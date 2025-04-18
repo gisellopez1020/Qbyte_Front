@@ -5,35 +5,51 @@ import { RiMenu3Fill, RiCloseLine } from "react-icons/ri";
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   return (
-    <header className="flex items-center justify-between border-b border-secondary dark:border-third bg-gradient-to-b from-third to-[#E8F3FA] xl:justify-start w-full py-4 px-8 h-[10vh] z-50">
+    <header className="flex items-center justify-between bg-gradient-to-b from-third to-[#ffffff] xl:justify-start w-full py-4 px-8 h-[10vh] z-50">
       <div className="xl:w-1/6 text-center -mt-4">
-        <a href="#" className="text-2xl xl:text-4xl font-bold relative p-1">
+        <a
+          href="#"
+          className="text-2xl md:text-3xl xl:text-4xl font-bold relative p-1"
+        >
           QByte<span className="text-primary text-4xl">.</span>
           <GiStarsStack className="absolute bottom-1 -left-6 text-primary" />
         </a>
       </div>
       <nav
-        className={`fixed w-[80%] md:w-[40%] xl:w-full h-full 
+        className={`fixed w-[80%] text-[#161236] font-medium md:w-[40%] xl:w-full h-full 
     bg-white xl:bg-transparent to-[#E8F3FA] 
     ${showMenu ? "left-0" : "-left-full"} 
     top-0 xl:static flex-1 flex flex-col xl:flex-row 
     items-center justify-center gap-10 transition-all 
     duration-500 z-50`}
       >
-        <a href="#" className="">
-          Home
+        <a href="#home" className="relative inline-block group">
+          <span className="transition-colors duration-300 group-hover:text-primary">
+            Home
+          </span>
+          <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-primary transition-all duration-500 group-hover:w-full"></span>
         </a>
-        <a href="#" className="">
-          Sobre Nosotros
+        <a href="#aboutUs" className="relative inline-block group">
+          <span className="transition-colors duration-300 group-hover:text-primary">
+            Sobre Nosotros
+          </span>
+          <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-primary transition-all duration-500 group-hover:w-full"></span>
         </a>
-        <a href="#" className="">
-          Servicios
+        <a href="#" className="relative inline-block group">
+          <span className="transition-colors duration-300 group-hover:text-primary">
+            Servicios
+          </span>
+          <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-primary transition-all duration-500 group-hover:w-full"></span>
         </a>
-        <a href="#" className="">
-          Contacto
+        <a href="#" className="relative inline-block group">
+          <span className="transition-colors duration-300 group-hover:text-primary">
+            Contacto
+          </span>
+          <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-primary transition-all duration-500 group-hover:w-full"></span>
         </a>
-        <button className="bg-primary font-bold text-white px-7 p-2 rounded-[10px]">
-          Log in
+        <button className="font-bold text-primary px-7 p-2 border-2 border-primary rounded-[10px] relative overflow-hidden group">
+          <span className="absolute inset-0 w-0 bg-primary transition-all duration-500 ease-in-out group-hover:w-full"></span>
+          <span className="relative z-10 group-hover:text-white">Log in</span>
         </button>
       </nav>
       <button
