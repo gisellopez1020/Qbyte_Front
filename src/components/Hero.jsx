@@ -6,7 +6,7 @@ const Hero = () => {
     <section id="home" className="min-h-[90vh] grid grid-cols-1 xl:grid-cols-8">
       <div className="md:col-span-5 flex items-center justify-center p-5 xl:p-16">
         <div className="flex flex-col gap-8">
-          <h1 className="text-5xl xl:text-6xl font-bold text-[#161236] leading-[4rem] xl:leading-[7rem]">
+          <h1 className="text-5xl xl:text-6xl font-bold text-shadow-sm text-[#161236] leading-[4rem] xl:leading-[7rem]">
             Automatiza y Simplifica el Cumplimiento{" "}
             <span className="text-primary py-2 px-6 border-8 border-secondary relative inline-block">
               Normativo

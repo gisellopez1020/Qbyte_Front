@@ -3,11 +3,11 @@ import React from "react";
 const AboutUs = () => {
   return (
     <section id="aboutUs">
-      <div className="bg-gray-50 p-8 flex flex-col items-center justify-center gap-8 mt-14 xl:mt-0">
-        <h1 className="text-2xl font-medium text-[#161236] tracking-wide">
+      <div className="bg-sky-50 p-8 flex flex-col items-center justify-center gap-8 mt-14 xl:mt-0">
+        <h1 className="text-4xl font-bold text-[#161236] text-center text-shadow-sm tracking-wide">
           Conoce nuestro equipo
         </h1>
-        <div className="flex flex-col md:flex-row items-center flex-wrap gap-10 xl:gap-32">
+        <div className="flex flex-col md:flex-row items-center justify-center flex-wrap gap-10 xl:gap-32">
           <div className="flex flex-col items-center">
             <img
               src="Monica.png"

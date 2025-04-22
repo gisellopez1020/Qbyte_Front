@@ -8,8 +8,8 @@ const Header = () => {
     <header className="flex items-center justify-between bg-gradient-to-b from-third to-[#ffffff] xl:justify-start w-full py-4 px-8 h-[10vh] z-50">
       <div className="xl:w-1/6 text-center -mt-4">
         <a
-          href="#"
-          className="text-2xl md:text-3xl xl:text-4xl font-bold relative p-1"
+          href="#home"
+          className="text-2xl md:text-3xl xl:text-4xl text-shadow-sm font-bold relative p-1"
         >
           QByte<span className="text-primary text-4xl">.</span>
           <GiStarsStack className="absolute bottom-1 -left-6 text-primary" />
@@ -35,7 +35,7 @@ const Header = () => {
           </span>
           <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-primary transition-all duration-500 group-hover:w-full"></span>
         </a>
-        <a href="#" className="relative inline-block group">
+        <a href="#services" className="relative inline-block group">
           <span className="transition-colors duration-300 group-hover:text-primary">
             Servicios
           </span>
