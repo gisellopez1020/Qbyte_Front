@@ -1,5 +1,6 @@
 import React from "react";
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -25,12 +26,14 @@ const Hero = () => {
             su cumplimiento normativo.
           </p>
           <div className="flex flex-col md:flex-row items-center">
-            <button className="bg-primary text-white font-bold py-2 px-14 rounded-xl xl:text-xl shadow-md relative overflow-hidden group">
-              <span className="absolute inset-0 scale-x-0 origin-left border-2 border-primary bg-white transition-transform duration-500 ease-in-out rounded-xl group-hover:scale-x-100"></span>
-              <span className="relative z-10 group-hover:text-primary">
-                ¡Empieza ahora!
-              </span>
-            </button>
+            <Link to="/Sign">
+              <button className="bg-primary text-white font-bold py-2 px-14 rounded-xl xl:text-xl shadow-md relative overflow-hidden group">
+                <span className="absolute inset-0 scale-x-0 origin-left border-2 border-primary bg-white transition-transform duration-500 ease-in-out rounded-xl group-hover:scale-x-100"></span>
+                <span className="relative z-10 group-hover:text-primary">
+                  ¡Empieza ahora!
+                </span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
