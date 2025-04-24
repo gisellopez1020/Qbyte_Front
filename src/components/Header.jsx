@@ -1,16 +1,18 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { GiStarsStack } from "react-icons/gi";
 import { RiMenu3Fill, RiCloseLine } from "react-icons/ri";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
+  
   return (
     <header className="flex items-center justify-between border-b border-secondary dark:border-third bg-gradient-to-b from-third to-[#E8F3FA] xl:justify-start w-full py-4 px-8 h-[10vh] z-50">
       <div className="xl:w-1/6 text-center -mt-4">
-        <a href="#" className="text-2xl xl:text-4xl font-bold relative p-1">
-          QByte<span className="text-primary text-4xl">.</span>
-          <GiStarsStack className="absolute bottom-1 -left-6 text-primary" />
-        </a>
+      <Link to="/" className="text-2xl xl:text-4xl font-bold relative p-1">
+      QByte<span className="text-primary text-4xl">.</span>
+      <GiStarsStack className="absolute bottom-1 -left-6 text-primary" />
+    </Link>
       </div>
       <nav
         className={`fixed w-[80%] md:w-[40%] xl:w-full h-full 
@@ -32,9 +34,10 @@ const Header = () => {
         <a href="#" className="">
           Contacto
         </a>
-        <button className="bg-primary font-bold text-white px-7 p-2 rounded-[10px]">
-          Log in
-        </button>
+        
+        <Link to="/login" className="bg-primary font-bold text-white px-7 p-2 rounded-[10px]">
+  Log in
+</Link>
       </nav>
       <button
         onClick={() => setShowMenu(!showMenu)}
