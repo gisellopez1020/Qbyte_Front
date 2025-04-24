@@ -24,18 +24,17 @@ function SignUp() {
 
   return (
     <div className="min-h-screen flex justify-center items-center relative">
-      {/* Imagen de fondo en HD */}
+   
       <img
         src="https://images.unsplash.com/photo-1530533609496-06430e875bbf?fm=jpg&q=100&w=1920"
         alt="Fondo espacial"
         className="absolute inset-0 w-full h-full object-cover -z-10"
       />
 
-      {/* Formulario */}
       <div className="relative z-10 bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[400px] backdrop-blur-md border border-white/20">
         <h2 className="text-center text-3xl italic tracking-wide font-bold text-white mb-5" tyle={{
         WebkitTextStroke: "1px #ffffff"
-      }}>Regístrate</h2>
+      }}>Sign Up</h2>
         
         <form onSubmit={handleSignUp}>
           <div className="mb-4 relative">

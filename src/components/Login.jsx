@@ -15,7 +15,6 @@ function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       alert("Inicio de sesión exitoso");
-      // Aquí puedes redirigir con useNavigate (React Router)
     } catch (err) {
       setError("Error al iniciar sesión: " + err.message);
     }
@@ -34,7 +33,7 @@ function Login() {
 
 
       <div className="relative z-10 bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[420px] backdrop-blur-md border border-white/20">
-        <h2 className="text-center text-3xl italic tracking-wide font-bold text-white mb-5">Acceso</h2>
+        <h2 className="text-center text-3xl italic tracking-wide font-bold text-white mb-5">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4 relative">
             <input
@@ -63,7 +62,7 @@ function Login() {
           <div className="mb-2 text-white text-sm">
             <label className="flex items-center">
               <input type="checkbox" className="mr-2" />
-              Acuérdate de mí
+              Terminos y condiciones
             </label>
           </div>
 
@@ -75,7 +74,7 @@ function Login() {
             type="submit"
             className="w-full bg-[#133D87] hover:bg-[#2b5399] text-white p-2 rounded-lg font-semibold transition-colors duration-300"
           >
-            Acceso
+            Iniciar Sesión
           </button>
         </form>
 
