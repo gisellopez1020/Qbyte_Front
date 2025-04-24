@@ -3,10 +3,13 @@ import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 
 const Hero = () => {
   return (
-    <section id="home" className="min-h-[90vh] grid grid-cols-1 xl:grid-cols-8">
+    <section
+      id="home"
+      className="min-h-[100vh] pt-[100px] grid grid-cols-1 xl:grid-cols-8"
+    >
       <div className="md:col-span-5 flex items-center justify-center p-5 xl:p-16">
-        <div className="flex flex-col gap-8">
-          <h1 className="text-5xl xl:text-6xl font-bold text-shadow-sm text-[#161236] leading-[4rem] xl:leading-[7rem]">
+        <div className="flex flex-col gap-6">
+          <h1 className="text-5xl xl:text-6xl font-bold text-shadow-sm text-[#161236] leading-[4rem] xl:leading-[5.5rem]">
             Automatiza y Simplifica el Cumplimiento{" "}
             <span className="text-primary py-2 px-6 border-8 border-secondary relative inline-block">
               Normativo
@@ -36,7 +39,7 @@ const Hero = () => {
           src="qbyte.png"
           className="w-[300px] h-[250px] md:w-[500px] md:h-[400px] object-cover  relative z-10"
         />
-        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[280px] h-[280px] md:w-[550px] md:h-[550px] bg-third border-[10px] border-primary rounded-full -z-10"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[280px] h-[280px] md:w-[530px] md:h-[530px] bg-third border-[10px] border-primary rounded-full -z-10"></div>
         <img
           src="python.png"
           className="xl:w-20 xl:h-20 object-cover rounded-full border-l-8 border-slate-700 absolute top-[4%] right-[12%] rotate-12 w-12 h-12"

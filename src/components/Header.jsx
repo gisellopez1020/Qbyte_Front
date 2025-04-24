@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GiStarsStack } from "react-icons/gi";
 import { RiMenu3Fill, RiCloseLine } from "react-icons/ri";
 
 const Header = () => {
+  const [scrolled, setScrolled] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="flex items-center justify-between bg-gradient-to-b from-third to-[#ffffff] xl:justify-start w-full py-4 px-8 h-[10vh] z-50">
+    <header
+      className={`fixed flex items-center justify-between xl:justify-start w-full py-4 px-8 h-[10vh] z-50 transition-colors duration-300 ${
+        scrolled
+          ? "bg-gradient-to-r from-[#b3d7eddf] to-white"
+          : "bg-gradient-to-b from-third to-[#ffffff]"
+      }`}
+    >
       <div className="xl:w-1/6 text-center -mt-4">
         <a
           href="#home"
