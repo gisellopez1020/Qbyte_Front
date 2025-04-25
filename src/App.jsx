@@ -5,7 +5,7 @@ import Login from "./components/Login";
 import Sign from "./components/Sign";
 import AboutUs from "./components/AboutUs";
 import Services from "./components/Services";
-import Contact from "./components/Contact";
+import Footer from "./components/Footer";
 
 function App() {
   const location = useLocation();
@@ -23,7 +23,7 @@ function App() {
               <Hero />
               <AboutUs />
               <Services />
-              <Contact />
+              <Footer />
             </>
           }
         />

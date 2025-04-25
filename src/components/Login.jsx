@@ -28,7 +28,8 @@ function Login() {
         alt="Fondo espacial"
         className="absolute inset-0 w-full h-full object-cover -z-10"
       />
-      <Link to="/" className="absolute inset-0 m-10">
+
+      <Link to="/" className="absolute m-10 z-50 top-[1%] left-[2%]">
         <FaArrowLeft className="text-3xl xl:text-4xl text-white rounded-full" />
       </Link>
 
