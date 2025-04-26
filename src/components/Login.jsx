@@ -1,21 +1,29 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const credencial = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       alert("Inicio de sesión exitoso");
+      if (credencial.user) {
+        navigate("/index", { replace: true });
+      }
     } catch (err) {
       setError("Error al iniciar sesión: " + err.message);
     }

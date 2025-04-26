@@ -57,31 +57,63 @@ const Header = () => {
         duration-100 z-50`}
       >
         <a href="#home" className="relative inline-block group">
-          <span className="transition-colors duration-300 group-hover:text-fourth">
+          <span
+            className={`transition-colors duration-300 ${
+              scrolled ? "group-hover:text-fourth" : "group-hover:text-primary"
+            }`}
+          >
             Home
           </span>
-          <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-fourth transition-all duration-500 group-hover:w-full"></span>
+          <span
+            className={`absolute left-0 bottom-0 h-0.5 w-0 ${
+              scrolled ? "bg-fourth" : "bg-primary"
+            } transition-all duration-500 group-hover:w-full`}
+          ></span>
         </a>
 
         <a href="#aboutUs" className="relative inline-block group">
-          <span className="transition-colors duration-300 group-hover:text-fourth">
+          <span
+            className={`transition-colors duration-300 ${
+              scrolled ? "group-hover:text-fourth" : "group-hover:text-primary"
+            }`}
+          >
             Sobre Nosotros
           </span>
-          <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-fourth transition-all duration-500 group-hover:w-full"></span>
+          <span
+            className={`absolute left-0 bottom-0 h-0.5 w-0 ${
+              scrolled ? "bg-fourth" : "bg-primary"
+            } transition-all duration-500 group-hover:w-full`}
+          ></span>
         </a>
 
         <a href="#services" className="relative inline-block group">
-          <span className="transition-colors duration-300 group-hover:text-fourth">
+          <span
+            className={`transition-colors duration-300 ${
+              scrolled ? "group-hover:text-fourth" : "group-hover:text-primary"
+            }`}
+          >
             Servicios
           </span>
-          <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-fourth transition-all duration-500 group-hover:w-full"></span>
+          <span
+            className={`absolute left-0 bottom-0 h-0.5 w-0 ${
+              scrolled ? "bg-fourth" : "bg-primary"
+            } transition-all duration-500 group-hover:w-full`}
+          ></span>
         </a>
 
         <a href="#contact" className="relative inline-block group">
-          <span className="transition-colors duration-300 group-hover:text-fourth">
+          <span
+            className={`transition-colors duration-300 ${
+              scrolled ? "group-hover:text-fourth" : "group-hover:text-primary"
+            }`}
+          >
             Contacto
           </span>
-          <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-fourth transition-all duration-500 group-hover:w-full"></span>
+          <span
+            className={`absolute left-0 bottom-0 h-0.5 w-0 ${
+              scrolled ? "bg-fourth" : "bg-primary"
+            } transition-all duration-500 group-hover:w-full`}
+          ></span>
         </a>
 
         <Link to="/login">
