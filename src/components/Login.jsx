@@ -1,23 +1,42 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { Link } from "react-router-dom";
+import { getUserRole } from "../roleUtils";
+import { Link, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("Inicio de sesión exitoso");
+      // Iniciar sesión con Firebase Authentication
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userId = userCredential.user.uid;
+      
+      // Obtener el rol del usuario
+      const role = await getUserRole(userId);
+      
+      // Redirigir según el rol
+      if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (role === "auditor") {
+        navigate("/auditor/dashboard");
+      } else {
+        navigate("/dashboard"); // Usuario normal
+      }
     } catch (err) {
       setError("Error al iniciar sesión: " + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,7 +84,7 @@ function Login() {
           <div className="mb-2 text-white text-sm">
             <label className="flex items-center">
               <input type="checkbox" className="mr-2" />
-              Terminos y condiciones
+              Términos y condiciones
             </label>
           </div>
 
@@ -77,9 +96,10 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full bg-[#133D87] hover:bg-[#2b5399] text-white p-2 rounded-lg font-semibold transition-colors duration-300"
+            disabled={loading}
+            className="w-full bg-[#133D87] hover:bg-[#2b5399] text-white p-2 rounded-lg font-semibold transition-colors duration-300 disabled:bg-gray-600"
           >
-            Iniciar Sesión
+            {loading ? "Procesando..." : "Iniciar Sesión"}
           </button>
         </form>
 
