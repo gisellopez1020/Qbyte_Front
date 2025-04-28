@@ -13,7 +13,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
     try {
       const credencial = await signInWithEmailAndPassword(
@@ -27,8 +26,6 @@ function Login() {
       }
     } catch (err) {
       setError("Error al iniciar sesión: " + err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -76,7 +73,7 @@ function Login() {
           <div className="mb-2 text-white text-sm">
             <label className="flex items-center">
               <input type="checkbox" className="mr-2" />
-              Términos y condiciones
+              Terminos y condiciones
             </label>
           </div>
 
@@ -88,10 +85,9 @@ function Login() {
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full bg-[#133D87] hover:bg-[#2b5399] text-white p-2 rounded-lg font-semibold transition-colors duration-300 disabled:bg-gray-600"
+            className="w-full bg-[#133D87] hover:bg-[#2b5399] text-white p-2 rounded-lg font-semibold transition-colors duration-300"
           >
-            {loading ? "Procesando..." : "Iniciar Sesión"}
+            Iniciar Sesión
           </button>
         </form>
 
