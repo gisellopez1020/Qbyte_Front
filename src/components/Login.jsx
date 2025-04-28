@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { getUserRole } from "../roleUtils";
 import { Link, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 
@@ -9,7 +8,6 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,20 +16,14 @@ function Login() {
     setLoading(true);
 
     try {
-      // Iniciar sesión con Firebase Authentication
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const userId = userCredential.user.uid;
-      
-      // Obtener el rol del usuario
-      const role = await getUserRole(userId);
-      
-      // Redirigir según el rol
-      if (role === "admin") {
-        navigate("/admin/dashboard");
-      } else if (role === "auditor") {
-        navigate("/auditor/dashboard");
-      } else {
-        navigate("/dashboard"); // Usuario normal
+      const credencial = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      alert("Inicio de sesión exitoso");
+      if (credencial.user) {
+        navigate("/index", { replace: true });
       }
     } catch (err) {
       setError("Error al iniciar sesión: " + err.message);
