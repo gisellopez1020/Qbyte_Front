@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../../firebaseConfig";
 
 const AuthContext = createContext();
 
@@ -17,14 +18,28 @@ export const AuthProvider = ({ children }) => {
 
     window.addEventListener("beforeunload", handleBeforeUnload);
 
-    const unsubscribe = onAuthStateChanged(auth, (userFirebase) => {
+    const unsubscribe = onAuthStateChanged(auth, async (userFirebase) => {
       if (userFirebase) {
-        sessionStorage.setItem("isAuthenticated", "true");
-        setUsuario(userFirebase);
+        try {
+          const docRef = doc(db, "usuarios", userFirebase.uid);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            setUsuario({ uid: userFirebase.uid, ...docSnap.data() });
+            sessionStorage.setItem("isAuthenticated", "true");
+          } else {
+            console.warn("Usuario sin datos en Firestore");
+            setUsuario(null);
+          }
+        } catch (error) {
+          console.error("Error obteniendo datos del usuario:", error);
+          setUsuario(null);
+        }
       } else {
-        sessionStorage.removeItem("isAuthenticated");
         setUsuario(null);
+        sessionStorage.removeItem("isAuthenticated");
       }
+
       setLoading(false);
     });
 

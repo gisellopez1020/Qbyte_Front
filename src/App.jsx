@@ -1,38 +1,28 @@
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
-import Login from "./components/Login";
-import Sign from "./components/Sign";
+import Login from "./pages/auth/Login";
+import Sign from "./pages/auth/Sign";
 import AboutUs from "./components/AboutUs";
 import Services from "./components/Services";
 import Footer from "./components/Footer";
 import Index from "./pages/Index";
-
-import Sidebar from "./components/Sidebar";
-import { useAuth } from "./context/AuthContext";
+import Forms from "./pages/auditor_interno/Forms";
+import Plan from "./pages/auditor_interno/Plan";
+import Reports from "./pages/Reports";
+import SidebarLayout from "./layouts/SidebarLayout";
 
 function App() {
-  const location = useLocation();
-  const hideHeader =
-    location.pathname === "/login" ||
-    location.pathname === "/Sign" ||
-    location.pathname === "/index";
-
-  const { isAuthenticated, loading } = useAuth();
-
-  if (loading) {
-    return <div className="text-center mt-20">Cargando...</div>;
-  }
-
   return (
     <>
-      {!hideHeader && <Header />}
       <Routes>
+        {/* Rutas públicas */}
         <Route
           path="/"
           element={
             <>
+              <Header />
               <Hero />
               <AboutUs />
               <Services />
@@ -40,23 +30,16 @@ function App() {
             </>
           }
         />
-        <Route
-          path="/index"
-          element={
-            isAuthenticated ? (
-              <>
-                <Sidebar />
-                <Index />
-              </>
-            ) : (
-              <>
-                <Login />
-              </>
-            )
-          }
-        />
         <Route path="/login" element={<Login />} />
         <Route path="/sign" element={<Sign />} />
+
+        {/* Rutas protegidas */}
+        <Route path="/" element={<SidebarLayout />}>
+          <Route path="index" element={<Index />} />
+          <Route path="forms" element={<Forms />} />
+          <Route path="plan-action" element={<Plan />} />
+          <Route path="reports" element={<Reports />} />
+        </Route>
       </Routes>
     </>
   );

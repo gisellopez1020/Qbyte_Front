@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+import { auth, db } from "../../../firebaseConfig";
 import { Link, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
+import { useAuth } from "../../context/AuthContext";
+import { doc, getDoc } from "firebase/firestore";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,9 +23,19 @@ function Login() {
         email,
         password
       );
-      alert("Inicio de sesión exitoso");
-      if (credencial.user) {
+      const user = credencial.user;
+
+      const docRef = doc(db, "usuarios", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+
+        login({ uid: user.uid, email: user.email, rol: userData.rol });
+
         navigate("/index", { replace: true });
+      } else {
+        setError("No se encontró información del usuario en la base de datos.");
       }
     } catch (err) {
       setError("Error al iniciar sesión: " + err.message);

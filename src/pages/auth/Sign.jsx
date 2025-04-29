@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { Link } from "react-router-dom";
-import { auth } from "../../firebaseConfig";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../../../firebaseConfig";
 import { FaArrowLeft } from "react-icons/fa6";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
 
 function SignUp() {
+  const [name, setName] = useState("");
+  const [rol, setRol] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -16,8 +21,21 @@ function SignUp() {
     setSuccess("");
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const credencial = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = credencial.user;
+
+      await setDoc(doc(db, "usuarios", user.uid), {
+        name: name,
+        email: email,
+        rol: rol,
+      });
+
       setSuccess("¡Cuenta creada exitosamente!");
+      navigate("/index");
     } catch (err) {
       setError("Error al registrarse: " + err.message);
     }
@@ -45,6 +63,39 @@ function SignUp() {
         </h2>
 
         <form onSubmit={handleSignUp}>
+          <div className="mb-4 relative">
+            <input
+              type="text"
+              placeholder="Nombre de usuario"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="w-full p-2 rounded-lg bg-white bg-opacity-20 text-white placeholder-white focus:outline-none focus:ring-2"
+            />
+            <i className="absolute right-3 top-2 text-white">👤</i>
+          </div>
+          <div className="mb-4 relative">
+            <select
+              value={rol}
+              onChange={(e) => setRol(e.target.value)}
+              required
+              className="w-full p-2 rounded-lg bg-white bg-opacity-20 text-white placeholder-white focus:outline-none focus:ring-2 appearance-none"
+            >
+              <option value="">Seleccione un rol</option>
+              <option value="auditor_interno" className="text-black">
+                Auditor Interno
+              </option>
+              <option value="auditor_externo" className="text-black">
+                Auditor Externo
+              </option>
+              <option value="admin" className="text-black">
+                Administrador
+              </option>
+            </select>
+            <i className="absolute right-3 top-2 text-white pointer-events-none">
+              🔏
+            </i>
+          </div>
           <div className="mb-4 relative">
             <input
               type="email"
