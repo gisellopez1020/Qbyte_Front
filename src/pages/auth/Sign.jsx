@@ -6,7 +6,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 
-function SignUp() {
+function Sign() {
   const [name, setName] = useState("");
   const [rol, setRol] = useState("");
   const [email, setEmail] = useState("");
@@ -19,7 +19,6 @@ function SignUp() {
     e.preventDefault();
     setError("");
     setSuccess("");
-    setLoading(true);
 
     try {
       const credencial = await createUserWithEmailAndPassword(
@@ -39,25 +38,8 @@ function SignUp() {
       navigate("/index");
     } catch (err) {
       setError("Error al registrarse: " + err.message);
-    } finally {
-      setLoading(false);
     }
   };
-
-  // Verificar si el correo está en la lista de correos autorizados
-  const checkEmailAuthorization = () => {
-    if (!email) return null;
-
-    if (AUTHORIZED_EMAILS.admin.includes(email)) {
-      return "admin";
-    } else if (AUTHORIZED_EMAILS.auditor.includes(email)) {
-      return "auditor";
-    }
-
-    return "user";
-  };
-
-  const potentialRole = checkEmailAuthorization();
 
   return (
     <div className="min-h-screen flex justify-center items-center relative">
@@ -71,7 +53,12 @@ function SignUp() {
       </Link>
 
       <div className="relative z-10 bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[400px] backdrop-blur-md border border-white/20">
-        <h2 className="text-center text-3xl italic tracking-wide font-bold text-white mb-5">
+        <h2
+          className="text-center text-3xl italic tracking-wide font-bold text-white mb-5"
+          tyle={{
+            WebkitTextStroke: "1px #ffffff",
+          }}
+        >
           Sign Up
         </h2>
 
@@ -121,15 +108,6 @@ function SignUp() {
             <i className="absolute right-3 top-2 text-white">📧</i>
           </div>
 
-          {email && potentialRole !== "user" && (
-            <div className="mb-4 p-2 bg-blue-600 bg-opacity-30 rounded-lg text-white text-sm">
-              Este correo será registrado como:{" "}
-              <strong>
-                {potentialRole === "admin" ? "Administrador" : "Auditor"}
-              </strong>
-            </div>
-          )}
-
           <div className="mb-4 relative">
             <input
               type="password"
@@ -144,10 +122,9 @@ function SignUp() {
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full bg-[#0d3065] hover:bg-[#1b4a8f] text-white p-2 rounded-lg font-semibold transition-colors duration-300 disabled:bg-gray-600"
+            className="w-full bg-[#0d3065] hover:bg-[#1b4a8f] text-white p-2 rounded-lg font-semibold transition-colors duration-300"
           >
-            {loading ? "Procesando..." : "Crear cuenta"}
+            Crear cuenta
           </button>
         </form>
 
