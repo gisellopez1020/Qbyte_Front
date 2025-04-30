@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../../firebaseConfig";
 import { FaArrowLeft } from "react-icons/fa6";
+import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 
@@ -13,6 +14,7 @@ function Sign() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
@@ -53,12 +55,7 @@ function Sign() {
       </Link>
 
       <div className="relative z-10 bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[400px] backdrop-blur-md border border-white/20">
-        <h2
-          className="text-center text-3xl italic tracking-wide font-bold text-white mb-5"
-          tyle={{
-            WebkitTextStroke: "1px #ffffff",
-          }}
-        >
+        <h2 className="text-center text-3xl italic tracking-wide font-bold text-white mb-5">
           Sign Up
         </h2>
 
@@ -110,14 +107,25 @@ function Sign() {
 
           <div className="mb-4 relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-2 rounded-lg bg-white bg-opacity-20 text-white placeholder-white focus:outline-none focus:ring-2"
+              className="w-full py-2 px-8 rounded-lg bg-white bg-opacity-20 text-white placeholder-white focus:outline-none focus:ring-2"
             />
             <i className="absolute right-3 top-2 text-white">🔐</i>
+            {showPassword ? (
+              <RiEyeOffFill
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-3 left-2 text-[#161236] hover:cursor-pointer"
+              />
+            ) : (
+              <RiEyeFill
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-3 left-2 text-[#161236] hover:cursor-pointer"
+              />
+            )}
           </div>
 
           <button

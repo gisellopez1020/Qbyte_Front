@@ -10,14 +10,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      signOut(auth).catch((error) => {
-        console.error("Error al cerrar sesión automáticamente:", error);
-      });
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
     const unsubscribe = onAuthStateChanged(auth, async (userFirebase) => {
       if (userFirebase) {
         try {
@@ -26,7 +18,6 @@ export const AuthProvider = ({ children }) => {
 
           if (docSnap.exists()) {
             setUsuario({ uid: userFirebase.uid, ...docSnap.data() });
-            sessionStorage.setItem("isAuthenticated", "true");
           } else {
             console.warn("Usuario sin datos en Firestore");
             setUsuario(null);
@@ -37,25 +28,12 @@ export const AuthProvider = ({ children }) => {
         }
       } else {
         setUsuario(null);
-        sessionStorage.removeItem("isAuthenticated");
       }
 
       setLoading(false);
     });
 
-    const checkSession = () => {
-      const isAuthenticated = sessionStorage.getItem("isAuthenticated");
-      if (!isAuthenticated) {
-        signOut(auth).catch((error) => {
-          console.error("Error al verificar sesión:", error);
-        });
-      }
-    };
-
-    checkSession();
-
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
       unsubscribe();
     };
   }, []);

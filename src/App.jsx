@@ -8,12 +8,19 @@ import AboutUs from "./components/AboutUs";
 import Services from "./components/Services";
 import Footer from "./components/Footer";
 import Index from "./pages/Index";
-import Forms from "./pages/auditor_interno/Forms";
-import Plan from "./pages/auditor_interno/Plan";
+import Forms from "./pages/Forms";
+import Plan from "./pages/Plan";
 import Reports from "./pages/Reports";
 import SidebarLayout from "./layouts/SidebarLayout";
+import Formulario from "./components/Formulario";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return <div className="text-center text-primary mt-20">Cargando...</div>;
+  }
   return (
     <>
       <Routes>
@@ -37,6 +44,7 @@ function App() {
         <Route path="/" element={<SidebarLayout />}>
           <Route path="index" element={<Index />} />
           <Route path="forms" element={<Forms />} />
+          <Route path="forms/:id" element={<Formulario />} />
           <Route path="plan-action" element={<Plan />} />
           <Route path="reports" element={<Reports />} />
         </Route>

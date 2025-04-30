@@ -10,9 +10,9 @@ const SidebarLayout = () => {
   if (!usuario) return <Navigate to="/login" />;
 
   return (
-    <div className="flex">
+    <div className="grid grid-cols-[80px_1fr] min-h-screen">
       <Sidebar rol={usuario.rol} />
-      <main className="flex-1 p-4">
+      <main className="flex-1">
         <Outlet />
       </main>
     </div>
