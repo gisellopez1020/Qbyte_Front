@@ -4,12 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../../firebaseConfig";
 import { FaArrowLeft } from "react-icons/fa6";
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 
 function Sign() {
   const [name, setName] = useState("");
   const [rol, setRol] = useState("");
+  const [adminCode, setAdminCode] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,6 +24,17 @@ function Sign() {
     setSuccess("");
 
     try {
+      if (rol === "admin") {
+        const codeRef = doc(db, "adminCodes", "adminAccess");
+        const codeSnap = await getDoc(codeRef);
+
+       if (!codeSnap.exists() || String(codeSnap.data().codigo) !== adminCode.trim()) {
+        setError("Código de administrador incorrecto.");
+        return;
+      }
+
+      }
+
       const credencial = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -47,7 +59,7 @@ function Sign() {
     <div className="min-h-screen flex justify-center items-center relative">
       <img
         src="https://images.unsplash.com/photo-1530533609496-06430e875bbf?fm=jpg&q=100&w=1920"
-        alt="Fondo espacial"
+        alt="Fondo"
         className="absolute inset-0 w-full h-full object-cover -z-10"
       />
       <Link to="/" className="absolute m-10 z-50 top-[1%] left-[2%]">
@@ -89,10 +101,23 @@ function Sign() {
                 Administrador
               </option>
             </select>
-            <i className="absolute right-3 top-2 text-white pointer-events-none">
-              🔏
-            </i>
+            <i className="absolute right-3 top-2 text-white pointer-events-none">🔏</i>
           </div>
+
+          {rol === "admin" && (
+            <div className="mb-4 relative">
+              <input
+                type="text"
+                placeholder="Código"
+                value={adminCode}
+                onChange={(e) => setAdminCode(e.target.value)}
+                required
+                className="w-full p-2 rounded-lg bg-white bg-opacity-20 text-white placeholder-white focus:outline-none focus:ring-2"
+              />
+              <i className="absolute right-3 top-2 text-white">🔐</i>
+            </div>
+          )}
+
           <div className="mb-4 relative">
             <input
               type="email"

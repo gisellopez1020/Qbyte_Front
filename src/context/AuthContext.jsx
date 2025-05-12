@@ -1,66 +1,46 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
+export const useAuth = () => useContext(AuthContext);
+
 export const AuthProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
+  const [rol, setRol] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (userFirebase) => {
-      if (userFirebase) {
-        try {
-          const docRef = doc(db, "usuarios", userFirebase.uid);
-          const docSnap = await getDoc(docRef);
+    const storedUser = sessionStorage.getItem("usuario");
+    const storedRol = sessionStorage.getItem("rol");
 
-          if (docSnap.exists()) {
-            setUsuario({ uid: userFirebase.uid, ...docSnap.data() });
-          } else {
-            console.warn("Usuario sin datos en Firestore");
-            setUsuario(null);
-          }
-        } catch (error) {
-          console.error("Error obteniendo datos del usuario:", error);
-          setUsuario(null);
-        }
-      } else {
-        setUsuario(null);
-      }
+    if (storedUser && storedRol) {
+      setUsuario(JSON.parse(storedUser));
+      setRol(storedRol);
+    }
 
-      setLoading(false);
-    });
-
-    return () => {
-      unsubscribe();
-    };
+    setLoading(false);
   }, []);
 
-  const login = (user) => {
-    sessionStorage.setItem("isAuthenticated", "true");
-    setUsuario(user);
+  const login = (userData, userRol) => {
+    setUsuario(userData);
+    setRol(userRol);
+    sessionStorage.setItem("usuario", JSON.stringify(userData));
+    sessionStorage.setItem("rol", userRol);
+    navigate("/index");
   };
 
   const logout = () => {
-    sessionStorage.removeItem("isAuthenticated");
-    signOut(auth)
-      .then(() => setUsuario(null))
-      .catch((error) =>
-        console.error("Error cerrando sesión manualmente:", error)
-      );
+    setUsuario(null);
+    setRol(null);
+    sessionStorage.clear();
+    navigate("/login");
   };
 
-  const isAuthenticated = !!usuario;
-
   return (
-    <AuthContext.Provider
-      value={{ usuario, isAuthenticated, login, logout, loading }}
-    >
+    <AuthContext.Provider value={{ usuario, rol, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

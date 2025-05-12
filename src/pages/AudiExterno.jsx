@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { formularios } from "../config/formConfig";
 
-const Forms = () => {
+const AudiExterno = () => {
   const navigate = useNavigate();
 
   return (
@@ -26,4 +26,4 @@ const Forms = () => {
   );
 };
 
-export default Forms;
+export default AudiExterno;

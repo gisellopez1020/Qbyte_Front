@@ -8,12 +8,13 @@ import AboutUs from "./components/AboutUs";
 import Services from "./components/Services";
 import Footer from "./components/Footer";
 import Index from "./pages/Index";
-import Forms from "./pages/Forms";
 import Plan from "./pages/Plan";
+import FormsRedirect from "./layouts/FormsRedirect";
 import Reports from "./pages/Reports";
 import SidebarLayout from "./layouts/SidebarLayout";
 import Formulario from "./components/Formulario";
 import { useAuth } from "./context/AuthContext";
+
 
 function App() {
   const { loading } = useAuth();
@@ -43,7 +44,7 @@ function App() {
         {/* Rutas protegidas */}
         <Route path="/" element={<SidebarLayout />}>
           <Route path="index" element={<Index />} />
-          <Route path="forms" element={<Forms />} />
+          <Route path="forms" element={<FormsRedirect />} />      
           <Route path="forms/:id" element={<Formulario />} />
           <Route path="plan-action" element={<Plan />} />
           <Route path="reports" element={<Reports />} />

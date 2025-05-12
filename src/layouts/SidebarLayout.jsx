@@ -12,6 +12,7 @@ const SidebarLayout = () => {
   return (
     <div className="grid grid-cols-[80px_1fr] min-h-screen">
       <Sidebar rol={usuario.rol} />
+      
       <main className="flex-1">
         <Outlet />
       </main>
