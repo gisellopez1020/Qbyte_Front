@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { auth } from "../../../firebaseConfig";
 import { FaArrowLeft } from "react-icons/fa6";
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
+import { useAuth } from "../../context/AuthContext";
 
 function Sign() {
   const [name, setName] = useState("");
@@ -16,7 +17,8 @@ function Sign() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const [compania, setCompania] = useState("");
+  const { login } = useAuth();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -28,11 +30,13 @@ function Sign() {
         const codeRef = doc(db, "adminCodes", "adminAccess");
         const codeSnap = await getDoc(codeRef);
 
-       if (!codeSnap.exists() || String(codeSnap.data().codigo) !== adminCode.trim()) {
-        setError("Código de administrador incorrecto.");
-        return;
-      }
-
+        if (
+          !codeSnap.exists() ||
+          String(codeSnap.data().codigo) !== adminCode.trim()
+        ) {
+          setError("Código de administrador incorrecto.");
+          return;
+        }
       }
 
       const credencial = await createUserWithEmailAndPassword(
@@ -46,10 +50,56 @@ function Sign() {
         name: name,
         email: email,
         rol: rol,
+        ...(rol === "auditor_interno" && { compania: compania }),
       });
+      login({ name, email, uid: user.uid }, rol);
 
-      setSuccess("¡Cuenta creada exitosamente!");
-      navigate("/index");
+      if (rol === "auditor_externo") {
+        const externoPayload = {
+          nombre: name,
+          usuario: email,
+          contraseña: password,
+        };
+
+        const res = await fetch(
+          "http://localhost:8000/auditor_externo/crear_auditor_externo",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(externoPayload),
+          }
+        );
+
+        if (!res.ok) {
+          setError("Error al registrar auditor interno.");
+        }
+      }
+
+      if (rol === "auditor_interno") {
+        const internoPayload = {
+          nombre: name,
+          compañia: compania,
+          usuario: email,
+          contraseña: password,
+        };
+
+        const res = await fetch(
+          "http://localhost:8000/auditor_interno/crear_auditor_interno",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(internoPayload),
+          }
+        );
+
+        if (!res.ok) {
+          setError("Error al registrar auditor interno.");
+        }
+      }
     } catch (err) {
       setError("Error al registrarse: " + err.message);
     }
@@ -101,8 +151,24 @@ function Sign() {
                 Administrador
               </option>
             </select>
-            <i className="absolute right-3 top-2 text-white pointer-events-none">🔏</i>
+            <i className="absolute right-3 top-2 text-white pointer-events-none">
+              🔏
+            </i>
           </div>
+
+          {rol === "auditor_interno" && (
+            <div className="mb-4 relative">
+              <input
+                type="text"
+                placeholder="Nombre de la compañía"
+                value={compania}
+                onChange={(e) => setCompania(e.target.value)}
+                required
+                className="w-full p-2 rounded-lg bg-white bg-opacity-20 text-white placeholder-white focus:outline-none focus:ring-2"
+              />
+              <i className="absolute right-3 top-2 text-white">🏢</i>
+            </div>
+          )}
 
           {rol === "admin" && (
             <div className="mb-4 relative">

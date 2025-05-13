@@ -30,14 +30,44 @@ function Login() {
       const docRef = doc(db, "usuarios", user.uid);
       const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        const userData = docSnap.data();
-
-        login({ uid: user.uid, email: user.email, rol: userData.rol });
-
-        navigate("/index", { replace: true });
-      } else {
+      if (!docSnap.exists()) {
         setError("No se encontró información del usuario en la base de datos.");
+        return;
+      }
+
+      const userData = docSnap.data();
+      const { rol } = userData;
+
+      if (rol === "auditor_interno" || rol === "auditor_externo") {
+        try {
+          const endpoint =
+            rol === "auditor_interno"
+              ? "/auditor_interno/logear_auditor_interno"
+              : "/auditor_externo/logear_auditor_externo";
+
+          const response = await fetch(`http://localhost:8000${endpoint}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ usuario: email, contraseña: password }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            setError("Error de backend: " + errorData.detail);
+            return;
+          }
+
+          login({ uid: user.uid, email: user.email, rol });
+
+          navigate("/index", { replace: true });
+        } catch (err) {
+          setError("Error al conectar con el backend: " + err.message);
+        }
+      } else {
+        login({ uid: user.uid, email: user.email, rol });
+        navigate("/index", { replace: true });
       }
     } catch (err) {
       setError("Error al iniciar sesión: " + err.message);

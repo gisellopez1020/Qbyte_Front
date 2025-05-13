@@ -21,7 +21,7 @@ const Footer = () => {
           <nav className="flex items-center gap-4">
             <a
               href=""
-              className="block text-xl bg-black text-primary rounded-full p-3"
+              className="block text-xl bg-white text-primary rounded-full p-3"
             >
               <ImWhatsapp />
             </a>

@@ -10,17 +10,17 @@ export const sidebarMenu = {
     { label: "Inicio", path: "/index", icon: RiHome3Line },
     { label: "Formularios", path: "/forms", icon: RiFileCopyLine },
     { label: "Plan de acción", path: "/plan-action", icon: RiWalletLine },
-    { label: "Reportes", path: "/reports", icon: RiPieChartLine },
   ],
   auditor_interno: [
     { label: "Inicio", path: "/index", icon: RiHome3Line },
     { label: "Formularios", path: "/forms", icon: RiFileCopyLine },
+    { label: "Reportes", path: "/reports", icon: RiPieChartLine },
     { label: "Plan de acción", path: "/plan-action", icon: RiWalletLine },
   ],
   auditor_externo: [
     { label: "Inicio", path: "/index", icon: RiHome3Line },
     { label: "Reportes", path: "/reports", icon: RiPieChartLine },
     { label: "Formularios", path: "/forms", icon: RiFileCopyLine },
-
+    { label: "Plan de acción", path: "/plan-action", icon: RiWalletLine }
   ],
 };
