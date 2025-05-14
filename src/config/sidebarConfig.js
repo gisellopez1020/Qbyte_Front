@@ -19,8 +19,6 @@ export const sidebarMenu = {
   ],
   auditor_externo: [
     { label: "Inicio", path: "/index", icon: RiHome3Line },
-    { label: "Reportes", path: "/reports", icon: RiPieChartLine },
-    { label: "Formularios", path: "/forms", icon: RiFileCopyLine },
-    { label: "Plan de acción", path: "/plan-action", icon: RiWalletLine }
+    { label: "Plan de acción", path: "/plan-action", icon: RiWalletLine },
   ],
 };

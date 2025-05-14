@@ -15,7 +15,6 @@ import SidebarLayout from "./layouts/SidebarLayout";
 import Formulario from "./components/Formulario";
 import { useAuth } from "./context/AuthContext";
 
-
 function App() {
   const { loading } = useAuth();
 
@@ -44,7 +43,7 @@ function App() {
         {/* Rutas protegidas */}
         <Route path="/" element={<SidebarLayout />}>
           <Route path="index" element={<Index />} />
-          <Route path="forms" element={<FormsRedirect />} />      
+          <Route path="forms" element={<FormsRedirect />} />
           <Route path="forms/:id" element={<Formulario />} />
           <Route path="plan-action" element={<Plan />} />
           <Route path="reports" element={<Reports />} />
