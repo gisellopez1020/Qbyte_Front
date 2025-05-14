@@ -52,7 +52,7 @@ function Sign() {
         rol: rol,
         ...(rol === "auditor_interno" && { compania: compania }),
       });
-      login({ name, email, uid: user.uid }, rol);
+      login({ name, email, uid: user.uid, rol });
 
       if (rol === "auditor_externo") {
         const externoPayload = {
