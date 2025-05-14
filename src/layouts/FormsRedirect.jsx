@@ -3,11 +3,11 @@ import FormsInterno from "../pages/AudiInterno";
 import Admin from "../pages/Admin";
 
 const FormsRedirect = () => {
-  const { usuario } = useAuth();
+  const { usuario, rol } = useAuth();
 
   if (!usuario) return null;
 
-  if (usuario.rol === "auditor_interno") {
+  if (rol === "auditor_interno") {
     return <FormsInterno />;
   } else {
     return <Admin />;

@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { Outlet, Navigate } from "react-router-dom";
 
 const SidebarLayout = () => {
-  const { usuario, cargando } = useAuth();
+  const { usuario, cargando, rol} = useAuth();
 
   if (cargando) return <p>Cargando...</p>;
 
@@ -11,7 +11,7 @@ const SidebarLayout = () => {
 
   return (
     <div className="grid grid-cols-[80px_1fr] min-h-screen">
-      <Sidebar rol={usuario.rol} />
+     <Sidebar rol={rol} />
       
       <main className="flex-1">
         <Outlet />
