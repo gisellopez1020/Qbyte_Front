@@ -5,11 +5,15 @@ import { sidebarMenu } from "../config/sidebarConfig";
 import { RiLogoutBoxLine, RiCloseFill } from "react-icons/ri";
 import { IoIosMenu } from "react-icons/io";
 
-const Sidebar = ({ rol }) => {
+const Sidebar = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(true);
   const { usuario, logout } = useAuth();
+
+  const rol = usuario?.rol;
+
   const menuItems = sidebarMenu[rol] || [];
+
 
   const getSidebarStyles = (rol) => {
     switch (rol) {
@@ -70,9 +74,8 @@ const Sidebar = ({ rol }) => {
             </button>
             <img
               src="profile.png"
-              className={`${
-                collapsed ? "w-12 h-12" : "w-16 h-16"
-              } object-cover bg-white rounded-full ring-2 ring-gray-400`}
+              className={`${collapsed ? "w-12 h-12" : "w-16 h-16"
+                } object-cover bg-white rounded-full ring-2 ring-gray-400`}
               alt="Perfil"
             />
             {!collapsed && (
@@ -101,17 +104,15 @@ const Sidebar = ({ rol }) => {
                 py-2 px-3 rounded-xl 
                 transition-all duration-500 ease-in-out transform
                 ${colors.text} 
-                ${
-                  isActive
-                    ? `${colors.active} scale-[0.99] shadow-inner`
-                    : `${colors.hover} hover:scale-[0.98] hover:shadow-md`
-                }
+                ${isActive
+                        ? `${colors.active} scale-[0.99] shadow-inner`
+                        : `${colors.hover} hover:scale-[0.98] hover:shadow-md`
+                      }
               `}
                   >
                     <item.icon
-                      className={`text-xl ${
-                        isActive ? "text-inherit" : colors.icon
-                      }`}
+                      className={`text-xl ${isActive ? "text-inherit" : colors.icon
+                        }`}
                     />
                     {!collapsed && item.label}
                   </Link>
