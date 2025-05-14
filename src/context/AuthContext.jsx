@@ -13,11 +13,9 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem("usuario");
-    const storedRol = sessionStorage.getItem("rol");
 
-    if (storedUser && storedRol) {
+    if (storedUser) {
       setUsuario(JSON.parse(storedUser));
-      setRol(storedRol);
     }
 
     setLoading(false);
