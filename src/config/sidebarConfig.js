@@ -10,6 +10,7 @@ export const sidebarMenu = {
     { label: "Inicio", path: "/index", icon: RiHome3Line },
     { label: "Formularios", path: "/forms", icon: RiFileCopyLine },
     { label: "Crear Formulario", path: "/crear-form", icon: RiPieChartLine },
+    { label: "Usuarios", path: "/usuarios", icon: RiPieChartLine },
   ],
   auditor_interno: [
     { label: "Inicio", path: "/index", icon: RiHome3Line },

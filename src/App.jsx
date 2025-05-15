@@ -14,8 +14,9 @@ import Reports from "./pages/Reports";
 import SidebarLayout from "./layouts/SidebarLayout";
 import Formulario from "./components/Formulario";
 import { useAuth } from "./context/AuthContext";
-import CrearForm from "./pages/admin/CrearForm";
-import VerForm from "./pages/admin/VerForm";
+import CrearForm from "./pages/admin/forms/CrearForm";
+import VerForm from "./pages/admin/forms/VerForm";
+import UsuariosAdmin from "./pages/admin/users/UsuariosAdmin";
 
 function App() {
   const { loading } = useAuth();
@@ -51,7 +52,7 @@ function App() {
           <Route path="reports" element={<Reports />} />
           <Route path="/crear-form" element={<CrearForm />} />
           <Route path="/forms/admin/:id" element={<VerForm />} />
-
+          <Route path="/usuarios" element={<UsuariosAdmin />} />
 
         </Route>
       </Routes>
