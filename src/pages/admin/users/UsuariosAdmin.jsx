@@ -87,7 +87,12 @@ const UsuariosAdmin = () => {
             </div>
 
             {mostrarFormulario && (
-                <UsuariosForm onUsuarioCreado={fetchUsuarios} />
+                <UsuariosForm
+                    onUsuarioCreado={() => {
+                        fetchUsuarios();
+                        setMostrarFormulario(false);
+                    }}
+                />
             )}
 
             <UsersTable
