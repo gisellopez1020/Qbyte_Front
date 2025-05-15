@@ -294,7 +294,7 @@ const Formulario = () => {
           return (
             <div key={i} className="bg-white p-4 rounded shadow-md">
               <div className="font-medium text-lg text-gray-700 mb-2">
-                {preguntaTexto}
+                {i + 1}. {preguntaTexto}
               </div>
               <select
                 className="w-full border rounded p-2"
