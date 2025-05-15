@@ -1,100 +1,156 @@
+// src/components/admin/UsuariosForm.jsx
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
-import { db, auth } from "../../../../firebaseConfig";
+import { auth, db } from "../../../../firebaseConfig";
+import { setDoc, doc, getDoc } from "firebase/firestore";
+
+const DEFAULT_PASSWORD = "123456";
 
 const UsuariosForm = ({ onUsuarioCreado }) => {
-    const [nuevoUsuario, setNuevoUsuario] = useState({
-        name: "",
-        email: "",
-        rol: "auditor_interno",
-        compania: "",
-    });
-
-    const handleChange = (e) => {
-        setNuevoUsuario({ ...nuevoUsuario, [e.target.name]: e.target.value });
-    };
+    const [name, setName] = useState("");
+    const [rol, setRol] = useState("auditor_interno");
+    const [adminCode, setAdminCode] = useState("");
+    const [email, setEmail] = useState("");
+    const [compania, setCompania] = useState("");
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
+        setSuccess("");
+
         try {
-            const cred = await createUserWithEmailAndPassword(
-                auth,
-                nuevoUsuario.email,
-                "123456"
-            );
+            // Validar código si es admin
+            if (rol === "admin") {
+                const codeRef = doc(db, "adminCodes", "adminAccess");
+                const codeSnap = await getDoc(codeRef);
+                if (!codeSnap.exists() || String(codeSnap.data().codigo) !== adminCode.trim()) {
+                    setError("Código de administrador incorrecto.");
+                    return;
+                }
+            }
 
-            const usuarioAGuardar = {
-                name: nuevoUsuario.name,
-                email: nuevoUsuario.email,
-                rol: nuevoUsuario.rol,
+            // Crear usuario en Auth con password por defecto
+            const cred = await createUserWithEmailAndPassword(auth, email, DEFAULT_PASSWORD);
+
+            //Guardar en Firestore
+            const userData = {
+                name,
+                email,
+                rol,
                 uid: cred.user.uid,
-                ...(nuevoUsuario.rol === "auditor_interno" && {
-                    compania: nuevoUsuario.compania,
-                }),
+                ...(rol === "auditor_interno" && { compania }),
             };
+            await setDoc(doc(db, "usuarios", cred.user.uid), userData);
 
-            await addDoc(collection(db, "usuarios"), usuarioAGuardar);
+            if (rol === "auditor_externo") {
+                const externoPayload = {
+                    nombre: name,
+                    usuario: email,
+                    contraseña: DEFAULT_PASSWORD,
+                };
+                const res = await fetch(
+                    "http://localhost:8000/auditor_externo/crear_auditor_externo",
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(externoPayload),
+                    }
+                );
+                if (!res.ok) {
+                    throw new Error("Error al registrar auditor externo en el backend");
+                }
+            }
 
-            setNuevoUsuario({
-                name: "",
-                email: "",
-                rol: "auditor_interno",
-                compania: "",
-            });
+            if (rol === "auditor_interno") {
+                const internoPayload = {
+                    nombre: name,
+                    compañia: compania,
+                    usuario: email,
+                    contraseña: DEFAULT_PASSWORD,
+                };
+                const res = await fetch(
+                    "http://localhost:8000/auditor_interno/crear_auditor_interno",
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(internoPayload),
+                    }
+                );
+                if (!res.ok) {
+                    throw new Error("Error al registrar auditor interno en el backend");
+                }
+            }
 
-            if (onUsuarioCreado) onUsuarioCreado(); // para refrescar lista
-        } catch (error) {
-            console.error("Error al crear usuario:", error);
+            setSuccess(`Usuario creado exitosamente. Password por defecto: "${DEFAULT_PASSWORD}"`);
+            // Reset campos
+            setName("");
+            setRol("auditor_interno");
+            setAdminCode("");
+            setEmail("");
+            setCompania("");
+
+            // Notificar al componente padre que refresque la lista
+            if (onUsuarioCreado) onUsuarioCreado();
+        } catch (err) {
+            console.error(err);
+            setError("Error al crear usuario: " + err.message);
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className="bg-gray-100 p-4 rounded mb-6 space-y-4">
+            {error && <p className="text-red-500">{error}</p>}
+            {success && <p className="text-green-500">{success}</p>}
+
             <input
-                type="text"
-                name="name"
-                placeholder="Nombre"
-                value={nuevoUsuario.name}
-                onChange={handleChange}
                 className="w-full p-2 border rounded"
-                required
+                type="text" placeholder="Nombre"
+                value={name} onChange={e => setName(e.target.value)} required
             />
-            <input
-                type="email"
-                name="email"
-                placeholder="Correo"
-                value={nuevoUsuario.email}
-                onChange={handleChange}
-                className="w-full p-2 border rounded"
-                required
-            />
+
             <select
-                name="rol"
-                value={nuevoUsuario.rol}
-                onChange={handleChange}
                 className="w-full p-2 border rounded"
+                value={rol} onChange={e => setRol(e.target.value)}
             >
                 <option value="auditor_interno">Auditor Interno</option>
                 <option value="auditor_externo">Auditor Externo</option>
                 <option value="admin">Administrador</option>
             </select>
-            {nuevoUsuario.rol === "auditor_interno" && (
+
+            {rol === "admin" && (
                 <input
-                    type="text"
-                    name="compania"
-                    placeholder="Compañía"
-                    value={nuevoUsuario.compania}
-                    onChange={handleChange}
                     className="w-full p-2 border rounded"
-                    required
+                    type="text" placeholder="Código Admin"
+                    value={adminCode} onChange={e => setAdminCode(e.target.value)} required
                 />
             )}
+
+            {rol === "auditor_interno" && (
+                <input
+                    className="w-full p-2 border rounded"
+                    type="text" placeholder="Compañía"
+                    value={compania} onChange={e => setCompania(e.target.value)} required
+                />
+            )}
+
+            <input
+                className="w-full p-2 border rounded"
+                type="email" placeholder="Email"
+                value={email} onChange={e => setEmail(e.target.value)} required
+            />
+
+            <p className="text-sm text-gray-600">
+                Se asignará la contraseña por defecto: <strong>{DEFAULT_PASSWORD}</strong>.
+                El usuario deberá cambiarla más tarde desde su perfil.
+            </p>
+
             <button
                 type="submit"
-                className="bg-green-500 text-white px-4 py-2 rounded"
+                className="w-full bg-green-500 text-white px-4 py-2 rounded"
             >
-                Guardar Usuario
+                Crear Usuario
             </button>
         </form>
     );
