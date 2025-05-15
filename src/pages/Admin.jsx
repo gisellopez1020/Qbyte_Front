@@ -1,4 +1,4 @@
-// src/pages/Admin.jsx
+
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
@@ -34,7 +34,7 @@ const Admin = () => {
       {formularios.map((form) => (
         <div
           key={form.id}
-          className="bg-white shadow-xl p-6 rounded-xl w-80 flex flex-col items-center"
+          className="bg-white shadow-xl p-6 rounded-xl w-10 flex flex-col items-center"
         >
           <img src={form.imagen || "form-default.png"} className="w-24 mb-3" />
           <h2 className="text-xl font-bold text-center mb-2">{form.titulo}</h2>

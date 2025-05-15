@@ -7,10 +7,10 @@ const FormsRedirect = () => {
 
   if (!usuario) return null;
 
-  if (rol === "auditor_interno") {
-    return <FormsInterno />;
-  } else {
+  if (rol === "admin") {
     return <Admin />;
+  } else {
+    return <FormsInterno />;
   }
 };
 
