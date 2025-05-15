@@ -14,6 +14,10 @@ const Plan = () => {
   const [planes, setPlanes] = useState([]);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [expandidos, setExpandidos] = useState({});
+  const [modoEvidencias, setModoEvidencias] = useState({});
+  const [evidenciasEditadas, setEvidenciasEditadas] = useState({});
+  const [auditorNombre, setAuditorNombre] = useState("");
+  const [auditorId, setAuditorId] = useState("");
   const { usuario } = useAuth();
   const [objetivo, setObjetivo] = useState("");
   const [etapas, setEtapas] = useState([
@@ -23,16 +27,133 @@ const Plan = () => {
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" });
 
   useEffect(() => {
-    if (usuario && usuario._id) {
-      cargarPlanes(usuario._id);
-    }
+    const obtenerAuditorNombre = async () => {
+      if (usuario && usuario.email) {
+        try {
+          console.log("Buscando auditor con email:", usuario.email);
+          const res = await fetch(
+            `http://localhost:8000/auditor_interno/listar_auditores_internos`
+          );
+          const auditores = await res.json();
+
+          const auditor = auditores.find(
+            (a) => a.usuario.toLowerCase() === usuario.email.toLowerCase()
+          );
+
+          if (auditor && auditor.nombre) {
+            setAuditorNombre(auditor.nombre);
+          } else {
+            console.error("No se encontró un auditor con ese email");
+          }
+        } catch (error) {
+          console.error("Error al obtener el nombre del auditor:", error);
+        }
+      }
+    };
+
+    obtenerAuditorNombre();
   }, [usuario]);
+
+  useEffect(() => {
+    const obtenerAuditorId = async () => {
+      if (usuario && usuario.email) {
+        try {
+          console.log("Buscando auditor con email:", usuario.email);
+          const res = await fetch(
+            `http://localhost:8000/auditor_interno/listar_auditores_internos`
+          );
+          const auditores = await res.json();
+
+          const auditor = auditores.find(
+            (a) => a.usuario.toLowerCase() === usuario.email.toLowerCase()
+          );
+
+          if (auditor && auditor._id) {
+            setAuditorId(auditor._id);
+            cargarPlanes(auditor._id);
+          }
+        } catch (error) {
+          console.error("Error al obtener el ID del auditor:", error);
+        }
+      }
+    };
+
+    obtenerAuditorId();
+  }, [usuario]);
+
+  const toggleModoEvidencias = (planId, etapas) => {
+    setModoEvidencias((prev) => ({
+      ...prev,
+      [planId]: !prev[planId],
+    }));
+
+    if (!modoEvidencias[planId]) {
+      const evidenciasIniciales = {};
+      etapas.forEach((etapa, i) => {
+        evidenciasIniciales[i] = etapa.evidencia || "";
+      });
+      setEvidenciasEditadas((prev) => ({
+        ...prev,
+        [planId]: evidenciasIniciales,
+      }));
+    }
+  };
+
+  const actualizarEvidencia = (planId, indiceEtapa, valor) => {
+    setEvidenciasEditadas((prev) => ({
+      ...prev,
+      [planId]: {
+        ...prev[planId],
+        [indiceEtapa]: valor,
+      },
+    }));
+  };
+
+  const enviarEvidencias = async (planId) => {
+    const evidencias = Object.entries(evidenciasEditadas[planId] || {}).map(
+      ([indice, evidencia]) => ({
+        indice_etapa: parseInt(indice),
+        evidencia,
+      })
+    );
+
+    try {
+      const respuesta = await fetch(
+        "http://localhost:8000/plan_de_accion/añadir_evidencias",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            plan_id: planId,
+            evidencias,
+          }),
+        }
+      );
+
+      if (respuesta.ok) {
+        setMensaje({
+          texto: "Evidencias guardadas exitosamente",
+          tipo: "exito",
+        });
+        cargarPlanes(auditorId);
+        setModoEvidencias((prev) => ({ ...prev, [planId]: false }));
+      } else {
+        const error = await respuesta.json();
+        setMensaje({ texto: `Error: ${error.detail}`, tipo: "error" });
+      }
+    } catch (error) {
+      console.error("Error al enviar evidencias:", error);
+      setMensaje({ texto: "Error al conectar con el servidor", tipo: "error" });
+    }
+  };
 
   const cargarPlanes = async (auditorId) => {
     setCargando(true);
     try {
       const respuesta = await fetch(
-        `http://0.0.0.0:8000/listar_plan_por_auditor_interno?auditorI_id=${auditorId}`
+        `http://localhost:8000/plan_de_accion/listar_plan_por_auditor_interno?auditorI_id=${auditorId}`
       );
       const datos = await respuesta.json();
       setPlanes(datos);
@@ -44,7 +165,7 @@ const Plan = () => {
   };
 
   const handleSubmit = async () => {
-    if (!usuario || !usuario._id) {
+    if (!usuario || !auditorId) {
       setMensaje({
         texto: "No se pudo identificar al auditor interno actual",
         tipo: "error",
@@ -63,20 +184,23 @@ const Plan = () => {
     const nuevoPlan = {
       objetivo,
       etapas,
-      auditor_interno: usuario._id,
+      auditor_interno: auditorId,
       comentario: "No se han realizado comentarios",
       estado: "pendiente",
     };
 
     setCargando(true);
     try {
-      const respuesta = await fetch("http://0.0.0.0:8000/guardar_plan", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(nuevoPlan),
-      });
+      const respuesta = await fetch(
+        "http://localhost:8000/plan_de_accion/guardar_plan",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(nuevoPlan),
+        }
+      );
 
       if (respuesta.ok) {
         setMensaje({
@@ -90,7 +214,7 @@ const Plan = () => {
         ]);
         setMostrarFormulario(false);
         // Recargar planes
-        cargarPlanes(usuario._id);
+        cargarPlanes(auditorId);
       } else {
         const error = await respuesta.json();
         setMensaje({ texto: `Error: ${error.detail}`, tipo: "error" });
@@ -165,7 +289,7 @@ const Plan = () => {
         <div className="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-200">
           <p className="text-blue-800">
             <span className="font-medium">Auditor Interno:</span>{" "}
-            {usuario.usuario}
+            {auditorNombre}
           </p>
         </div>
       )}
@@ -298,22 +422,72 @@ const Plan = () => {
                           <p className="text-sm font-medium text-gray-600">
                             Evidencia:
                           </p>
-                          <p className="text-sm text-gray-600">
-                            {etapa.evidencia ===
-                            "Aun no ha cargado evidencia para esta meta" ? (
-                              <span className="italic text-gray-500">
-                                {etapa.evidencia}
-                              </span>
-                            ) : (
-                              etapa.evidencia
-                            )}
-                          </p>
+                          {modoEvidencias[plan._id] ? (
+                            <textarea
+                              value={
+                                evidenciasEditadas[plan._id]?.[idx] ??
+                                etapa.evidencia ??
+                                ""
+                              }
+                              onChange={(e) =>
+                                actualizarEvidencia(
+                                  plan._id,
+                                  idx,
+                                  e.target.value
+                                )
+                              }
+                              className="w-full p-2 border border-gray-300 rounded-md mt-1"
+                              rows="2"
+                            />
+                          ) : (
+                            <p className="text-sm text-gray-600">
+                              {etapa.evidencia ===
+                              "Aun no ha cargado evidencia para esta meta" ? (
+                                <span className="italic text-gray-500">
+                                  {etapa.evidencia}
+                                </span>
+                              ) : (
+                                etapa.evidencia
+                              )}
+                            </p>
+                          )}
                         </div>
                       </div>
                     ))}
                     <div className="mt-3">
                       <p className="font-medium text-gray-700">Comentario:</p>
                       <p className="text-gray-600">{plan.comentario}</p>
+                    </div>
+
+                    {modoEvidencias[plan._id] && (
+                      <div className="flex justify-end mt-4">
+                        <button
+                          onClick={() => enviarEvidencias(plan._id)}
+                          className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md"
+                        >
+                          Enviar Evidencias
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="flex justify-between mt-5">
+                      <button className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md">
+                        Enviar a Auditor Externo
+                      </button>
+                      <button
+                        onClick={() =>
+                          toggleModoEvidencias(plan._id, plan.etapas)
+                        }
+                        className={`text-sm font-medium ${
+                          modoEvidencias[plan._id]
+                            ? "text-red-600 hover:text-red-800"
+                            : "text-blue-600 hover:text-blue-800"
+                        }`}
+                      >
+                        {modoEvidencias[plan._id]
+                          ? "Cancelar"
+                          : "Añadir Evidencias"}
+                      </button>
                     </div>
                   </div>
                 )}

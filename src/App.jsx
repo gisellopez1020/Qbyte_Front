@@ -14,6 +14,8 @@ import Reports from "./pages/Reports";
 import SidebarLayout from "./layouts/SidebarLayout";
 import Formulario from "./components/Formulario";
 import { useAuth } from "./context/AuthContext";
+import CrearForm from "./pages/admin/CrearForm";
+import VerForm from "./pages/admin/VerForm";
 
 function App() {
   const { loading } = useAuth();
@@ -47,6 +49,10 @@ function App() {
           <Route path="forms/:id" element={<Formulario />} />
           <Route path="plan-action" element={<Plan />} />
           <Route path="reports" element={<Reports />} />
+          <Route path="/crear-form" element={<CrearForm />} />
+          <Route path="/forms/admin/:id" element={<VerForm />} />
+
+
         </Route>
       </Routes>
     </>
