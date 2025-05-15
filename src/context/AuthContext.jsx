@@ -13,9 +13,14 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem("usuario");
+    const storedRol = sessionStorage.getItem("rol");
 
     if (storedUser) {
       setUsuario(JSON.parse(storedUser));
+    }
+    
+    if (storedRol) {
+      setRol(storedRol);
     }
 
     setLoading(false);
@@ -38,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ usuario, rol, login, logout, loading }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
