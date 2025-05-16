@@ -9,6 +9,8 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
 
 const Plan = () => {
   const [planes, setPlanes] = useState([]);
@@ -28,31 +30,24 @@ const Plan = () => {
 
   useEffect(() => {
     const obtenerAuditorNombre = async () => {
-      if (usuario && usuario.email) {
-        try {
-          console.log("Buscando auditor con email:", usuario.email);
-          const res = await fetch(
-            `http://localhost:8000/auditor_interno/listar_auditores_internos`
-          );
-          const auditores = await res.json();
+      try {
+        const docRef = doc(db, "usuarios", usuario.uid);
+        const docSnap = await getDoc(docRef);
 
-          const auditor = auditores.find(
-            (a) => a.usuario.toLowerCase() === usuario.email.toLowerCase()
-          );
-
-          if (auditor && auditor.nombre) {
-            setAuditorNombre(auditor.nombre);
-          } else {
-            console.error("No se encontró un auditor con ese email");
-          }
-        } catch (error) {
-          console.error("Error al obtener el nombre del auditor:", error);
+        if (docSnap.exists()) {
+          const datosUsuario = docSnap.data();
+          setAuditorNombre(datosUsuario.name);
+        } else {
+          console.log("No se encontró el documento del usuario.");
+          return null;
         }
+      } catch (error) {
+        console.error("Error al obtener los datos del usuario:", error);
+        return null;
       }
     };
-
     obtenerAuditorNombre();
-  }, [usuario]);
+  });
 
   useEffect(() => {
     const obtenerAuditorId = async () => {

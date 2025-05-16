@@ -30,11 +30,11 @@ const AudiInterno = () => {
         Formularios
       </h1>
 
-      <div className="flex flex-wrap p-3 xl:p-0 relative items-center justify-center gap-5 xl:gap-10 overflow-y-auto h-auto">
+      <div className="flex flex-wrap p-5 xl:p-0 relative items-center justify-center gap-5 xl:gap-10 h-auto">
         {formularios.map((form) => (
           <div
             key={form.norma}
-            className="bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[200px] cursor-pointer backdrop-blur-md border border-primary flex flex-col justify-center items-center"
+            className="bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[200px] cursor-pointer hover:scale-105 transition-transform duration-300 backdrop-blur-md border border-primary flex flex-col justify-center items-center"
             onClick={() => navigate(`/forms/${encodeURIComponent(form.norma)}`)}
           >
             <FcRules className="text-7xl" />
