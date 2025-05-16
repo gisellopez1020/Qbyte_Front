@@ -17,6 +17,7 @@ import { useAuth } from "./context/AuthContext";
 import CrearForm from "./pages/admin/forms/CrearForm";
 import VerForm from "./pages/admin/forms/VerForm";
 import UsuariosAdmin from "./pages/admin/users/UsuariosAdmin";
+import PlanesExterno from "./pages/PlanesExterno";
 
 function App() {
   const { loading } = useAuth();
@@ -53,6 +54,7 @@ function App() {
           <Route path="/crear-form" element={<CrearForm />} />
           <Route path="/forms/admin/:id" element={<VerForm />} />
           <Route path="/usuarios" element={<UsuariosAdmin />} />
+          <Route path="PlanesExterno" element={<PlanesExterno/>}></Route>
 
         </Route>
       </Routes>

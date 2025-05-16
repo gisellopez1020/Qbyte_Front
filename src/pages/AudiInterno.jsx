@@ -7,6 +7,9 @@ const AudiInterno = () => {
   const [formularios, setFormularios] = useState([]);
   const navigate = useNavigate();
 
+  // Simulación del ID del auditor interno (puedes reemplazarlo con localStorage o contexto)
+  const auditorInternoId = "665feab0b1a65e8f6a6c5c27"; // <-- Reemplázalo con el ID real
+
   useEffect(() => {
     const fetchFormularios = async () => {
       try {
@@ -25,11 +28,33 @@ const AudiInterno = () => {
 
   return (
     <div className="mx-auto py-8 flex flex-col items-center justify-center h-screen">
-      <h1 className="text-3xl text-gray-800 font-bold flex items-center justify-center mb-8">
+      <h1 className="text-3xl text-gray-800 font-bold flex items-center justify-center mb-4">
         <SiGoogleforms className="text-primary mr-2" />
         Formularios
       </h1>
 
+      {/* Bloque para copiar código */}
+      <div className="mb-6 text-center">
+        <p className="text-gray-700 mb-2">
+          Comparte este código con el auditor externo para que pueda ver tus planes:
+        </p>
+        <div className="flex gap-3 items-center justify-center">
+          <code className="bg-gray-100 px-3 py-1 rounded text-sm font-mono">
+            {auditorInternoId}
+          </code>
+          <button
+            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+            onClick={() => {
+              navigator.clipboard.writeText(auditorInternoId);
+              alert("Código copiado al portapapeles");
+            }}
+          >
+            Copiar
+          </button>
+        </div>
+      </div>
+
+      {/* Tarjetas de formularios */}
       <div className="flex flex-wrap p-3 xl:p-0 relative items-center justify-center gap-5 xl:gap-10 overflow-y-auto h-auto">
         {formularios.map((form) => (
           <div
