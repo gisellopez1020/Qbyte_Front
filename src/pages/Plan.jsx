@@ -7,10 +7,10 @@ import {
   FileText,
   ChevronDown,
   ChevronUp,
-  X,
-  Send
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
 
 const Plan = () => {
   const [planes, setPlanes] = useState([]);
@@ -27,40 +27,27 @@ const Plan = () => {
   ]);
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" });
-  const [isopen, setIsopen] = useState(false);
-  const [auditoresExternos, setAuditoresExternos] = useState([]);
-  const [auditorExternoSeleccionado, setAuditorExternoSeleccionado] = useState("");
-  const [planSeleccionado, setPlanSeleccionado] = useState(null);
-  const [cargandoAuditores, setCargandoAuditores] = useState(false);
-  const [enviandoPlan, setEnviandoPlan] = useState(false);
 
   useEffect(() => {
     const obtenerAuditorNombre = async () => {
-      if (usuario && usuario.email) {
-        try {
-          console.log("Buscando auditor con email:", usuario.email);
-          const res = await fetch(
-            "http://localhost:8000/auditor_externo/listar_auditores_externos"
-          );
-          const auditores = await res.json();
+      try {
+        const docRef = doc(db, "usuarios", usuario.uid);
+        const docSnap = await getDoc(docRef);
 
-          const auditor = auditores.find(
-            (a) => a.usuario.toLowerCase() === usuario.email.toLowerCase()
-          );
-
-          if (auditor && auditor.nombre) {
-            setAuditorNombre(auditor.nombre);
-          } else {
-            console.error("No se encontró un auditor con ese email");
-          }
-        } catch (error) {
-          console.error("Error al obtener el nombre del auditor:", error);
+        if (docSnap.exists()) {
+          const datosUsuario = docSnap.data();
+          setAuditorNombre(datosUsuario.name);
+        } else {
+          console.log("No se encontró el documento del usuario.");
+          return null;
         }
+      } catch (error) {
+        console.error("Error al obtener los datos del usuario:", error);
+        return null;
       }
     };
-
     obtenerAuditorNombre();
-  }, [usuario]);
+  });
 
   useEffect(() => {
     const obtenerAuditorId = async () => {
@@ -68,7 +55,7 @@ const Plan = () => {
         try {
           console.log("Buscando auditor con email:", usuario.email);
           const res = await fetch(
-            "http://localhost:8000/auditor_externo/listar_auditores_externos"
+            `http://localhost:8000/auditor_interno/listar_auditores_internos`
           );
           const auditores = await res.json();
 
@@ -88,130 +75,6 @@ const Plan = () => {
 
     obtenerAuditorId();
   }, [usuario]);
-
-  useEffect(() => {
-    const obtenerAuditorNombre = async () => {
-      if (usuario && usuario.email) {
-        try {
-          console.log("Buscando auditor con email:", usuario.email);
-          const res = await fetch(
-            "http://localhost:8000/auditor_interno/listar_auditores_internos"
-          );
-          const auditores = await res.json();
-
-          const auditor = auditores.find(
-            (a) => a.usuario.toLowerCase() === usuario.email.toLowerCase()
-          );
-
-          if (auditor && auditor.nombre) {
-            setAuditorNombre(auditor.nombre);
-          } else {
-            console.error("No se encontró un auditor con ese email");
-          }
-        } catch (error) {
-          console.error("Error al obtener el nombre del auditor:", error);
-        }
-      }
-    };
-
-    obtenerAuditorNombre();
-  }, [usuario]);
-
-  useEffect(() => {
-    const obtenerAuditorId = async () => {
-      if (usuario && usuario.email) {
-        try {
-          console.log("Buscando auditor con email:", usuario.email);
-          const res = await fetch(
-            "http://localhost:8000/auditor_interno/listar_auditores_internos"
-          );
-          const auditores = await res.json();
-
-          const auditor = auditores.find(
-            (a) => a.usuario.toLowerCase() === usuario.email.toLowerCase()
-          );
-
-          if (auditor && auditor._id) {
-            setAuditorId(auditor._id);
-            cargarPlanes(auditor._id);
-          }
-        } catch (error) {
-          console.error("Error al obtener el ID del auditor:", error);
-        }
-      }
-    };
-
-    obtenerAuditorId();
-  }, [usuario]);
-
-  // Función para obtener la lista de auditores externos
-  const obtenerAuditoresExternos = async () => {
-    setCargandoAuditores(true);
-    try {
-      const respuesta = await fetch(
-        "http://localhost:8000/auditor_externo/listar_auditores_externos"
-      );
-      if (respuesta.ok) {
-        const auditores = await respuesta.json();
-        setAuditoresExternos(auditores);
-      } else {
-        console.error("Error al obtener auditores externos");
-        setMensaje({ texto: "Error al obtener la lista de auditores externos", tipo: "error" });
-      }
-    } catch (error) {
-      console.error("Error al conectar con el servidor:", error);
-      setMensaje({ texto: "Error al conectar con el servidor", tipo: "error" });
-    } finally {
-      setCargandoAuditores(false);
-    }
-  };
-
-  // Función para abrir el modal de auditores externos
-  const abrirModalAuditoresExternos = (planId) => {
-    setPlanSeleccionado(planId);
-    setAuditorExternoSeleccionado("");
-    obtenerAuditoresExternos();
-    setIsopen(true);
-  };
-
-  // Función para enviar el plan al auditor externo seleccionado
-  const enviarPlanAuditorExterno = async () => {
-    if (!auditorExternoSeleccionado || !planSeleccionado) {
-      setMensaje({ texto: "Debe seleccionar un auditor externo", tipo: "error" });
-      return;
-    }
-
-    setEnviandoPlan(true);
-    try {
-      const respuesta = await fetch(
-        "http://localhost:8000/plan_de_accion/enviar_plan_auditor_externo",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            plan_id: planSeleccionado,
-            auditor_externo_id: auditorExternoSeleccionado
-          })
-        }
-      );
-
-      if (respuesta.ok) {
-        setMensaje({ texto: "Plan enviado exitosamente al auditor externo", tipo: "exito" });
-        setIsopen(false);
-        cargarPlanes(auditorId); // Recargar planes después de enviar
-      } else {
-        const error = await respuesta.json();
-        setMensaje({ texto: `Error: ${error.detail}`, tipo: "error" });
-      }
-    } catch (error) {
-      console.error("Error al enviar plan:", error);
-      setMensaje({ texto: "Error al conectar con el servidor", tipo: "error" });
-    } finally {
-      setEnviandoPlan(false);
-    }
-  };
 
   const toggleModoEvidencias = (planId, etapas) => {
     setModoEvidencias((prev) => ({
@@ -603,14 +466,9 @@ const Plan = () => {
                     )}
 
                     <div className="flex justify-between mt-5">
-                      <button 
-                        className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md flex items-center" 
-                        onClick={() => abrirModalAuditoresExternos(plan._id)}
-                      >
-                        <Send size={18} className="mr-2" />
+                      <button className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md">
                         Enviar a Auditor Externo
                       </button>
-
                       <button
                         onClick={() =>
                           toggleModoEvidencias(plan._id, plan.etapas)
@@ -642,70 +500,6 @@ const Plan = () => {
           </div>
         )}
       </div>
-
-      {/* Modal de Auditores Externos */}
-      {isopen && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">
-                Seleccionar Auditor Externo
-              </h3>
-              <button
-                onClick={() => setIsopen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {cargandoAuditores ? (
-              <div className="py-4 text-center text-gray-600">
-                Cargando auditores externos...
-              </div>
-            ) : auditoresExternos.length > 0 ? (
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-medium mb-2">
-                  Auditores disponibles:
-                </label>
-                <select
-                  value={auditorExternoSeleccionado}
-                  onChange={(e) => setAuditorExternoSeleccionado(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md bg-white focus:ring focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="">Seleccione un auditor externo</option>
-                  {auditoresExternos.map((auditor) => (
-                    <option key={auditor._id} value={auditor._id}>
-                      {auditor.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ) : (
-              <div className="py-4 text-center text-gray-600">
-                No hay auditores externos disponibles
-              </div>
-            )}
-
-            <div className="flex justify-end space-x-3 mt-6">
-              <button
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                onClick={() => setIsopen(false)}
-              >
-                Cancelar
-              </button>
-              <button
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
-                disabled={!auditorExternoSeleccionado || enviandoPlan}
-                onClick={enviarPlanAuditorExterno}
-              >
-                {enviandoPlan ? "Enviando..." : "Enviar Plan"}
-                {!enviandoPlan && <Send size={16} className="ml-2" />}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     if (storedUser) {
       setUsuario(JSON.parse(storedUser));
     }
-    
+
     if (storedRol) {
       setRol(storedRol);
     }

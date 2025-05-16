@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   collection,
   addDoc,
@@ -17,7 +17,137 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { FaChartPie } from "react-icons/fa";
+import { FaChartPie, FaDownload, FaCertificate } from "react-icons/fa";
+import { doc, getDoc } from "firebase/firestore";
+import { GiStarsStack } from "react-icons/gi";
+
+const Certificate = React.forwardRef(({ reportData, totalPoints }, ref) => {
+  const { usuario } = useAuth();
+  const [auditorNombre, setAuditorNombre] = useState("");
+  const [auditorEmpresa, setAuditorEmpresa] = useState("");
+  const currentDate = new Date().toLocaleDateString("es-ES", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  useEffect(() => {
+    const obtenerAuditorNombre = async () => {
+      try {
+        const docRef = doc(db, "usuarios", usuario.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const datosUsuario = docSnap.data();
+          setAuditorNombre(datosUsuario.name);
+        } else {
+          console.log("No se encontró el documento del usuario.");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error al obtener los datos del usuario:", error);
+        return null;
+      }
+    };
+    obtenerAuditorNombre();
+  });
+
+  useEffect(() => {
+    const obtenerAuditorEmpresa = async () => {
+      try {
+        const docRef = doc(db, "usuarios", usuario.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const datosUsuario = docSnap.data();
+          setAuditorEmpresa(datosUsuario.compania);
+        } else {
+          console.log("No se encontró el documento del usuario.");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error al obtener los datos del usuario:", error);
+        return null;
+      }
+    };
+    obtenerAuditorEmpresa();
+  });
+
+  return (
+    <div
+      ref={ref}
+      className="bg-white w-full p-8 border-8 border-double border-primary"
+      style={{
+        fontFamily: "serif",
+        width: "800px",
+        height: "650px",
+        position: "relative",
+        background: "linear-gradient(to bottom right, #ffffff, #f0f8ff)",
+      }}
+    >
+      <div className="absolute inset-0 flex justify-center items-center opacity-10 pointer-events-none">
+        <FaCertificate className="text-9xl text-primary" />
+      </div>
+
+      <div className="text-center">
+        <h1
+          className="text-4xl font-bold text-primary mb-4"
+          style={{ fontFamily: "serif" }}
+        >
+          CERTIFICADO
+        </h1>
+        <h2 className="text-2xl font-semibold text-gray-700 mb-10">
+          DE CUMPLIMIENTO
+        </h2>
+
+        <p className="text-lg mb-8">Se certifica que:</p>
+
+        <p className="text-3xl font-bold mb-10 border-b-2 pb-2 border-gray-300 inline-block">
+          {auditorNombre || usuario?.email}
+        </p>
+
+        <p className="text-xl mb-5 font-bold">
+          {usuario?.rol} de la empresa {auditorEmpresa}
+        </p>
+
+        <p className="text-lg mb-8 px-16">
+          Ha cumplido satisfactoriamente con los requisitos especificados en la
+          norma:
+        </p>
+
+        <p className="text-2xl font-bold mb-10 text-primary">
+          {reportData?.norma ||
+            reportData?.formularioTitulo ||
+            "Evaluación de cumplimiento normativo"}
+        </p>
+
+        <p className="text-lg">
+          Con una puntuación de <strong>{totalPoints}</strong> de 100 puntos
+          posibles
+        </p>
+
+        <div className="mt-10 flex justify-between items-end">
+          <div className="text-center">
+            <p className="text-2xl text-shadow-sm font-bold relative text-[#161236] p-1">
+              QByte
+              <span className="text-primary text-4xl">.</span>
+              <GiStarsStack className="text-primary absolute bottom-1 left-11" />
+            </p>
+            <div className="border-t-2 border-gray-500 pt-2 px-10">
+              Firma del evaluador
+            </div>
+          </div>
+
+          <div className="text-center">
+            <div className="border-t-2 border-gray-500 pt-2 px-10">
+              Fecha: {currentDate}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
 
 const Reports = () => {
   const { usuario } = useAuth();
@@ -28,6 +158,8 @@ const Reports = () => {
   const [savedReports, setSavedReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
   const [totalesData, setTotalesData] = useState(null);
+  const [showCertificate, setShowCertificate] = useState(false);
+  const certificateRef = useRef(null);
 
   const COLORS = ["#4CAF50", "#FFC107", "#F44336"];
 
@@ -35,32 +167,30 @@ const Reports = () => {
     if (!content) return null;
 
     try {
-      // Si content es una cadena, intentamos parsearlo como JSON
       let data = content;
       if (typeof content === "string") {
         try {
-          // Primero intentamos ver si toda la cadena es un JSON
           data = JSON.parse(content);
         } catch (e) {
-          // Si no, buscamos si hay un objeto "totales" en la cadena usando regex
           const totalesMatch = content.match(/"totales"\s*:\s*({[^}]*})/);
           if (totalesMatch && totalesMatch[1]) {
             try {
-              // Limpiamos el texto capturado y lo parseamos
               const totalesStr = totalesMatch[1].replace(/'/g, '"');
               data = JSON.parse(`{"totales":${totalesStr}}`);
             } catch (innerError) {
-              console.error("Error parsing extracted totales:", innerError);
+              console.error(
+                "Error al analizar los totales extraídos",
+                innerError
+              );
               return null;
             }
           } else {
-            console.error("No totales object found in string");
+            console.error("No se encontró ningún objeto totales en la cadena");
             return null;
           }
         }
       }
 
-      // Ahora que tenemos el objeto, intentamos extraer los totales
       if (data && data.totales) {
         const { bueno, regular, malo } = data.totales;
         if (
@@ -70,10 +200,10 @@ const Reports = () => {
         ) {
           // Datos para el gráfico circular
           return [
-            { name: "Bueno", value: bueno || 0, color: "#4CAF50" },
-            { name: "Regular", value: regular || 0, color: "#FFC107" },
-            { name: "Malo", value: malo || 0, color: "#F44336" },
-          ].filter((item) => item.value >= 0); // Solo incluimos valores mayores que 0
+            { name: "Bueno", value: bueno || 0, color: COLORS[0] },
+            { name: "Regular", value: regular || 0, color: COLORS[1] },
+            { name: "Malo", value: malo || 0, color: COLORS[2] },
+          ].filter((item) => item.value > 0);
         }
       }
 
@@ -81,6 +211,69 @@ const Reports = () => {
     } catch (error) {
       console.error("Error extracting totales data:", error);
       return null;
+    }
+  };
+
+  // Función para determinar el estado de certificación
+  const getCertificationStatus = (totalPoints) => {
+    if (totalPoints >= 70) {
+      return {
+        message: `Felicitaciones, te certificaste en la norma ${
+          reportData?.norma || reportData?.formularioTitulo || ""
+        }`,
+        className: "bg-green-100 text-green-800 border-green-300",
+        icon: "🏆",
+        certified: true,
+      };
+    } else if (totalPoints >= 50) {
+      return {
+        message: "Sigue intentando, estás cerca de lograrlo",
+        className: "bg-yellow-100 text-yellow-800 border-yellow-300",
+        icon: "💪",
+        certified: false,
+      };
+    } else {
+      return {
+        message:
+          "Lo siento, no cumples con los puntos suficientes para certificarte",
+        className: "bg-red-100 text-red-800 border-red-300",
+        icon: "❌",
+        certified: false,
+      };
+    }
+  };
+
+  // Función para generar y descargar el PDF
+  const generatePDF = async () => {
+    if (!certificateRef.current) return;
+
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const { jsPDF } = await import("jspdf");
+
+      const canvas = await html2canvas(certificateRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const imgWidth = 297;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      pdf.save(`certificado_${reportData?.norma || "normativo"}.pdf`);
+    } catch (err) {
+      console.error("Error generando PDF:", err);
+      alert(
+        "Hubo un error al generar el certificado PDF. Por favor intenta de nuevo."
+      );
     }
   };
 
@@ -297,6 +490,7 @@ const Reports = () => {
   // Ver un reporte guardado
   const viewSavedReport = (report) => {
     setSelectedReport(report);
+    setShowCertificate(false);
 
     const reportContent = report.content;
     if (typeof reportContent === "object" && reportContent !== null) {
@@ -315,6 +509,13 @@ const Reports = () => {
       const totales = extractTotalesData(reportContent);
       setTotalesData(totales);
     }
+  };
+
+  // Calcular puntuación total
+  const getTotalPoints = () => {
+    return totalesData
+      ? totalesData.reduce((sum, item) => sum + item.value, 0)
+      : 0;
   };
 
   return (
@@ -370,7 +571,7 @@ const Reports = () => {
               className={`px-4 py-2 rounded font-medium ${
                 loading
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "bg-primary hover:bg-blue-800 text-white"
               }`}
             >
               {loading ? "Generando..." : "Generar reporte"}
@@ -422,20 +623,71 @@ const Reports = () => {
                       <Legend />
                     </PieChart>
                   </ResponsiveContainer>
-                  <div className="flex justify-center mt-2">
+                  <div className="flex flex-col justify-center mt-2">
                     <div className="text-sm font-medium">
-                      Puntuación total:{" "}
-                      {totalesData.reduce((sum, item) => sum + item.value, 0)}
+                      Puntuación total: {getTotalPoints()} de 100 puntos
+                      posibles.
                     </div>
                   </div>
                 </div>
               </div>
             )}
 
+            <div className="prose max-w-none">
+              {totalesData && totalesData.length > 0 && (
+                <div
+                  className={`p-4 mb-6 rounded-lg border ${
+                    getCertificationStatus(getTotalPoints()).className
+                  }`}
+                >
+                  <p className="text-lg font-bold flex items-center">
+                    <span className="text-2xl mr-2">
+                      {getCertificationStatus(getTotalPoints()).icon}
+                    </span>
+                    {getCertificationStatus(getTotalPoints()).message}
+                  </p>
+
+                  {/* Botón de certificado para descargar solo si está certificado */}
+                  {getCertificationStatus(getTotalPoints()).certified && (
+                    <div className="mt-3 flex gap-2">
+                      <button
+                        onClick={() => setShowCertificate(!showCertificate)}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                      >
+                        <FaCertificate /> Ver certificado
+                      </button>
+
+                      <button
+                        onClick={generatePDF}
+                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                      >
+                        <FaDownload /> Descargar certificado
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Mostrar el certificado si está habilitado */}
+              {showCertificate &&
+                getCertificationStatus(getTotalPoints()).certified && (
+                  <div className="mb-6 p-4 border rounded-lg overflow-auto flex justify-center">
+                    <Certificate
+                      ref={certificateRef}
+                      reportData={reportData || selectedReport?.formData}
+                      totalPoints={getTotalPoints()}
+                    />
+                  </div>
+                )}
+            </div>
+
             {!selectedReport && (
               <div className="mt-6">
                 <button
-                  onClick={() => setReporte(null)}
+                  onClick={() => {
+                    setReporte(null);
+                    setShowCertificate(false);
+                  }}
                   className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 font-medium"
                 >
                   Generar otro reporte
@@ -449,6 +701,7 @@ const Reports = () => {
                   onClick={() => {
                     setSelectedReport(null);
                     setReporte(null);
+                    setShowCertificate(false);
                   }}
                   className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 font-medium"
                 >
@@ -457,6 +710,17 @@ const Reports = () => {
               </div>
             )}
           </div>
+        )}
+      </div>
+
+      {/* Elemento oculto para generar el PDF */}
+      <div className="hidden">
+        {getTotalPoints() >= 70 && (
+          <Certificate
+            ref={certificateRef}
+            reportData={reportData || selectedReport?.formData}
+            totalPoints={getTotalPoints()}
+          />
         )}
       </div>
     </div>

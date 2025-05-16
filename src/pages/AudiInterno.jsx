@@ -7,9 +7,6 @@ const AudiInterno = () => {
   const [formularios, setFormularios] = useState([]);
   const navigate = useNavigate();
 
-  // Simulación del ID del auditor interno (puedes reemplazarlo con localStorage o contexto)
-  const auditorInternoId = "665feab0b1a65e8f6a6c5c27"; // <-- Reemplázalo con el ID real
-
   useEffect(() => {
     const fetchFormularios = async () => {
       try {
@@ -33,33 +30,11 @@ const AudiInterno = () => {
         Formularios
       </h1>
 
-      {/* Bloque para copiar código */}
-      <div className="mb-6 text-center">
-        <p className="text-gray-700 mb-2">
-          Comparte este código con el auditor externo para que pueda ver tus planes:
-        </p>
-        <div className="flex gap-3 items-center justify-center">
-          <code className="bg-gray-100 px-3 py-1 rounded text-sm font-mono">
-            {auditorInternoId}
-          </code>
-          <button
-            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-            onClick={() => {
-              navigator.clipboard.writeText(auditorInternoId);
-              alert("Código copiado al portapapeles");
-            }}
-          >
-            Copiar
-          </button>
-        </div>
-      </div>
-
-      {/* Tarjetas de formularios */}
-      <div className="flex flex-wrap p-3 xl:p-0 relative items-center justify-center gap-5 xl:gap-10 overflow-y-auto h-auto">
+      <div className="flex flex-wrap p-5 xl:p-0 relative items-center justify-center gap-5 xl:gap-10 h-auto">
         {formularios.map((form) => (
           <div
             key={form.norma}
-            className="bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[200px] cursor-pointer backdrop-blur-md border border-primary flex flex-col justify-center items-center"
+            className="bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[200px] cursor-pointer hover:scale-105 transition-transform duration-300 backdrop-blur-md border border-primary flex flex-col justify-center items-center"
             onClick={() => navigate(`/forms/${encodeURIComponent(form.norma)}`)}
           >
             <FcRules className="text-7xl" />

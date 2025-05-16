@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import {
   ShieldCheck,
@@ -10,10 +10,13 @@ import {
   PlusCircle,
   BarChart2,
 } from "lucide-react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
 
 const Index = () => {
   const { usuario } = useAuth();
   const rol = usuario?.rol;
+  const [usuarioNombre, setUsuarioNombre] = useState("");
 
   if (!usuario) return null;
 
@@ -142,8 +145,28 @@ const Index = () => {
       ],
     },
   };
-
   const current = descriptionMap[rol];
+
+  useEffect(() => {
+    const obtenerDatosUsuario = async () => {
+      try {
+        const docRef = doc(db, "usuarios", usuario.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const datosUsuario = docSnap.data();
+          setUsuarioNombre(datosUsuario.name);
+        } else {
+          console.log("No se encontró el documento del usuario.");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+        return null;
+      }
+    };
+    obtenerDatosUsuario();
+  });
 
   return (
     <div className="p-2 max-w-5xl mx-auto">
@@ -153,10 +176,11 @@ const Index = () => {
         {iconMap[rol]}
         <div>
           <h1 className="text-3xl font-bold">
-            Bienvenido, {usuario.name} <span className="ml-2">👋</span>
+            Bienvenido, {usuarioNombre} <span className="ml-2">👋</span>
           </h1>
           <p className="text-lg mt-1">
-            Rol: <span className="font-semibold capitalize">{current.title}</span>
+            Rol:{" "}
+            <span className="font-semibold capitalize">{current.title}</span>
           </p>
         </div>
       </div>
@@ -168,7 +192,9 @@ const Index = () => {
         <p className="text-gray-700 text-lg">{current.description}</p>
         <ul className="list-disc list-inside text-gray-600 space-y-1">
           {current.list.map((item, idx) => (
-            <li key={idx} className="text-md">{item}</li>
+            <li key={idx} className="text-md">
+              {item}
+            </li>
           ))}
         </ul>
       </div>
