@@ -24,12 +24,12 @@ const PlanesAuditorExterno = () => {
     setExpandidos((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const actualizarComentario = (planId, texto) => {
-    setComentarios((prev) => ({ ...prev, [planId]: texto }));
+  const actualizarComentario = (plan_id, texto) => {
+    setComentarios((prev) => ({ ...prev, [plan_id]: texto }));
   };
 
-  const actualizarComentarioYEstado = async (planId, estado) => {
-    const comentario = comentarios[planId]?.trim();
+  const actualizarComentarioYEstado = async (plan_id, estado) => {
+    const comentario = comentarios[plan_id]?.trim();
     if (!comentario) {
       setMensaje({
         texto: "Debe agregar un comentario antes de evaluar",
@@ -40,17 +40,20 @@ const PlanesAuditorExterno = () => {
 
     setProcesando(true);
     try {
-      const res = await fetch("http://localhost:8000/plan_de_accion/actualizar_comentario_estado", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: planId, comentario, estado }),
-      });
+      const res = await fetch(
+        "http://localhost:8000/plan_de_accion/actualizar_comentario_estado",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: plan_id, comentario, estado }),
+        }
+      );
 
       if (!res.ok) throw new Error("Error al actualizar estado");
 
       setPlanes((prev) =>
         prev.map((plan) =>
-          plan._id === planId ? { ...plan, estado, comentario } : plan
+          plan._id === plan_id ? { ...plan, estado, comentario } : plan
         )
       );
       setMensaje({
@@ -71,7 +74,9 @@ const PlanesAuditorExterno = () => {
       if (!usuario?.email) return;
 
       try {
-        const res = await fetch("http://localhost:8000/auditor_externo/listar_auditores_externos");
+        const res = await fetch(
+          "http://localhost:8000/auditor_externo/listar_auditores_externos"
+        );
         const auditores = await res.json();
 
         const auditor = auditores.find(
@@ -81,7 +86,9 @@ const PlanesAuditorExterno = () => {
 
         setAuditorExternoId(auditor._id);
 
-        const res2 = await fetch("http://localhost:8000/auditor_interno/listar_auditores_internos");
+        const res2 = await fetch(
+          "http://localhost:8000/auditor_interno/listar_auditores_internos"
+        );
         const data = await res2.json();
         const diccionario = {};
         data.forEach((a) => {
@@ -91,7 +98,9 @@ const PlanesAuditorExterno = () => {
 
         const planesData = await Promise.all(
           auditor.planesAsignados.map((id) =>
-            fetch(`http://localhost:8000/plan_de_accion/listar_plan_por_auditor_interno?auditorI_id=${id}`)
+            fetch(
+              `http://localhost:8000/plan_de_accion/listar_plan_por_id?plan_id=${id}`
+            )
               .then((res) => res.json())
               .catch(() => [])
           )
@@ -139,8 +148,12 @@ const PlanesAuditorExterno = () => {
             <div className="p-4">
               {plan.etapas?.map((etapa, i) => (
                 <div key={i} className="mb-2 p-2 bg-gray-50 border rounded">
-                  <p><strong>Meta:</strong> {etapa.meta}</p>
-                  <p><strong>Responsable:</strong> {etapa.responsable}</p>
+                  <p>
+                    <strong>Meta:</strong> {etapa.meta}
+                  </p>
+                  <p>
+                    <strong>Responsable:</strong> {etapa.responsable}
+                  </p>
                   {etapa.indicadores?.length > 0 && (
                     <ul className="list-disc ml-6">
                       {etapa.indicadores.map((ind, idx) => (
@@ -148,7 +161,11 @@ const PlanesAuditorExterno = () => {
                       ))}
                     </ul>
                   )}
-                  {etapa.evidencia && <p><em>Evidencia:</em> {etapa.evidencia}</p>}
+                  {etapa.evidencia && (
+                    <p>
+                      <em>Evidencia:</em> {etapa.evidencia}
+                    </p>
+                  )}
                 </div>
               ))}
 
@@ -162,13 +179,17 @@ const PlanesAuditorExterno = () => {
 
               <div className="flex gap-2 mt-3">
                 <button
-                  onClick={() => actualizarComentarioYEstado(plan._id, "Evaluado")}
+                  onClick={() =>
+                    actualizarComentarioYEstado(plan._id, "Evaluado")
+                  }
                   className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
                 >
                   Aprobar
                 </button>
                 <button
-                  onClick={() => actualizarComentarioYEstado(plan._id, "Rechazado")}
+                  onClick={() =>
+                    actualizarComentarioYEstado(plan._id, "Rechazado")
+                  }
                   className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
                 >
                   Rechazar
@@ -181,7 +202,9 @@ const PlanesAuditorExterno = () => {
     </div>
   );
 
-  const planesPendientes = planes.filter((p) => !p.estado || p.estado === "Pendiente");
+  const planesPendientes = planes.filter(
+    (p) => !p.estado || p.estado === "pendiente"
+  );
   const planesEvaluados = planes.filter((p) => p.estado === "Evaluado");
   const planesRechazados = planes.filter((p) => p.estado === "Rechazado");
 
@@ -194,10 +217,16 @@ const PlanesAuditorExterno = () => {
       {mensaje.texto && (
         <div
           className={`mb-4 p-4 rounded ${
-            mensaje.tipo === "exito" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+            mensaje.tipo === "exito"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
           }`}
         >
-          {mensaje.tipo === "error" ? <AlertCircle className="mr-2 inline" /> : <Save className="mr-2 inline" />}
+          {mensaje.tipo === "error" ? (
+            <AlertCircle className="mr-2 inline" />
+          ) : (
+            <Save className="mr-2 inline" />
+          )}
           {mensaje.texto}
         </div>
       )}
@@ -209,7 +238,9 @@ const PlanesAuditorExterno = () => {
       ) : (
         <div className="grid  grid-cols-1 md:grid-cols-3 gap-3">
           <div>
-            <h2 className="text-xl font-bold text-yellow-600 mb-2">Pendientes</h2>
+            <h2 className="text-xl font-bold text-yellow-600 mb-2">
+              Pendientes
+            </h2>
             {renderPlanes(planesPendientes, "yellow")}
           </div>
 

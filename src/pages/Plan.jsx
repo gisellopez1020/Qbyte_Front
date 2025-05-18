@@ -62,14 +62,9 @@ const Plan = () => {
   }, []);
 
   const enviarAAuditorExterno = async (planId) => {
-    if (!auditorId) {
-      setMensaje({ texto: "Auditor interno no identificado", tipo: "error" });
-      return;
-    }
-
     setCargando(true);
     try {
-      const url = `http://localhost:8000/plan_de_accion/enviar_a_auditorExterno?auditorI_id=${auditorId}`;
+      const url = `http://localhost:8000/plan_de_accion/enviar_a_auditorExterno?plan_id=${planId}`;
       const respuesta = await fetch(url, {
         method: "POST",
         headers: {
@@ -483,146 +478,149 @@ const Plan = () => {
       )}
 
       {/* Lista de Planes */}
-      <div className="overflow-y-auto max-h-[400px] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
-
-      <div>
-        {cargando ? (
-          <div className="text-center py-8">Cargando planes...</div>
-        ) : planes.length > 0 ? (
-          <div className="space-y-4">
-            {planes.map((plan) => (
-              <div
-                key={plan._id}
-                className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm"
-              >
+      <div className="h-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+        <div>
+          {cargando ? (
+            <div className="text-center py-8">Cargando planes...</div>
+          ) : planes.length > 0 ? (
+            <div className="space-y-4">
+              {planes.map((plan) => (
                 <div
-                  className="bg-gray-50 p-4 cursor-pointer flex justify-between items-center"
-                  onClick={() => toggleExpandido(plan._id)}
+                  key={plan._id}
+                  className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm"
                 >
-                  <div>
-                    <h3 className="font-medium text-lg">{plan.objetivo}</h3>
-                    <div className="flex items-center mt-1">
-                      <span
-                        className={`text-sm px-2 py-1 rounded-full ${
-                          plan.estado === "pendiente"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : plan.estado === "aprobado"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {plan.estado.charAt(0).toUpperCase() +
-                          plan.estado.slice(1)}
-                      </span>
-                    </div>
-                  </div>
-                  {expandidos[plan._id] ? <ChevronUp /> : <ChevronDown />}
-                </div>
-
-                {expandidos[plan._id] && (
-                  <div className="p-4 border-t border-gray-200">
-                    <h4 className="font-medium text-gray-700 mb-2">Etapas:</h4>
-                    {plan.etapas.map((etapa, idx) => (
-                      <div key={idx} className="mb-3 p-3 bg-gray-50 rounded">
-                        <p className="font-medium">Meta {idx + 1}:</p>
-                        <p className="text-gray-700">{etapa.meta}</p>
-                        <div className="mt-2">
-                          <p className="text-sm font-medium text-gray-600">
-                            Evidencia:
-                          </p>
-                          {modoEvidencias[plan._id] ? (
-                            <textarea
-                              value={
-                                evidenciasEditadas[plan._id]?.[idx] ??
-                                etapa.evidencia ??
-                                ""
-                              }
-                              onChange={(e) =>
-                                actualizarEvidencia(
-                                  plan._id,
-                                  idx,
-                                  e.target.value
-                                )
-                              }
-                              className="w-full p-2 border border-gray-300 rounded-md mt-1"
-                              rows="2"
-                            />
-                          ) : (
-                            <p className="text-sm text-gray-600">
-                              {etapa.evidencia ===
-                              "Aun no ha cargado evidencia para esta meta" ? (
-                                <span className="italic text-gray-500">
-                                  {etapa.evidencia}
-                                </span>
-                              ) : (
-                                etapa.evidencia
-                              )}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                    <div className="mt-3">
-                      <p className="font-medium text-gray-700">Comentario:</p>
-                      <p className="text-gray-600">{plan.comentario}</p>
-                    </div>
-
-                    {modoEvidencias[plan._id] && (
-                      <div className="flex justify-end mt-4">
-                        <button
-                          onClick={() => enviarEvidencias(plan._id)}
-                          className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md"
-                          disabled={cargando}
+                  <div
+                    className="bg-gray-50 p-4 cursor-pointer flex justify-between items-center"
+                    onClick={() => toggleExpandido(plan._id)}
+                  >
+                    <div>
+                      <h3 className="font-medium text-lg">{plan.objetivo}</h3>
+                      <div className="flex items-center mt-1">
+                        <span
+                          className={`text-sm px-2 py-1 rounded-full ${
+                            plan.estado === "pendiente"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : plan.estado === "Evaluado"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
                         >
-                          {cargando ? "Enviando..." : "Enviar Evidencias"}
-                        </button>
+                          {plan.estado.charAt(0).toUpperCase() +
+                            plan.estado.slice(1)}
+                        </span>
                       </div>
-                    )}
+                    </div>
+                    {expandidos[plan._id] ? <ChevronUp /> : <ChevronDown />}
+                  </div>
 
-                    <div className="flex justify-between mt-5">
-                      <button
-                        onClick={() => enviarAAuditorExterno(plan._id)}
-                        className=" text-white p-2 rounded-lg font-semibold
+                  {expandidos[plan._id] && (
+                    <div className="p-4 border-t border-gray-200">
+                      <h4 className="font-medium text-gray-700 mb-2">
+                        Etapas:
+                      </h4>
+                      {plan.etapas.map((etapa, idx) => (
+                        <div key={idx} className="mb-3 p-3 bg-gray-50 rounded">
+                          <p className="font-medium">Meta {idx + 1}:</p>
+                          <p className="text-gray-700">{etapa.meta}</p>
+                          <div className="mt-2">
+                            <p className="text-sm font-medium text-gray-600">
+                              Evidencia:
+                            </p>
+                            {modoEvidencias[plan._id] ? (
+                              <textarea
+                                value={
+                                  evidenciasEditadas[plan._id]?.[idx] ??
+                                  etapa.evidencia ??
+                                  ""
+                                }
+                                onChange={(e) =>
+                                  actualizarEvidencia(
+                                    plan._id,
+                                    idx,
+                                    e.target.value
+                                  )
+                                }
+                                className="w-full p-2 border border-gray-300 rounded-md mt-1"
+                                rows="2"
+                              />
+                            ) : (
+                              <p className="text-sm text-gray-600">
+                                {etapa.evidencia ===
+                                "Aun no ha cargado evidencia para esta meta" ? (
+                                  <span className="italic text-gray-500">
+                                    {etapa.evidencia}
+                                  </span>
+                                ) : (
+                                  etapa.evidencia
+                                )}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                      <div className="mt-3">
+                        <p className="font-medium text-gray-700">Comentario:</p>
+                        <p className="text-gray-600">{plan.comentario}</p>
+                      </div>
+
+                      {modoEvidencias[plan._id] && (
+                        <div className="flex justify-end mt-4">
+                          <button
+                            onClick={() => enviarEvidencias(plan._id)}
+                            className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md"
+                            disabled={cargando}
+                          >
+                            {cargando ? "Enviando..." : "Enviar Evidencias"}
+                          </button>
+                        </div>
+                      )}
+
+                      <div className="flex justify-between mt-5">
+                        <button
+                          onClick={() => enviarAAuditorExterno(plan._id)}
+                          className=" text-white p-2 rounded-lg font-semibold
              bg-gradient-to-r from-sky-800 to-sky-950
              hover:from-sky-700 hover:to-sky-900
              active:scale-95 active:from-sky-900 active:to-sky-950
              transition-all duration-200 ease-in-out shadow-md hover:shadow-lg active:shadow-inner"
-                        disabled={cargando}
-                      >
-                        {cargando ? "Enviando..." : "Enviar a Auditor Externo"}
-                      </button>
-                      <button
-                        onClick={() =>
-                          toggleModoEvidencias(plan._id, plan.etapas)
-                        }
-                        className={`text-sm font-medium ${
-                          modoEvidencias[plan._id]
-                            ? "text-red-600 hover:text-red-800"
-                            : "text-blue-600 hover:text-blue-800"
-                        }`}
-                        disabled={cargando}
-                      >
-                        {modoEvidencias[plan._id]
-                          ? "Cancelar"
-                          : "Añadir Evidencias"}
-                      </button>
+                          disabled={cargando}
+                        >
+                          {cargando
+                            ? "Enviando..."
+                            : "Enviar a Auditor Externo"}
+                        </button>
+                        <button
+                          onClick={() =>
+                            toggleModoEvidencias(plan._id, plan.etapas)
+                          }
+                          className={`text-sm font-medium ${
+                            modoEvidencias[plan._id]
+                              ? "text-red-600 hover:text-red-800"
+                              : "text-blue-600 hover:text-blue-800"
+                          }`}
+                          disabled={cargando}
+                        >
+                          {modoEvidencias[plan._id]
+                            ? "Cancelar"
+                            : "Añadir Evidencias"}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : usuario ? (
-          <div className="text-center py-8 text-gray-600">
-            No hay planes de acción registrados. Cree uno nuevo.
-          </div>
-        ) : (
-          <div className="text-center py-8 text-gray-600">
-            Para ver sus planes de acción, debe iniciar sesión como auditor
-            interno.
-          </div>
-        )}
-      </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : usuario ? (
+            <div className="text-center py-8 text-gray-600">
+              No hay planes de acción registrados. Cree uno nuevo.
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-600">
+              Para ver sus planes de acción, debe iniciar sesión como auditor
+              interno.
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
