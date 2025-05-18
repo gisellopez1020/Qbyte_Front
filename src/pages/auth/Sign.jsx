@@ -16,6 +16,7 @@ function Sign() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [compania, setCompania] = useState("");
   const { login } = useAuth();
@@ -24,6 +25,7 @@ function Sign() {
     e.preventDefault();
     setError("");
     setSuccess("");
+    setIsLoading(true);
 
     try {
       if (rol === "admin") {
@@ -38,21 +40,6 @@ function Sign() {
           return;
         }
       }
-
-      const credencial = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = credencial.user;
-
-      await setDoc(doc(db, "usuarios", user.uid), {
-        name: name,
-        email: email,
-        rol: rol,
-        ...(rol === "auditor_interno" && { compania: compania }),
-      });
-      login({ name, email, uid: user.uid, rol });
 
       if (rol === "auditor_externo") {
         const externoPayload = {
@@ -73,7 +60,11 @@ function Sign() {
         );
 
         if (!res.ok) {
-          setError("Error al registrar auditor interno.");
+          const errorData = await res.json().catch(() => null);
+          const errorMessage =
+            errorData?.detail || "Error al registrar auditor externo.";
+          setError(errorMessage);
+          return;
         }
       }
 
@@ -97,11 +88,42 @@ function Sign() {
         );
 
         if (!res.ok) {
-          setError("Error al registrar auditor interno.");
+          const errorData = await res.json().catch(() => null);
+          const errorMessage =
+            errorData?.detail || "Error al registrar auditor interno.";
+          setError(errorMessage);
+          return;
         }
       }
+
+      const credencial = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = credencial.user;
+
+      await setDoc(doc(db, "usuarios", user.uid), {
+        name: name,
+        email: email,
+        rol: rol,
+        ...(rol === "auditor_interno" && { compania: compania }),
+      });
+
+      setSuccess("¡Registro exitoso!");
+      login({ name, email, uid: user.uid, rol });
     } catch (err) {
-      setError("Error al registrarse: " + err.message);
+      if (err.code === "auth/email-already-in-use") {
+        setError("El correo electrónico ya está en uso.");
+      } else if (err.code === "auth/weak-password") {
+        setError("La contraseña debe tener al menos 6 caracteres.");
+      } else if (err.code === "auth/invalid-email") {
+        setError("El formato del correo electrónico no es válido.");
+      } else {
+        setError("Error al registrarse: " + err.message);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
