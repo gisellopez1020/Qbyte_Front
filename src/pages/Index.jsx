@@ -51,21 +51,21 @@ const Index = () => {
           icon: <UserCog size={32} className="text-white" />,
           color: "bg-blue-600",
           desc: "Crear, editar y eliminar usuarios y roles.",
-          route: "/admin/usuarios",
+          route: "/usuarios",
         },
         {
           title: "Reportes Globales",
           icon: <BarChart2 size={32} className="text-white" />,
           color: "bg-indigo-600",
           desc: "Visualizar estadísticas y reportes globales.",
-          route: "/admin/reportes",
+          route: "/usuarios",
         },
         {
-          title: "Planes de Auditoría",
+          title: "Crear formularios",
           icon: <ClipboardList size={32} className="text-white" />,
           color: "bg-cyan-600",
-          desc: "Crear, asignar y gestionar planes de auditoría.",
-          route: "/admin/planes-auditoria",
+          desc: "Crear formularios de las normas",
+          route: "/crear-form",
         },
         {
           title: "Configuración",
@@ -133,7 +133,7 @@ const Index = () => {
           icon: <FileText size={32} className="text-white" />,
           color: "bg-sky-700",
           desc: "Visualizar formularios que requieren auditoría externa.",
-          route: "/auditor-externo/formularios-pendientes",
+          route: "/planesExternos",
         },
         {
           title: "Evaluación",
@@ -183,7 +183,7 @@ const Index = () => {
   }, [usuario.uid]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 mt-8">
+    <div className="p-2 max-w-5xl mx-auto">
       <div
         className={`rounded-3xl shadow-lg text-white p-7 mb-8 flex items-center gap-6 bg-gradient-to-r ${roleColors[rol]}`}
       >
@@ -213,7 +213,7 @@ const Index = () => {
         </ul>
       </div>
 
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-1">
         Acciones Disponibles
       </h2>
 
@@ -222,7 +222,7 @@ const Index = () => {
           <div
             key={idx}
             onClick={() => route && navigate(route)}
-            className={`${color} p-6 rounded-xl shadow-lg text-white flex flex-col hover:scale-105 transition-transform duration-300 cursor-pointer`}
+            className={`${color} p-4 rounded-xl shadow-lg text-white flex flex-col hover:scale-105 transition-transform duration-300 cursor-pointer`}
           >
             <div className="mb-4">{icon}</div>
             <h3 className="text-xl font-semibold mb-2">{title}</h3>
