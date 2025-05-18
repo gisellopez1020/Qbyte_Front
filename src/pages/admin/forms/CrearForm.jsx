@@ -33,11 +33,7 @@ const CrearForm = () => {
             return;
         }
 
-        const payload = {
-            titulo,
-            norma,
-            preguntas,
-        };
+        const payload = { titulo, norma, preguntas };
 
         try {
             const res = await fetch("http://localhost:8000/formulario/crear_formulario", {
@@ -59,78 +55,85 @@ const CrearForm = () => {
     };
 
     return (
-        <div className="p-5 min-h-screen bg-gray-50">
-            <h1 className="text-2xl font-bold mb-6 text-center">Crear nuevo formulario</h1>
+        <div className="h-screen overflow-y-auto px-4 py-6 bg-gray-100">
+            <div className="relative py-11 min-h-[700px] max-w-[1200px] mx-auto rounded-3xl bg-sky-900/30 px-4">
+                <h1 className="text-2xl font-bold mb-6 text-center text-white">Crear nuevo formulario</h1>
 
-            {mensaje && (
-                <div
-                    className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"
-                        }`}
-                >
-                    <div className="text-center font-semibold">{mensaje.texto}</div>
-                </div>
-            )}
+                {mensaje && (
+                    <div className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"}`}>
+                        <div className="text-center font-semibold">{mensaje.texto}</div>
+                    </div>
+                )}
 
-            <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto">
-                <div className="bg-white p-4 rounded shadow-md">
-                    <label className="block font-medium text-gray-700 mb-1">Título del formulario:</label>
-                    <input
-                        type="text"
-                        className="w-full border rounded p-2"
-                        value={titulo}
-                        onChange={(e) => setTitulo(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <div className="bg-white p-4 rounded shadow-md">
-                    <label className="block font-medium text-gray-700 mb-1">Norma:</label>
-                    <input
-                        type="text"
-                        className="w-full border rounded p-2"
-                        value={norma}
-                        onChange={(e) => setNorma(e.target.value)}
-                        required
-                    />
-                </div>
-
-                {preguntas.map((pregunta, i) => (
-                    <div key={i} className="bg-white p-4 rounded shadow-md">
-                        <label className="block font-medium text-gray-700 mb-1">
-                            Pregunta {i + 1}:
-                        </label>
+                <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto">
+                    <div className="bg-white p-4 rounded shadow-md">
+                        <label className="block font-medium text-gray-700 mb-1">Título del formulario:</label>
                         <input
                             type="text"
-                            className="w-full border rounded p-2 mb-2"
-                            value={pregunta}
-                            onChange={(e) => actualizarPregunta(i, e.target.value)}
+                            className="w-full border rounded p-2"
+                            value={titulo}
+                            onChange={(e) => setTitulo(e.target.value)}
                             required
                         />
+                    </div>
+
+                    <div className="bg-white p-4 rounded shadow-md">
+                        <label className="block font-medium text-gray-700 mb-1">Norma:</label>
+                        <input
+                            type="text"
+                            className="w-full border rounded p-2"
+                            value={norma}
+                            onChange={(e) => setNorma(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    {preguntas.map((pregunta, i) => (
+                        <div key={i} className="bg-white p-4 rounded shadow-md">
+                            <label className="block font-medium text-gray-700 mb-1">
+                                Pregunta {i + 1}:
+                            </label>
+                            <input
+                                type="text"
+                                className="w-full border rounded p-2 mb-2"
+                                value={pregunta}
+                                onChange={(e) => actualizarPregunta(i, e.target.value)}
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={() => eliminarPregunta(i)}
+                                className="text-red-600 text-sm hover:underline"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                    ))}
+
+                    <div className="flex gap-x-4 mt-4 justify-center flex-wrap">
                         <button
                             type="button"
-                            onClick={() => eliminarPregunta(i)}
-                            className="text-red-600 text-sm hover:underline"
+                            onClick={agregarPregunta}
+                            className="bg-gradient-to-r from-[#2067af] to-blue-950
+                            hover:from-[#1b5186] hover:to-blue-900
+                            transition-all duration-200 ease-in-out text-white px-4 py-2
+                            rounded-lg active:scale-95 active:shadow-inner hover:scale-105"
                         >
-                            Eliminar
+                            Agregar Pregunta
+                        </button>
+
+                        <button
+                            type="submit"
+                            className="bg-gradient-to-r from-[#2067af] to-blue-950
+                            hover:from-[#1b5186] hover:to-blue-900
+                            transition-all duration-200 ease-in-out text-white px-4 py-2
+                            rounded-lg active:scale-95 active:shadow-inner hover:scale-105"
+                        >
+                            Guardar formulario
                         </button>
                     </div>
-                ))}
-
-                <button
-                    type="button"
-                    onClick={agregarPregunta}
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
-                    Agregar Pregunta
-                </button>
-
-                <button
-                    type="submit"
-                    className="bg-primary text-white px-6 py-2 rounded hover:bg-blue-900"
-                >
-                    Guardar formulario
-                </button>
-            </form>
+                </form>
+            </div>
         </div>
     );
 };

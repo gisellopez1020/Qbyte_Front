@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
   ClipboardList,
-  ChevronDown,
-  ChevronUp,
   Save,
   MessageSquare,
   AlertCircle,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
@@ -17,100 +17,8 @@ const PlanesAuditorExterno = () => {
   const [cargando, setCargando] = useState(true);
   const [procesando, setProcesando] = useState(false);
   const { usuario } = useAuth();
-
   const [auditorExternoId, setAuditorExternoId] = useState("");
-  const [auditorExternoNombre, setAuditorExternoNombre] = useState("");
-
-  useEffect(() => {
-    const obtenerAuditorYPlanes = async () => {
-      if (!usuario?.email) return;
-
-      try {
-        const res = await fetch(
-          "http://localhost:8000/auditor_externo/listar_auditores_externos"
-        );
-        const auditores = await res.json();
-
-        const auditor = auditores.find(
-          (a) => a.usuario.toLowerCase() === usuario.email.toLowerCase()
-        );
-
-        if (!auditor) {
-          setMensaje({
-            texto: "No se encontró el auditor externo",
-            tipo: "error",
-          });
-          setCargando(false);
-          return;
-        }
-
-        setAuditorExternoId(auditor._id);
-        setAuditorExternoNombre(auditor.nombre);
-
-        const obtenerPlanesPorAuditorInterno = async (planesAsignados) => {
-          try {
-            const fetches = planesAsignados.map((auditorInternoId) =>
-              fetch(
-                `http://localhost:8000/plan_de_accion/listar_plan_por_auditor_interno?auditorI_id=${auditorInternoId}`
-              )
-                .then((res) => {
-                  if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
-                  return res.json();
-                })
-                .catch((err) => {
-                  console.error(
-                    `Error al obtener planes para el auditor interno ${auditorInternoId}:`,
-                    err
-                  );
-                  return [];
-                })
-            );
-
-            const planesPorAuditor = await Promise.all(fetches);
-            const todosLosPlanes = planesPorAuditor.flat();
-
-            setPlanes(todosLosPlanes);
-
-            const comentariosIniciales = {};
-            todosLosPlanes.forEach((plan) => {
-              if (plan && plan._id) {
-                comentariosIniciales[plan._id] = plan.comentario || "";
-              }
-            });
-            setComentarios(comentariosIniciales);
-          } catch (e) {
-            console.error("Error general al obtener planes:", e);
-            setMensaje({
-              texto: "Error al obtener planes: " + e.message,
-              tipo: "error",
-            });
-            setPlanes([]);
-          }
-        };
-
-        if (
-          auditor.planesAsignados &&
-          Array.isArray(auditor.planesAsignados) &&
-          auditor.planesAsignados.length > 0
-        ) {
-          await obtenerPlanesPorAuditorInterno(auditor.planesAsignados);
-        } else {
-          setPlanes([]);
-          setComentarios({});
-        }
-      } catch (err) {
-        console.error("Error:", err);
-        setMensaje({
-          texto: "Error al conectar con el servidor",
-          tipo: "error",
-        });
-      } finally {
-        setCargando(false);
-      }
-    };
-
-    obtenerAuditorYPlanes();
-  }, [usuario]);
+  const [nombresAuditoresInternos, setNombresAuditoresInternos] = useState({});
 
   const toggleExpandido = (id) => {
     setExpandidos((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -120,57 +28,6 @@ const PlanesAuditorExterno = () => {
     setComentarios((prev) => ({ ...prev, [planId]: texto }));
   };
 
-  const enviarPlanAlAuditorInterno = async (planId) => {
-    setProcesando(true);
-    try {
-      const auditorInternoId = planes.find(
-        (p) => p._id === planId
-      )?.auditor_interno;
-
-      if (!auditorInternoId) {
-        throw new Error(
-          "No se pudo encontrar el ID del auditor interno para este plan"
-        );
-      }
-
-      console.log(
-        "Enviando plan",
-        planId,
-        "al auditor interno",
-        auditorInternoId
-      );
-
-      const res = await fetch(
-        `http://localhost:8000/plan_de_accion/enviar_a_auditorExterno?auditorI_id=${auditorInternoId}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            plan_id: planId,
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.detail || "Error al enviar plan");
-      }
-
-      setPlanes((prev) => prev.filter((plan) => plan._id !== planId));
-      setMensaje({
-        texto: "Plan enviado al auditor interno y eliminado de tu lista",
-        tipo: "exito",
-      });
-      setTimeout(() => setMensaje({ texto: "", tipo: "" }), 3000);
-    } catch (err) {
-      console.error("Error al enviar plan:", err);
-      setMensaje({ texto: `Error: ${err.message}`, tipo: "error" });
-      setTimeout(() => setMensaje({ texto: "", tipo: "" }), 3000);
-    } finally {
-      setProcesando(false);
-    }
-  };
-
   const actualizarComentarioYEstado = async (planId, estado) => {
     const comentario = comentarios[planId]?.trim();
     if (!comentario) {
@@ -178,235 +35,193 @@ const PlanesAuditorExterno = () => {
         texto: "Debe agregar un comentario antes de evaluar",
         tipo: "error",
       });
-      setTimeout(() => setMensaje({ texto: "", tipo: "" }), 3000);
-      return;
+      return setTimeout(() => setMensaje({ texto: "", tipo: "" }), 3000);
     }
 
     setProcesando(true);
     try {
-      console.log(
-        "Actualizando plan",
-        planId,
-        "con estado",
-        estado,
-        "y comentario",
-        comentario
-      );
+      const res = await fetch("http://localhost:8000/plan_de_accion/actualizar_comentario_estado", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: planId, comentario, estado }),
+      });
 
-      const res = await fetch(
-        "http://localhost:8000/plan_de_accion/actualizar_comentario_estado",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id: planId,
-            comentario: comentario,
-            estado: estado,
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.detail || "Error al actualizar estado");
-      }
+      if (!res.ok) throw new Error("Error al actualizar estado");
 
       setPlanes((prev) =>
         prev.map((plan) =>
-          plan._id === planId
-            ? { ...plan, estado: estado, comentario: comentario }
-            : plan
+          plan._id === planId ? { ...plan, estado, comentario } : plan
         )
       );
-
       setMensaje({
-        texto: `Plan ${
-          estado === "Evaluado" ? "evaluado" : "actualizado"
-        } correctamente`,
+        texto: `Plan actualizado correctamente`,
         tipo: "exito",
       });
-      setTimeout(() => setMensaje({ texto: "", tipo: "" }), 3000);
     } catch (err) {
-      console.error("Error al actualizar estado:", err);
-      setMensaje({ texto: `Error: ${err.message}`, tipo: "error" });
-      setTimeout(() => setMensaje({ texto: "", tipo: "" }), 3000);
+      console.error(err);
+      setMensaje({ texto: "Error: " + err.message, tipo: "error" });
     } finally {
       setProcesando(false);
+      setTimeout(() => setMensaje({ texto: "", tipo: "" }), 3000);
     }
   };
 
+  useEffect(() => {
+    const obtenerAuditorYPlanes = async () => {
+      if (!usuario?.email) return;
+
+      try {
+        const res = await fetch("http://localhost:8000/auditor_externo/listar_auditores_externos");
+        const auditores = await res.json();
+
+        const auditor = auditores.find(
+          (a) => a.usuario.toLowerCase() === usuario.email.toLowerCase()
+        );
+        if (!auditor) return;
+
+        setAuditorExternoId(auditor._id);
+
+        const res2 = await fetch("http://localhost:8000/auditor_interno/listar_auditores_internos");
+        const data = await res2.json();
+        const diccionario = {};
+        data.forEach((a) => {
+          diccionario[a._id] = a.nombre;
+        });
+        setNombresAuditoresInternos(diccionario);
+
+        const planesData = await Promise.all(
+          auditor.planesAsignados.map((id) =>
+            fetch(`http://localhost:8000/plan_de_accion/listar_plan_por_auditor_interno?auditorI_id=${id}`)
+              .then((res) => res.json())
+              .catch(() => [])
+          )
+        );
+        const todos = planesData.flat();
+        setPlanes(todos);
+
+        const inicial = {};
+        todos.forEach((p) => {
+          inicial[p._id] = p.comentario || "";
+        });
+        setComentarios(inicial);
+      } catch (e) {
+        console.error(e);
+        setMensaje({ texto: "Error al cargar datos", tipo: "error" });
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    obtenerAuditorYPlanes();
+  }, [usuario]);
+
+  const renderPlanes = (planesLista, color) => (
+    <div className="bg-gradient-to-r bg-slate-300 rounded-2xl shadow-sm flex-1 p-4 max-h-[500px] overflow-y-auto space-y-4">
+      {planesLista.map((plan) => (
+        <div key={plan._id} className="border rounded ">
+          <div
+            className="p-3 bg-white flex justify-between  items-center cursor-pointer"
+            onClick={() => toggleExpandido(plan._id)}
+          >
+            <div>
+              <p className="font-semibold">{plan.objetivo || "Sin objetivo"}</p>
+              <p className="text-sm text-gray-600">
+                De: {nombresAuditoresInternos[plan.auditor_interno] || "N/A"}
+              </p>
+              <p className={`text-sm font-medium text-${color}-600`}>
+                Estado: {plan.estado || "Pendiente"}
+              </p>
+            </div>
+            {expandidos[plan._id] ? <ChevronUp /> : <ChevronDown />}
+          </div>
+
+          {expandidos[plan._id] && (
+            <div className="p-4">
+              {plan.etapas?.map((etapa, i) => (
+                <div key={i} className="mb-2 p-2 bg-gray-50 border rounded">
+                  <p><strong>Meta:</strong> {etapa.meta}</p>
+                  <p><strong>Responsable:</strong> {etapa.responsable}</p>
+                  {etapa.indicadores?.length > 0 && (
+                    <ul className="list-disc ml-6">
+                      {etapa.indicadores.map((ind, idx) => (
+                        <li key={idx}>{ind}</li>
+                      ))}
+                    </ul>
+                  )}
+                  {etapa.evidencia && <p><em>Evidencia:</em> {etapa.evidencia}</p>}
+                </div>
+              ))}
+
+              <textarea
+                className="w-full mt-2 border rounded p-2"
+                rows={3}
+                placeholder="Escribe tu comentario..."
+                value={comentarios[plan._id] || ""}
+                onChange={(e) => actualizarComentario(plan._id, e.target.value)}
+              />
+
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={() => actualizarComentarioYEstado(plan._id, "Evaluado")}
+                  className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+                >
+                  Aprobar
+                </button>
+                <button
+                  onClick={() => actualizarComentarioYEstado(plan._id, "Rechazado")}
+                  className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+                >
+                  Rechazar
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+
+  const planesPendientes = planes.filter((p) => !p.estado || p.estado === "Pendiente");
+  const planesEvaluados = planes.filter((p) => p.estado === "Evaluado");
+  const planesRechazados = planes.filter((p) => p.estado === "Rechazado");
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 flex items-center text-gray-800">
         <ClipboardList className="mr-2" /> Planes de Acción Asignados
       </h1>
 
       {mensaje.texto && (
         <div
-          className={`mb-4 p-4 rounded flex items-center ${
-            mensaje.tipo === "exito"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
+          className={`mb-4 p-4 rounded ${
+            mensaje.tipo === "exito" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
           }`}
         >
-          {mensaje.tipo === "error" ? (
-            <AlertCircle className="mr-2" size={20} />
-          ) : (
-            <Save className="mr-2" size={20} />
-          )}
+          {mensaje.tipo === "error" ? <AlertCircle className="mr-2 inline" /> : <Save className="mr-2 inline" />}
           {mensaje.texto}
         </div>
       )}
 
       {cargando ? (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-700"></div>
-        </div>
-      ) : planes.length === 0 ? (
-        <div className="text-center py-8 bg-gray-50 rounded border">
-          <p className="text-gray-600">
-            No hay planes de acción asignados a revisar.
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Los planes aparecerán aquí cuando un auditor interno te asigne
-            planes para revisar.
-          </p>
+        <div className="text-center py-8">
+          <div className="animate-spin h-12 w-12 border-b-3 border-blue-700 rounded-full mx-auto"></div>
         </div>
       ) : (
-        <div className="space-y-4">
-          {planes.map((plan) => (
-            <div key={plan._id} className="border rounded bg-white shadow-sm">
-              <div
-                className="p-4 flex justify-between cursor-pointer bg-gray-50 hover:bg-gray-100"
-                onClick={() => toggleExpandido(plan._id)}
-              >
-                <div>
-                  <h2 className="font-medium text-lg">
-                    {plan.objetivo || "Sin objetivo definido"}
-                  </h2>
-                  <div className="flex space-x-4 text-sm text-gray-600 mt-1">
-                    <p>
-                      De: {plan.auditor_interno_nombre || "Auditor Interno"}
-                    </p>
-                    <p>
-                      Estado:{" "}
-                      <span
-                        className={`font-medium ${
-                          plan.estado === "Evaluado"
-                            ? "text-green-600"
-                            : plan.estado === "Rechazado"
-                            ? "text-red-600"
-                            : "text-yellow-600"
-                        }`}
-                      >
-                        {plan.estado || "Pendiente"}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-                {expandidos[plan._id] ? <ChevronUp /> : <ChevronDown />}
-              </div>
+        <div className="grid  grid-cols-1 md:grid-cols-3 gap-3">
+          <div>
+            <h2 className="text-xl font-bold text-yellow-600 mb-2">Pendientes</h2>
+            {renderPlanes(planesPendientes, "yellow")}
+          </div>
 
-              {expandidos[plan._id] && (
-                <div className="p-4 border-t">
-                  {plan.etapas && plan.etapas.length > 0 ? (
-                    <>
-                      <h3 className="font-semibold mb-2">Etapas</h3>
-                      {plan.etapas.map((etapa, idx) => (
-                        <div
-                          key={idx}
-                          className="mb-4 p-3 bg-gray-50 rounded border"
-                        >
-                          <p className="font-medium">
-                            Meta {idx + 1}: {etapa.meta || "Sin definir"}
-                          </p>
-                          {etapa.responsable && (
-                            <p className="text-sm text-gray-700">
-                              Responsable: {etapa.responsable}
-                            </p>
-                          )}
-                          {etapa.indicadores &&
-                            etapa.indicadores.length > 0 && (
-                              <>
-                                <p className="text-sm font-medium mt-2">
-                                  Indicadores:
-                                </p>
-                                <ul className="list-disc ml-5 text-sm text-gray-700">
-                                  {etapa.indicadores.map((ind, i) => (
-                                    <li key={i}>{ind}</li>
-                                  ))}
-                                </ul>
-                              </>
-                            )}
-                          {etapa.evidencia && (
-                            <p className="text-sm mt-2 italic">
-                              Evidencia: {etapa.evidencia}
-                            </p>
-                          )}
-                        </div>
-                      ))}
-                    </>
-                  ) : (
-                    <p className="text-yellow-600 mb-4 flex items-center">
-                      <AlertCircle className="mr-2" size={16} />
-                      No hay etapas definidas en este plan
-                    </p>
-                  )}
+          <div>
+            <h2 className="text-xl font-bold text-green-600 mb-2">Evaluados</h2>
+            {renderPlanes(planesEvaluados, "green")}
+          </div>
 
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Tu comentario:
-                    </label>
-                    <textarea
-                      className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 focus:border-blue-500"
-                      rows="3"
-                      placeholder="Escribe tu evaluación del plan..."
-                      value={comentarios[plan._id] || ""}
-                      onChange={(e) =>
-                        actualizarComentario(plan._id, e.target.value)
-                      }
-                    ></textarea>
-
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      <button
-                        onClick={() =>
-                          actualizarComentarioYEstado(plan._id, "Evaluado")
-                        }
-                        disabled={procesando}
-                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50 flex items-center"
-                      >
-                        <Save className="mr-1" size={16} /> Aprobar plan
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          actualizarComentarioYEstado(plan._id, "Rechazado")
-                        }
-                        disabled={procesando}
-                        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 disabled:opacity-50 flex items-center"
-                      >
-                        <AlertCircle className="mr-1" size={16} /> Rechazar plan
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 pt-4 border-t">
-                    <button
-                      onClick={() => enviarPlanAlAuditorInterno(plan._id)}
-                      disabled={procesando}
-                      className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50 flex items-center"
-                    >
-                      <MessageSquare className="mr-1" size={16} /> Enviar plan
-                      al auditor interno
-                    </button>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Nota: Esto eliminará el plan de tu lista una vez enviado.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+          <div>
+            <h2 className="text-xl font-bold text-red-600 mb-2">Rechazados</h2>
+            {renderPlanes(planesRechazados, "red")}
+          </div>
         </div>
       )}
     </div>

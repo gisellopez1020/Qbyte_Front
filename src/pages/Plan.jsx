@@ -363,7 +363,14 @@ const Plan = () => {
         </h1>
         <button
           onClick={() => setMostrarFormulario(!mostrarFormulario)}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md flex items-center"
+          className="px-4 py-2 font-semibold
+    bg-gradient-to-r from-sky-800 to-sky-950
+    hover:from-sky-700 hover:to-sky-900
+    active:from-sky-900 active:to-sky-950
+    text-white rounded-md flex items-center justify-center
+    transition-all duration-200 ease-in-out
+    shadow-md hover:shadow-lg active:shadow-inner
+    hover:scale-100 active:scale-95"
         >
           {mostrarFormulario ? "Cancelar" : "Nuevo Plan"}
           {!mostrarFormulario && <Plus className="ml-1" size={18} />}
@@ -476,6 +483,8 @@ const Plan = () => {
       )}
 
       {/* Lista de Planes */}
+      <div className="overflow-y-auto max-h-[400px] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+
       <div>
         {cargando ? (
           <div className="text-center py-8">Cargando planes...</div>
@@ -573,7 +582,11 @@ const Plan = () => {
                     <div className="flex justify-between mt-5">
                       <button
                         onClick={() => enviarAAuditorExterno(plan._id)}
-                        className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md"
+                        className=" text-white p-2 rounded-lg font-semibold
+             bg-gradient-to-r from-sky-800 to-sky-950
+             hover:from-sky-700 hover:to-sky-900
+             active:scale-95 active:from-sky-900 active:to-sky-950
+             transition-all duration-200 ease-in-out shadow-md hover:shadow-lg active:shadow-inner"
                         disabled={cargando}
                       >
                         {cargando ? "Enviando..." : "Enviar a Auditor Externo"}
@@ -609,6 +622,7 @@ const Plan = () => {
             interno.
           </div>
         )}
+      </div>
       </div>
     </div>
   );
