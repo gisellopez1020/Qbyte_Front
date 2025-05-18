@@ -45,7 +45,7 @@ const Formulario = () => {
       try {
         console.log("Obteniendo formulario para norma:", id);
         let res = await fetch(
-          `http://localhost:8000/formulario/listar_por_norma?norma=${encodeURIComponent(
+          `http://localhost:8000/formulario/listar_por_nombre?nombre=${encodeURIComponent(
             id
           )}`
         );
@@ -62,7 +62,7 @@ const Formulario = () => {
           console.log("Todos los formularios:", allForms);
 
           const formFound = allForms.find(
-            (f) => f.norma && f.norma.includes(id)
+            (f) => f.nombre && f.nombre.includes(id)
           );
 
           if (formFound) {
@@ -171,7 +171,7 @@ const Formulario = () => {
 
     const payload = {
       titulo:
-        formulario?.titulo ||
+        formulario?.nombre ||
         formulario?.descripcion ||
         "Formulario de evaluación",
       respuestas: respuestas,
@@ -238,7 +238,9 @@ const Formulario = () => {
   return (
     <div className="p-5 min-h-screen bg-gray-50">
       <h1 className="text-2xl font-bold mb-6 text-center">
-        {formulario.nombre || formulario.titulo || "Formulario de evaluación"}
+        {formulario.nombre ||
+          formulario.descripcion ||
+          "Formulario de evaluación"}
       </h1>
 
       {/* Mensaje de éxito o error */}
@@ -261,7 +263,7 @@ const Formulario = () => {
                       formulario?.titulo ||
                       formulario?.nombre ||
                       "Formulario de evaluación",
-                    norma: id,
+                    nombre: id,
                     fechaEnvio: new Date().toISOString(),
                     respuestas: respuestas,
                   };
