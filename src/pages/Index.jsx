@@ -12,11 +12,13 @@ import {
 } from "lucide-react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const { usuario } = useAuth();
   const rol = usuario?.rol;
   const [usuarioNombre, setUsuarioNombre] = useState("");
+  const navigate = useNavigate();
 
   if (!usuario) return null;
 
@@ -49,24 +51,28 @@ const Index = () => {
           icon: <UserCog size={32} className="text-white" />,
           color: "bg-blue-600",
           desc: "Crear, editar y eliminar usuarios y roles.",
+          route: "/admin/usuarios",
         },
         {
           title: "Reportes Globales",
           icon: <BarChart2 size={32} className="text-white" />,
           color: "bg-indigo-600",
           desc: "Visualizar estadísticas y reportes globales.",
+          route: "/admin/reportes",
         },
         {
           title: "Planes de Auditoría",
           icon: <ClipboardList size={32} className="text-white" />,
           color: "bg-cyan-600",
           desc: "Crear, asignar y gestionar planes de auditoría.",
+          route: "/admin/planes-auditoria",
         },
         {
           title: "Configuración",
           icon: <ShieldCheck size={32} className="text-white" />,
           color: "bg-sky-700",
           desc: "Ajustes generales y configuración del sistema.",
+          route: "/admin/configuracion",
         },
       ],
     },
@@ -86,24 +92,28 @@ const Index = () => {
           icon: <UserCog size={32} className="text-white" />,
           color: "bg-cyan-700",
           desc: "Ver y actualizar información personal y formularios completados.",
+          route: "/auditor-interno/perfil",
         },
         {
           title: "Formularios",
           icon: <PlusCircle size={32} className="text-white" />,
           color: "bg-blue-600",
           desc: "Seleccionar norma y completar formularios de auditoría.",
+          route: "/auditor-interno/formularios",
         },
         {
           title: "Planes de Acción",
           icon: <ClipboardList size={32} className="text-white" />,
           color: "bg-sky-600",
           desc: "Crear, registrar y hacer seguimiento a planes de acción.",
+          route: "/auditor-interno/planes",
         },
         {
           title: "Comentarios",
           icon: <LayoutDashboard size={32} className="text-white" />,
           color: "bg-cyan-900",
           desc: "Visualizar comentarios realizados por auditores externos.",
+          route: "/auditor-interno/comentarios",
         },
       ],
     },
@@ -123,28 +133,33 @@ const Index = () => {
           icon: <FileText size={32} className="text-white" />,
           color: "bg-sky-700",
           desc: "Visualizar formularios que requieren auditoría externa.",
+          route: "/auditor-externo/formularios-pendientes",
         },
         {
           title: "Evaluación",
           icon: <ClipboardList size={32} className="text-white" />,
           color: "bg-indigo-700",
           desc: "Ver evidencias y escribir comentarios para cada formulario.",
+          route: "/auditor-externo/evaluacion",
         },
         {
           title: "Estado Auditoría",
           icon: <BarChart2 size={32} className="text-white" />,
           color: "bg-blue-700",
           desc: "Actualizar estado para permitir seguimiento interno.",
+          route: "/auditor-externo/estado-auditoria",
         },
         {
           title: "Seguimiento",
           icon: <PlusCircle size={32} className="text-white" />,
           color: "bg-cyan-800",
           desc: "Facilitar que el auditor interno revise comentarios y observaciones.",
+          route: "/auditor-externo/seguimiento",
         },
       ],
     },
   };
+
   const current = descriptionMap[rol];
 
   useEffect(() => {
@@ -158,15 +173,14 @@ const Index = () => {
           setUsuarioNombre(datosUsuario.name);
         } else {
           console.log("No se encontró el documento del usuario.");
-          return null;
         }
       } catch (error) {
         console.error("Error al obtener datos del usuario:", error);
-        return null;
       }
     };
+
     obtenerDatosUsuario();
-  });
+  }, [usuario.uid]);
 
   return (
     <div className="p-2 max-w-5xl mx-auto">
@@ -204,9 +218,10 @@ const Index = () => {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-        {current.features.map(({ title, icon, color, desc }, idx) => (
+        {current.features.map(({ title, icon, color, desc, route }, idx) => (
           <div
             key={idx}
+            onClick={() => route && navigate(route)}
             className={`${color} p-6 rounded-xl shadow-lg text-white flex flex-col hover:scale-105 transition-transform duration-300 cursor-pointer`}
           >
             <div className="mb-4">{icon}</div>

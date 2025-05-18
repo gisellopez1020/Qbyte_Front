@@ -148,7 +148,11 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
 
             <button
                 type="submit"
-                className="w-full bg-green-500 text-white px-4 py-2 rounded"
+            className=" w-full items-center gap-2 
+                bg-gradient-to-r from-[#2067af] to-blue-950
+                hover:from-[#1b5186] hover:to-blue-900
+                transition-all duration-200 ease-in-out text-white px-4 py-2
+                rounded-lg active:scale-65 active:shadow-md hover:scale-105"
             >
                 Crear Usuario
             </button>

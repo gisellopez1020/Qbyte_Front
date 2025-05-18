@@ -55,9 +55,10 @@ const CrearForm = () => {
     };
 
     return (
-        <div className="h-screen overflow-y-auto px-4 py-6 bg-gray-100">
-            <div className="relative py-11 min-h-[700px] max-w-[1200px] mx-auto rounded-3xl bg-sky-900/30 px-4">
-                <h1 className="text-2xl font-bold mb-6 text-center text-white">Crear nuevo formulario</h1>
+      
+            <div className="relative py-11 px-4">
+                  <div className=" max-h-[600px] overflow-y-auto h-screen mx-auto max-w-[1200px] px-4 py-4 bg-sky-900/30 rounded-3xl">
+                <h1 className="text-3xl font-bold mb-6 text-center text-black">Crear nuevo formulario</h1>
 
                 {mensaje && (
                     <div className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"}`}>
