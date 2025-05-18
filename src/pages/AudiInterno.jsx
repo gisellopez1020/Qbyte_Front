@@ -25,7 +25,7 @@ const AudiInterno = () => {
 
   return (
     <div className="mx-auto py-8 flex flex-col items-center justify-center h-screen">
-      <h1 className="text-3xl text-gray-800 font-bold flex items-center justify-center mb-8">
+      <h1 className="text-3xl text-gray-800 font-bold flex items-center justify-center mb-4">
         <SiGoogleforms className="text-primary mr-2" />
         Formularios
       </h1>

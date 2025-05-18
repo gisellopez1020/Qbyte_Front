@@ -20,6 +20,6 @@ export const sidebarMenu = {
   ],
   auditor_externo: [
     { label: "Inicio", path: "/index", icon: RiHome3Line },
-    { label: "Plan de acción", path: "/plan-action", icon: RiWalletLine },
+    { label: "Plan de acción", path: "/PlanesExterno", icon: RiWalletLine },
   ],
 };

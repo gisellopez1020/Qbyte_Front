@@ -27,9 +27,75 @@ const Plan = () => {
   ]);
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" });
+  const [auditoresExternos, setAuditoresExternos] = useState([]);
+
+  useEffect(() => {
+    const obtenerAuditoresExternos = async () => {
+      try {
+        const respuesta = await fetch(`http://localhost:8000/auditor_externo/listar_auditores_externos`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          },
+        });
+        
+        if (!respuesta.ok) {
+          throw new Error(`Error HTTP: ${respuesta.status}`);
+        }
+        
+        const datos = await respuesta.json();
+        setAuditoresExternos(datos);
+      } catch (error) {
+        console.error("Error al obtener auditores externos:", error);
+        setMensaje({ texto: "Error al obtener auditores externos", tipo: "error" });
+      }
+    };
+
+    obtenerAuditoresExternos();
+  }, []);
+
+  const enviarAAuditorExterno = async (planId) => {
+    if (!auditorId) {
+      setMensaje({ texto: "Auditor interno no identificado", tipo: "error" });
+      return;
+    }
+
+    setCargando(true);
+    try {
+      const url = `http://localhost:8000/plan_de_accion/enviar_a_auditorExterno`;
+      const respuesta = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Añadir headers para CORS
+          "Access-Control-Allow-Origin": "*"
+        },
+        body: JSON.stringify({ 
+          plan_id: planId,
+          auditorI_id: auditorId 
+        }),
+      });
+
+      if (respuesta.ok) {
+        setMensaje({ texto: "Plan enviado exitosamente a un auditor externo", tipo: "exito" });
+        cargarPlanes(auditorId);
+      } else {
+        const error = await respuesta.json().catch(() => ({ detail: "Error desconocido" }));
+        setMensaje({ texto: `Error: ${error.detail || 'Error al procesar la solicitud'}`, tipo: "error" });
+      }
+    } catch (error) {
+      console.error("Error al enviar a auditor externo:", error);
+      setMensaje({ texto: "Error al conectar con el servidor. Verifica que el servidor esté en ejecución.", tipo: "error" });
+    } finally {
+      setCargando(false);
+    }
+  };
 
   useEffect(() => {
     const obtenerAuditorNombre = async () => {
+      if (!usuario || !usuario.uid) return;
+      
       try {
         const docRef = doc(db, "usuarios", usuario.uid);
         const docSnap = await getDoc(docRef);
@@ -46,8 +112,11 @@ const Plan = () => {
         return null;
       }
     };
-    obtenerAuditorNombre();
-  });
+    
+    if (usuario) {
+      obtenerAuditorNombre();
+    }
+  }, [usuario]);
 
   useEffect(() => {
     const obtenerAuditorId = async () => {
@@ -55,8 +124,21 @@ const Plan = () => {
         try {
           console.log("Buscando auditor con email:", usuario.email);
           const res = await fetch(
-            `http://localhost:8000/auditor_interno/listar_auditores_internos`
+            `${API_BASE_URL}/auditor_interno/listar_auditores_internos`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                // Añadir headers para CORS
+                "Access-Control-Allow-Origin": "*"
+              },
+            }
           );
+          
+          if (!res.ok) {
+            throw new Error(`Error HTTP: ${res.status}`);
+          }
+          
           const auditores = await res.json();
 
           const auditor = auditores.find(
@@ -66,9 +148,12 @@ const Plan = () => {
           if (auditor && auditor._id) {
             setAuditorId(auditor._id);
             cargarPlanes(auditor._id);
+          } else {
+            console.warn("No se encontró el auditor con email:", usuario.email);
           }
         } catch (error) {
           console.error("Error al obtener el ID del auditor:", error);
+          setMensaje({ texto: "Error al obtener datos del auditor", tipo: "error" });
         }
       }
     };
@@ -112,13 +197,16 @@ const Plan = () => {
       })
     );
 
+    setCargando(true);
     try {
       const respuesta = await fetch(
-        "http://localhost:8000/plan_de_accion/añadir_evidencias",
+        `http://localhost:8000/plan_de_accion/añadir_evidencias`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            // Añadir headers para CORS
+            "Access-Control-Allow-Origin": "*"
           },
           body: JSON.stringify({
             plan_id: planId,
@@ -135,25 +223,41 @@ const Plan = () => {
         cargarPlanes(auditorId);
         setModoEvidencias((prev) => ({ ...prev, [planId]: false }));
       } else {
-        const error = await respuesta.json();
-        setMensaje({ texto: `Error: ${error.detail}`, tipo: "error" });
+        const error = await respuesta.json().catch(() => ({ detail: "Error desconocido" }));
+        setMensaje({ texto: `Error: ${error.detail || 'Error al procesar la solicitud'}`, tipo: "error" });
       }
     } catch (error) {
       console.error("Error al enviar evidencias:", error);
       setMensaje({ texto: "Error al conectar con el servidor", tipo: "error" });
+    } finally {
+      setCargando(false);
     }
   };
 
   const cargarPlanes = async (auditorId) => {
+    if (!auditorId) return;
+    
     setCargando(true);
     try {
       const respuesta = await fetch(
-        `http://localhost:8000/plan_de_accion/listar_plan_por_auditor_interno?auditorI_id=${auditorId}`
+        `http://localhost:8000/plan_de_accion/listar_plan_por_auditor_interno?auditorI_id=${auditorId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
+      
+      if (!respuesta.ok) {
+        throw new Error(`Error HTTP: ${respuesta.status}`);
+      }
+      
       const datos = await respuesta.json();
       setPlanes(datos);
     } catch (error) {
       console.error("Error al cargar planes:", error);
+      setMensaje({ texto: "Error al cargar planes de acción", tipo: "error" });
     } finally {
       setCargando(false);
     }
@@ -187,7 +291,7 @@ const Plan = () => {
     setCargando(true);
     try {
       const respuesta = await fetch(
-        "http://localhost:8000/plan_de_accion/guardar_plan",
+        `http://localhost:8000/plan_de_accion/guardar_plan`,
         {
           method: "POST",
           headers: {
@@ -211,8 +315,8 @@ const Plan = () => {
         // Recargar planes
         cargarPlanes(auditorId);
       } else {
-        const error = await respuesta.json();
-        setMensaje({ texto: `Error: ${error.detail}`, tipo: "error" });
+        const error = await respuesta.json().catch(() => ({ detail: "Error desconocido" }));
+        setMensaje({ texto: `Error: ${error.detail || 'Error al procesar la solicitud'}`, tipo: "error" });
       }
     } catch (error) {
       setMensaje({ texto: "Error al conectar con el servidor", tipo: "error" });
@@ -284,7 +388,7 @@ const Plan = () => {
         <div className="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-200">
           <p className="text-blue-800">
             <span className="font-medium">Auditor Interno:</span>{" "}
-            {auditorNombre}
+            {auditorNombre || "Cargando..."}
           </p>
         </div>
       )}
@@ -459,17 +563,22 @@ const Plan = () => {
                         <button
                           onClick={() => enviarEvidencias(plan._id)}
                           className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md"
+                          disabled={cargando}
                         >
-                          Enviar Evidencias
+                          {cargando ? "Enviando..." : "Enviar Evidencias"}
                         </button>
                       </div>
                     )}
 
                     <div className="flex justify-between mt-5">
-                      <button className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md">
-                        Enviar a Auditor Externo
-                      </button>
-                      <button
+                    <button
+                      onClick={() => enviarAAuditorExterno(plan._id)}
+                      className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md"
+                      disabled={cargando}
+                    >
+                      {cargando ? "Enviando..." : "Enviar a Auditor Externo"}
+                    </button>
+                    <button
                         onClick={() =>
                           toggleModoEvidencias(plan._id, plan.etapas)
                         }
@@ -478,6 +587,7 @@ const Plan = () => {
                             ? "text-red-600 hover:text-red-800"
                             : "text-blue-600 hover:text-blue-800"
                         }`}
+                        disabled={cargando}
                       >
                         {modoEvidencias[plan._id]
                           ? "Cancelar"

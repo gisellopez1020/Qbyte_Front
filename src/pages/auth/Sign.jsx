@@ -108,7 +108,7 @@ function Sign() {
   return (
     <div className="min-h-screen flex justify-center items-center relative">
       <img
-        src="https://images.unsplash.com/photo-1530533609496-06430e875bbf?fm=jpg&q=100&w=1920"
+        src="https://cdn.pixabay.com/photo/2017/06/14/01/43/background-2400765_1280.jpg"
         alt="Fondo"
         className="absolute inset-0 w-full h-full object-cover -z-10"
       />
@@ -116,7 +116,7 @@ function Sign() {
         <FaArrowLeft className="text-3xl xl:text-4xl text-white rounded-full" />
       </Link>
 
-      <div className="relative z-10 bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[400px] backdrop-blur-md border border-white/20">
+      <div className="relative z-10 bg-white bg-opacity-5 shadow-white rounded-xl p-6 max-w-xs w-full min-h-[420px] backdrop-blur-md border border-sky-800">
         <h2 className="text-center text-3xl italic tracking-wide font-bold text-white mb-5">
           Sign Up
         </h2>
@@ -221,7 +221,11 @@ function Sign() {
 
           <button
             type="submit"
-            className="w-full bg-[#0d3065] hover:bg-[#1b4a8f] text-white p-2 rounded-lg font-semibold transition-colors duration-300"
+            className="w-full text-white p-2 rounded-lg font-semibold
+             bg-gradient-to-r from-sky-800 to-sky-950
+             hover:from-sky-700 hover:to-sky-900
+             active:scale-95 active:from-sky-900 active:to-sky-950
+             transition-all duration-200 ease-in-out shadow-md hover:shadow-lg active:shadow-inner"
           >
             Crear cuenta
           </button>
