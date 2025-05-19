@@ -50,7 +50,7 @@ const Index = () => {
           title: "Usuarios",
           icon: <UserCog size={32} className="text-white" />,
           color: "bg-blue-600",
-          desc: "Crear, editar y eliminar usuarios y roles.",
+          desc: "Crear, visualizar y eliminar usuarios del sistema.",
           route: "/usuarios",
         },
         {
@@ -64,7 +64,7 @@ const Index = () => {
           title: "Crear formularios",
           icon: <ClipboardList size={32} className="text-white" />,
           color: "bg-cyan-600",
-          desc: "Crear formularios de las normas",
+          desc: "Crear formularios de las normas o lineamientos",
           route: "/crear-form",
         },
         {
