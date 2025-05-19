@@ -26,15 +26,17 @@ const Admin = () => {
       <div className="flex flex-wrap justify-center gap-6 w-full">
         {formularios.map((form) => (
           <div
-            key={form.norma}
+            key={form._id}
             className="bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[200px] cursor-pointer backdrop-blur-md border border-primary flex flex-col justify-center items-center"
-            onClick={() => navigate(`/forms/admin/${encodeURIComponent(form.norma)}`)}
+            onClick={() => navigate(`/forms/admin/${encodeURIComponent(form.nombre)}`)}
           >
             <FcRules className="text-7xl" />
             <h2 className="text-black font-semibold text-xl text-center">
-              {form.norma}
+              {form.nombre}
             </h2>
-            <p className="text-sm text-gray-700 text-center">{form.titulo}</p>
+            <p className="text-sm text-gray-700 text-center">
+              {form.descripcion}
+            </p>
           </div>
         ))}
 

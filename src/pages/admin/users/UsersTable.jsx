@@ -1,13 +1,8 @@
 import React from "react";
 
-
 const UserTable = ({
     usuarios,
-    cambiarRol,
     eliminarUsuario,
-    companiaEditando,
-    setCompaniaEditando,
-    actualizarCompania,
 }) => {
     return (
         <div className="overflow-x-auto rounded-lg shadow border border-gray-300">
@@ -32,62 +27,13 @@ const UserTable = ({
                             <td className="px-4 py-3 border border-gray-200">{usuario.email}</td>
 
                             <td className="px-4 py-3 border border-gray-200">
-                                <select
-                                    value={usuario.rol}
-                                    onChange={(e) => cambiarRol(usuario.id, e.target.value)}
-                                    className="border rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                >
-                                    <option value="admin">Administrador</option>
-                                    <option value="auditor_externo">Auditor Externo</option>
-                                    <option value="auditor_interno">Auditor Interno</option>
-                                </select>
+                                <span className="capitalize">{usuario.rol.replace("_", " ")}</span>
                             </td>
+
 
                             <td className="px-4 py-3 border border-gray-200">
                                 {usuario.rol === "auditor_interno" ? (
-                                    companiaEditando[usuario.id] !== undefined ? (
-                                        <div className="flex items-center space-x-2">
-                                            <input
-                                                type="text"
-                                                value={companiaEditando[usuario.id]}
-                                                onChange={(e) =>
-                                                    setCompaniaEditando(prev => ({
-                                                        ...prev,
-                                                        [usuario.id]: e.target.value
-                                                    }))
-                                                }
-                                                className="border px-2 py-1 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-300"
-                                                placeholder="Compañía"
-                                            />
-                                            <button
-                                                onClick={() =>
-                                                    actualizarCompania(usuario.id, companiaEditando[usuario.id])
-                                                }
-                                                className="flex items-center gap-2 
-                                                bg-gradient-to-r from-[#2067af] to-blue-950
-                                                hover:from-[#1b5186] hover:to-blue-900
-                                                transition-all duration-200 ease-in-out text-white px-4 py-2
-                                                rounded-lg active:scale-95 active:shadow-md hover:scale-105"
-                                            >
-                                                Guardar
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div className="flex justify-between items-center">
-                                            <span>{usuario.compania || "No definida"}</span>
-                                            <button
-                                                onClick={() =>
-                                                    setCompaniaEditando(prev => ({
-                                                        ...prev,
-                                                        [usuario.id]: usuario.compania || ""
-                                                    }))
-                                                }
-                                                className="ml-2 text-blue-600 hover:underline text-sm"
-                                            >
-                                                Editar
-                                            </button>
-                                        </div>
-                                    )
+                                    <span>{usuario.compania || "No definida"}</span>
                                 ) : (
                                     <span className="text-gray-400 italic">No aplica</span>
                                 )}

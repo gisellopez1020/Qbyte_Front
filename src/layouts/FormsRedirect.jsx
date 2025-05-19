@@ -1,16 +1,16 @@
 import { useAuth } from "../context/AuthContext";
-import FormsInterno from "../pages/AudiInterno";
+import AudiInterno from "../pages/AudiInterno";
 import Admin from "../pages/Admin";
 
 const FormsRedirect = () => {
-  const { usuario, rol } = useAuth();
+  const { usuario } = useAuth();
 
   if (!usuario) return null;
 
-  if (rol === "admin") {
+  if (usuario.rol === "admin") {
     return <Admin />;
   } else {
-    return <FormsInterno />;
+    return <AudiInterno />;
   }
 };
 
