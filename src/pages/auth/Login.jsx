@@ -6,6 +6,8 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { useAuth } from "../../context/AuthContext";
 import { doc, getDoc } from "firebase/firestore";
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
+import { useTranslation } from "react-i18next";
+import { MdLanguage } from "react-icons/md";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -14,6 +16,21 @@ function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { t, i18n } = useTranslation();
+  const [showLangMenu, setShowLangMenu] = useState(false);
+
+  const languages = [
+    { code: "es", label: "Español" },
+    { code: "gb", label: "English", langCode: "en" },
+    { code: "fr", label: "Français" },
+    { code: "de", label: "Deutsch" },
+    { code: "it", label: "Italiano" },
+  ];
+
+  const handleChangeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setShowLangMenu(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +48,7 @@ function Login() {
       const docSnap = await getDoc(docRef);
 
       if (!docSnap.exists()) {
-        setError("No se encontró información del usuario en la base de datos.");
+        setError(`${t("log_in.exist")}`);
         return;
       }
 
@@ -63,19 +80,19 @@ function Login() {
 
           navigate("/index", { replace: true });
         } catch (err) {
-          setError("Error al conectar con el backend: " + err.message);
+          setError("Error al conectar con el backend.");
         }
       } else {
         login({ uid: user.uid, email: user.email, rol });
         navigate("/index", { replace: true });
       }
     } catch (err) {
-      setError("Error al iniciar sesión: " + err.message);
+      setError(`${t("log_in.error")}`);
     }
   };
 
   return (
-<div className="min-h-screen flex justify-center items-center relative">
+    <div className="min-h-screen flex justify-center items-center relative">
       <img
         src="https://cdn.pixabay.com/photo/2017/06/14/01/43/background-2400765_1280.jpg"
         alt="Fondo"
@@ -84,17 +101,47 @@ function Login() {
       <Link to="/" className="absolute m-10 z-50 top-[1%] left-[2%]">
         <FaArrowLeft className="text-3xl xl:text-4xl text-white rounded-full" />
       </Link>
+      <div className="absolute m-10 z-50 top-[1%] right-[2%]">
+        <button
+          onClick={() => setShowLangMenu(!showLangMenu)}
+          className={`p-2 rounded-full`}
+        >
+          <MdLanguage
+            className={`text-white hover:text-sky-950 text-4xl transition-colors duration-300`}
+          />
+        </button>
+
+        {showLangMenu && (
+          <div className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg z-50">
+            <ul className="py-1 text-sm text-gray-700">
+              {languages.map((lang) => (
+                <li key={lang.code}>
+                  <button
+                    onClick={() =>
+                      handleChangeLanguage(lang.langCode || lang.code)
+                    }
+                    className="flex items-center w-full px-4 py-2 hover:bg-gray-50"
+                  >
+                    <span className={`fi fi-${lang.code} mr-2`}></span>{" "}
+                    {lang.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
 
       <div className="relative z-10 bg-white bg-opacity-5 shadow-white rounded-xl p-6 max-w-xs w-full min-h-[420px] backdrop-blur-md border border-sky-800">
         <h2 className="text-center text-3xl italic tracking-wide font-bold text-white mb-5">
-          Login
+          {t("log_in.title")}
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4 relative">
             <input
               className="w-full p-2 rounded-lg bg-white bg-opacity-20 text-white placeholder-white focus:outline-none focus:ring-2"
               type="email"
-              placeholder="Correo electrónico"
+              placeholder={t("log_in.email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -106,7 +153,7 @@ function Login() {
             <input
               className="w-full py-2 px-8 rounded-lg bg-white bg-opacity-20 text-white placeholder-white focus:outline-none focus:ring-2"
               type={showPassword ? "text" : "password"}
-              placeholder="Contraseña"
+              placeholder={t("log_in.password")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -127,15 +174,9 @@ function Login() {
 
           <div className="mb-2 text-white text-sm">
             <label className="flex items-center">
-              <input type="checkbox" className="mr-2" />
-              Terminos y condiciones
+              <input type="checkbox" className="mr-2 my-2" />
+              {t("log_in.terms")}
             </label>
-          </div>
-
-          <div className="mb-4 text-right">
-            <a href="#" className="text-white text-sm hover:underline">
-              ¿Has olvidado tu contraseña?
-            </a>
           </div>
 
           <button
@@ -146,7 +187,7 @@ function Login() {
              active:scale-95 active:from-sky-900 active:to-sky-950
              transition-all duration-200 ease-in-out shadow-md hover:shadow-lg active:shadow-inner"
           >
-            Iniciar Sesión
+            {t("log_in.button")}
           </button>
         </form>
 
@@ -155,9 +196,9 @@ function Login() {
         )}
 
         <p className="text-center text-white text-sm mt-4">
-          ¿No tienes una cuenta?{" "}
+          {t("log_in.p1")}{" "}
           <Link to="/Sign" className="underline text-white hover:text-blue-300">
-            Regístrate
+            {t("log_in.register")}
           </Link>
         </p>
       </div>

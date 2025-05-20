@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FcRules } from "react-icons/fc";
 import { SiGoogleforms } from "react-icons/si";
+import { useTranslation } from "react-i18next";
 
 const AudiInterno = () => {
   const [formularios, setFormularios] = useState([]);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchFormularios = async () => {
@@ -28,14 +30,14 @@ const AudiInterno = () => {
       <div className="bg-slate-200 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[80vh] max-w-[70vw] overflow-y-auto space-y-6">
         <h1 className="text-3xl text-gray-800 font-bold flex items-center justify-center mb-12">
           <SiGoogleforms className="text-primary mr-2" />
-          Formularios
+          {t("forms.title")}
         </h1>
 
         <div className="flex flex-wrap justify-center gap-6 w-full">
           {formularios.map((form) => (
             <div
               key={form._id}
-              className="bg-white rounded-xl shadow-xl p-6
+              className="bg-white rounded-xl shadow-xl p-5
              max-w-xs w-full min-h-[200px] cursor-pointer hover:scale-105 
              transition-transform duration-300 backdrop-blur-md border
               border-primary flex flex-col justify-center items-center"

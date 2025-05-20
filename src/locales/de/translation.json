@@ -1,0 +1,263 @@
+{
+  "home": "Startseite",
+  "about_us": "Über uns",
+  "n_services": "Dienstleistungen",
+  "contact": "Kontakt",
+  "login": "Anmelden",
+  "hero": {
+    "title": {
+      "part1": "Automatisieren und vereinfachen Sie regulatorische",
+      "part2": "Einhaltung"
+    },
+    "description": "Sparen Sie Zeit und minimieren Sie Fehler mit einer Plattform, die für Unternehmen entwickelt wurde, die eine schnelle, zuverlässige und automatisierte Lösung zur Einhaltung gesetzlicher Vorschriften suchen.",
+    "cta": "Legen Sie jetzt los!"
+  },
+  "about": {
+    "title": "Triff unser Team",
+    "roles": {
+      "frontend": "Frontend-Entwickler",
+      "backend": "Backend-Entwickler"
+    }
+  },
+  "services": {
+    "title": "Wir revolutionieren die Qualitätsbewertung",
+    "subtitle": "Wir verbessern Ihre Audits durch Automatisierung und strategische Ausrichtung, um Normen und Vorschriften zu erfüllen.",
+    "cards": [
+      {
+        "title": "Intelligente Compliance-Bewertungen",
+        "subtitle": "Selbstbeurteilungen und geführte Audits",
+        "description": "Durchführung einer detaillierten Diagnose der Einhaltung von Normen wie ISO 9001 mithilfe von strukturierten Fragebögen, Checklisten und der Erfassung von Nachweisen."
+      },
+      {
+        "title": "Aktionsplan-Management (PDCA)",
+        "subtitle": "Definition von Zielen, Maßnahmen und Verfolgung",
+        "description": "Setzen Sie Erkenntnisse in Verbesserungen um: Erstellen Sie Ziele, weisen Sie Aufgaben zu und verfolgen Sie den PDCA-Zyklus, um messbare Fortschritte zu erzielen."
+      },
+      {
+        "title": "Dynamische Dashboards und Berichte",
+        "subtitle": "Sehen Sie Ihren Fortschritt in Echtzeit",
+        "description": "Entdecken Sie Dashboards mit Metriken zur Einhaltung der Vorschriften, kritischen Lücken und herunterladbaren Berichten."
+      },
+      {
+        "title": "Rollen- und Berechtigungsverwaltung",
+        "subtitle": "Zugangskontrolle nach Profil",
+        "description": "Einfache Verwaltung des Teamzugriffs: Definieren Sie Rollen wie Manager, Prüfer oder Bewerter und stellen Sie sicher, dass jeder nur das sieht, was er braucht."
+      },
+      {
+        "title": "Flexible Standards und Mehrsprachigkeit",
+        "subtitle": "Anpassung an unterschiedliche Normen und Regionen",
+        "description": "Lassen Sie sich nach verschiedenen Standards zertifizieren und nutzen Sie die Plattform in Ihrer bevorzugten Sprache."
+      },
+      {
+        "title": "Identifizierung von Lücken und Abhilfemaßnahmen",
+        "subtitle": "Erkennen, dokumentieren und aufklären",
+        "description": "Erfassen Sie Konformitätslücken, legen Sie Korrekturmaßnahmen fest und verfolgen Sie Ihren Status anhand der Historie und von Nachweisen."
+      }
+    ]
+  },
+  "footer": {
+    "text1": "Alle Rechte vorbehalten"
+  },
+  "log_in": {
+    "title": "Anmeldung",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "terms": "Allgemeine Geschäftsbedingungen",
+    "button": "Einloggen",
+    "p1": "Sie haben kein Konto?",
+    "register": "Registrieren",
+    "error": "Fehler beim Anmelden: Ungültige Anmeldedaten",
+    "exist": "Es wurden keine Benutzerinformationen in der Datenbank gefunden."
+  },
+  "sign_up": {
+    "title": "Registrieren",
+    "user": "Benutzername",
+    "rols": {
+      "select": "Wählen Sie eine Rolle",
+      "r1": "Interner Auditor",
+      "r2": "Externer Auditor",
+      "r3": "Administrator"
+    },
+    "email": "E-Mail",
+    "password": "Passwort",
+    "company": "Firmenname",
+    "code": "Code",
+    "button": "Konto erstellen",
+    "p1": "Sie haben bereits ein Konto?",
+    "login": "Einloggen"
+  },
+  "sidebar": {
+    "language": "Sprache",
+    "logout": "Abmelden",
+    "home": "Startseite",
+    "forms": "Formulare",
+    "create_form": "Formular erstellen",
+    "users": "Benutzer",
+    "reports": "Berichte",
+    "action_plan": "Aktionsplan"
+  },
+  "index": {
+    "welcome": "Willkommen, {{name}} 👋",
+    "role": "Rolle",
+    "resume": "Funktionsübersicht",
+    "actions": "Verfügbare Aktionen",
+    "admin": {
+      "title": "Administrator",
+      "description": "Verwaltet Benutzer, überwacht Auditoren, erstellt und weist Vorlagen und Audits zu und kontrolliert das gesamte System.",
+      "list": [
+        "Interne und externe Auditoren verwalten",
+        "Formularvorlagen erstellen und verwalten",
+        "Globale Berichte anzeigen und erstellen",
+        "Audits zuweisen und deren Fortschritt überwachen"
+      ],
+      "features": {
+        "usuarios": {
+          "title": "Benutzer",
+          "desc": "Benutzer im System erstellen, anzeigen und löschen."
+        },
+        "reportes": {
+          "title": "Globale Berichte",
+          "desc": "Statistiken und globale Berichte anzeigen."
+        },
+        "crearForm": {
+          "title": "Formulare erstellen",
+          "desc": "Formulare basierend auf Normen oder Richtlinien erstellen"
+        },
+        "config": {
+          "title": "Einstellungen",
+          "desc": "Allgemeine Einstellungen und Systemkonfiguration."
+        }
+      }
+    },
+    "auditor_interno": {
+      "title": "Interner Auditor",
+      "description": "Überwacht und dokumentiert interne Audits, füllt Formulare aus und verfolgt Aktionspläne.",
+      "list": [
+        "Persönliche Daten einsehen und aktualisieren",
+        "Normen auswählen und Formulare ausfüllen",
+        "Aktionspläne erstellen und verfolgen",
+        "Kommentare und Beobachtungen aus Audits prüfen"
+      ],
+      "features": {
+        "perfil": {
+          "title": "Persönliche Daten",
+          "desc": "Persönliche Informationen und ausgefüllte Formulare anzeigen und bearbeiten."
+        },
+        "formularios": {
+          "title": "Formulare",
+          "desc": "Norm auswählen und Audit-Formulare ausfüllen."
+        },
+        "planes": {
+          "title": "Aktionspläne",
+          "desc": "Aktionspläne erstellen, erfassen und verfolgen."
+        },
+        "comentarios": {
+          "title": "Kommentare",
+          "desc": "Von externen Auditoren abgegebene Kommentare anzeigen."
+        }
+      }
+    },
+    "auditor_externo": {
+      "title": "Externer Auditor",
+      "description": "Prüft ausstehende Audit-Formulare, bewertet Nachweise, fügt Kommentare hinzu und aktualisiert den Audit-Status zur internen Nachverfolgung.",
+      "list": [
+        "Ausstehende Formulare zur Prüfung einsehen",
+        "Nachweise bewerten und Kommentare dokumentieren",
+        "Beobachtungen zur Datenbankaktualisierung senden",
+        "Audit-Status auf 'Kommentare gemacht' aktualisieren"
+      ],
+      "features": {
+        "pendientes": {
+          "title": "Ausstehende Formulare",
+          "desc": "Formulare anzeigen, die externe Audits erfordern."
+        },
+        "evaluacion": {
+          "title": "Bewertung",
+          "desc": "Nachweise prüfen und Kommentare zu jedem Formular schreiben."
+        },
+        "estado": {
+          "title": "Audit-Status",
+          "desc": "Status aktualisieren, um interne Nachverfolgung zu ermöglichen."
+        },
+        "seguimiento": {
+          "title": "Nachverfolgung",
+          "desc": "Dem internen Auditor ermöglichen, Kommentare und Beobachtungen zu prüfen."
+        }
+      }
+    }
+  },
+  "forms": {
+    "title": "Formulare",
+    "load": "Dokument hochladen",
+    "pdf": "Wählen Sie eine PDF-Datei aus:",
+    "generate": "Formular erstellen"
+  },
+  "users": {
+    "title": "Benutzerverwaltung",
+    "name": "Name",
+    "email": "E-Mail",
+    "rol": "Rolle",
+    "company": "Unternehmen",
+    "actions": "Aktionen",
+    "no": "Nicht anwendbar",
+    "delete": "Löschen",
+    "cancel": "Abbrechen",
+    "new": "Neuer Benutzer"
+  },
+  "plan": {
+    "title": "Aktionsplan",
+    "success": "Plan erfolgreich an externen Prüfer gesendet",
+    "evidence_s": "Nachweise erfolgreich gespeichert",
+    "save": "Aktionsplan erfolgreich erstellt",
+    "create": "Neuen Aktionsplan erstellen",
+    "create1": "Neuer Plan",
+    "objective": "Planziel",
+    "sub1": "Phasen und Ziele",
+    "meta": "Ziel",
+    "etapa": "Phase",
+    "e": "Phasen:",
+    "evidencia": "Nachweis",
+    "a_evidencia": "Nachweise hinzufügen",
+    "comment": "Kommentar:",
+    "add": "Weitere Phase hinzufügen",
+    "sub2": "Beschreiben Sie das Hauptziel des Aktionsplans",
+    "sub3": "Beschreiben Sie das zu erreichende Ziel",
+    "loading": "Speichern...",
+    "save2": "Plan speichern",
+    "loading2": "Pläne werden geladen...",
+    "l_send": "Senden...",
+    "send": "Nachweise senden",
+    "send2": "An externen Prüfer senden",
+    "void": "Keine Aktionspläne registriert. Erstellen Sie einen neuen."
+  },
+  "report": {
+    "title": "Berichte",
+    "t2": "Gespeicherte Berichte",
+    "t3": "Neuen Bericht erstellen",
+    "t4": "Klicken Sie auf die Schaltfläche, um einen Bericht basierend auf den Formularantworten zu erstellen.",
+    "t5": "Wird erstellt...",
+    "t6": "Bericht erstellen",
+    "t7": "Ergebniszusammenfassung",
+    "t8": "Punkte",
+    "t9": "Gesamtpunktzahl",
+    "t10": " möglich.",
+    "certificate": "Zertifikat ansehen",
+    "download": "Zertifikat herunterladen",
+    "generate": "Weiteren Bericht erstellen",
+    "back": "Zurück zur Liste"
+  },
+  "certificate": {
+    "t1": "ZERTIFIKAT",
+    "t2": "DER KONFORMITÄT",
+    "t3": "Hiermit wird bescheinigt, dass:",
+    "t4": " aus dem Unternehmen ",
+    "t5": "Die in der Norm festgelegten Anforderungen erfolgreich erfüllt hat:",
+    "t6": "Mit einer Punktzahl von ",
+    "t7": "von 100 möglichen Punkten.",
+    "t8": "Unterschrift des Prüfers",
+    "t9": "Datum: ",
+    "t11": "Herzlichen Glückwunsch, Sie sind nach der Norm zertifiziert ",
+    "t12": "Versuch es weiter, du bist nah dran",
+    "t13": "Sie haben leider nicht genügend Punkte erreicht, um zertifiziert zu werden."
+  }
+}

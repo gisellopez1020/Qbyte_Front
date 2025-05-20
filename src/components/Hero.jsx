@@ -1,8 +1,10 @@
 import React from "react";
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Hero = () => {
+  const { t } = useTranslation();
   return (
     <section
       id="home"
@@ -11,9 +13,9 @@ const Hero = () => {
       <div className="md:col-span-5 flex items-center justify-center p-5 xl:p-16">
         <div className="flex flex-col gap-6">
           <h1 className="text-5xl xl:text-6xl font-bold text-shadow-sm text-[#161236] leading-[4rem] xl:leading-[5.5rem]">
-            Automatiza y Simplifica el Cumplimiento{" "}
+            {t("hero.title.part1")}{" "}
             <span className="text-primary py-2 px-6 border-8 border-secondary relative inline-block">
-              Normativo
+              {t("hero.title.part2")}
               <RiCheckboxBlankCircleFill className="text-white text-base absolute -left-5 -top-5 p-2 bg-secondary rounded-full box-content" />
               <RiCheckboxBlankCircleFill className="text-white text-base absolute -right-5 -top-5 p-2 bg-secondary rounded-full box-content" />
               <RiCheckboxBlankCircleFill className="text-white text-base absolute -right-5 -bottom-5 p-2 bg-secondary rounded-full box-content" />
@@ -21,16 +23,14 @@ const Hero = () => {
             </span>
           </h1>
           <p className="text-gray-500 text-xl xl:leading-[2.5rem]">
-            Ahorra tiempo y minimiza errores con una plataforma diseñada para
-            empresas que buscan una solución ágil, confiable y automatizada para
-            su cumplimiento normativo.
+            {t("hero.description")}
           </p>
           <div className="flex flex-col md:flex-row items-center">
             <Link to="/Sign">
               <button className="bg-primary text-white font-bold py-2 px-14 rounded-xl xl:text-xl shadow-md relative overflow-hidden group">
                 <span className="absolute inset-0 scale-x-0 origin-left border-2 border-primary bg-white transition-transform duration-500 ease-in-out rounded-xl group-hover:scale-x-100"></span>
                 <span className="relative z-10 group-hover:text-primary">
-                  ¡Empieza ahora!
+                  {t("hero.cta")}
                 </span>
               </button>
             </Link>

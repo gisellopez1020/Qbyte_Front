@@ -13,12 +13,14 @@ import {
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Index = () => {
   const { usuario } = useAuth();
   const rol = usuario?.rol;
   const [usuarioNombre, setUsuarioNombre] = useState("");
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (!usuario) return null;
 
@@ -34,133 +36,37 @@ const Index = () => {
     auditor_externo: <FileText size={48} className="text-white" />,
   };
 
-  const descriptionMap = {
-    admin: {
-      title: "Administrador",
-      description:
-        "Administra usuarios, supervisa auditores, crea y asigna plantillas y auditorías, y controla el sistema completo.",
-      list: [
-        "Gestionar auditores internos y externos",
-        "Crear y administrar plantillas de formularios",
-        "Visualizar y generar reportes globales",
-        "Asignar auditorías y supervisar su progreso",
-      ],
-      features: [
-        {
-          title: "Usuarios",
-          icon: <UserCog size={32} className="text-white" />,
-          color: "bg-blue-600",
-          desc: "Crear, visualizar y eliminar usuarios del sistema.",
-          route: "/usuarios",
-        },
-        {
-          title: "Reportes Globales",
-          icon: <BarChart2 size={32} className="text-white" />,
-          color: "bg-indigo-600",
-          desc: "Visualizar estadísticas y reportes globales.",
-          route: "/usuarios",
-        },
-        {
-          title: "Crear formularios",
-          icon: <ClipboardList size={32} className="text-white" />,
-          color: "bg-cyan-600",
-          desc: "Crear formularios de las normas o lineamientos",
-          route: "/crear-form",
-        },
-        {
-          title: "Configuración",
-          icon: <ShieldCheck size={32} className="text-white" />,
-          color: "bg-sky-700",
-          desc: "Ajustes generales y configuración del sistema.",
-          route: "/admin/configuracion",
-        },
-      ],
-    },
-    auditor_interno: {
-      title: "Auditor Interno",
-      description:
-        "Supervisa y documenta auditorías internas, llena formularios, y da seguimiento a los planes de acción generados.",
-      list: [
-        "Visualizar y actualizar su información personal",
-        "Seleccionar normas y completar formularios",
-        "Crear y dar seguimiento a planes de acción",
-        "Revisar comentarios y observaciones de auditorías",
-      ],
-      features: [
-        {
-          title: "Información Personal",
-          icon: <UserCog size={32} className="text-white" />,
-          color: "bg-cyan-700",
-          desc: "Ver y actualizar información personal y formularios completados.",
-          route: "/auditor-interno/perfil",
-        },
-        {
-          title: "Formularios",
-          icon: <PlusCircle size={32} className="text-white" />,
-          color: "bg-blue-600",
-          desc: "Seleccionar norma y completar formularios de auditoría.",
-          route: "/auditor-interno/formularios",
-        },
-        {
-          title: "Planes de Acción",
-          icon: <ClipboardList size={32} className="text-white" />,
-          color: "bg-sky-600",
-          desc: "Crear, registrar y hacer seguimiento a planes de acción.",
-          route: "/auditor-interno/planes",
-        },
-        {
-          title: "Comentarios",
-          icon: <LayoutDashboard size={32} className="text-white" />,
-          color: "bg-cyan-900",
-          desc: "Visualizar comentarios realizados por auditores externos.",
-          route: "/auditor-interno/comentarios",
-        },
-      ],
-    },
-    auditor_externo: {
-      title: "Auditor Externo",
-      description:
-        "Revisa formularios pendientes de auditoría, evalúa evidencias, agrega comentarios, y actualiza el estado de auditoría para seguimiento interno.",
-      list: [
-        "Consultar formularios pendientes para auditar",
-        "Evaluar evidencias y documentar comentarios",
-        "Enviar observaciones para actualización en base de datos",
-        "Actualizar estado de auditoría a 'Comentarios realizados'",
-      ],
-      features: [
-        {
-          title: "Formularios Pendientes",
-          icon: <FileText size={32} className="text-white" />,
-          color: "bg-sky-700",
-          desc: "Visualizar formularios que requieren auditoría externa.",
-          route: "/planesExternos",
-        },
-        {
-          title: "Evaluación",
-          icon: <ClipboardList size={32} className="text-white" />,
-          color: "bg-indigo-700",
-          desc: "Ver evidencias y escribir comentarios para cada formulario.",
-          route: "/auditor-externo/evaluacion",
-        },
-        {
-          title: "Estado Auditoría",
-          icon: <BarChart2 size={32} className="text-white" />,
-          color: "bg-blue-700",
-          desc: "Actualizar estado para permitir seguimiento interno.",
-          route: "/auditor-externo/estado-auditoria",
-        },
-        {
-          title: "Seguimiento",
-          icon: <PlusCircle size={32} className="text-white" />,
-          color: "bg-cyan-800",
-          desc: "Facilitar que el auditor interno revise comentarios y observaciones.",
-          route: "/auditor-externo/seguimiento",
-        },
-      ],
-    },
+  const featureIcons = {
+    usuarios: <UserCog size={32} className="text-white" />,
+    reportes: <BarChart2 size={32} className="text-white" />,
+    crearForm: <ClipboardList size={32} className="text-white" />,
+    config: <ShieldCheck size={32} className="text-white" />,
+    perfil: <UserCog size={32} className="text-white" />,
+    formularios: <PlusCircle size={32} className="text-white" />,
+    planes: <ClipboardList size={32} className="text-white" />,
+    comentarios: <LayoutDashboard size={32} className="text-white" />,
+    pendientes: <FileText size={32} className="text-white" />,
+    evaluacion: <ClipboardList size={32} className="text-white" />,
+    estado: <BarChart2 size={32} className="text-white" />,
+    seguimiento: <PlusCircle size={32} className="text-white" />,
   };
 
-  const current = descriptionMap[rol];
+  const featureRoutes = {
+    usuarios: "/usuarios",
+    reportes: "/usuarios",
+    crearForm: "/crear-form",
+    config: "/admin/configuracion",
+    perfil: "/auditor-interno/perfil",
+    formularios: "/forms",
+    planes: "/plan-action",
+    comentarios: "/plan-action",
+    pendientes: "/planesExternos",
+    evaluacion: "/auditor-externo/evaluacion",
+    estado: "/auditor-externo/estado-auditoria",
+    seguimiento: "/auditor-externo/seguimiento",
+  };
+
+  const current = t(`index.${rol}`, { returnObjects: true });
 
   useEffect(() => {
     const obtenerDatosUsuario = async () => {
@@ -190,10 +96,11 @@ const Index = () => {
         {iconMap[rol]}
         <div>
           <h1 className="text-3xl font-bold">
-            Bienvenido, {usuarioNombre} <span className="ml-2">👋</span>
+            {t("index.welcome")}, {usuarioNombre}{" "}
+            <span className="ml-2">👋</span>
           </h1>
           <p className="text-lg mt-1">
-            Rol:{" "}
+            {t("index.role")}:{" "}
             <span className="font-semibold capitalize">{current.title}</span>
           </p>
         </div>
@@ -201,7 +108,7 @@ const Index = () => {
 
       <div className="mb-8 bg-white rounded-xl shadow p-1 space-y-4">
         <h2 className="text-2xl font-semibold text-gray-800">
-          Resumen de Funcionalidades
+          {t("index.resume")}
         </h2>
         <p className="text-gray-700 text-lg">{current.description}</p>
         <ul className="list-disc list-inside text-gray-600 space-y-1">
@@ -213,22 +120,41 @@ const Index = () => {
         </ul>
       </div>
 
-      <h2 className="text-2xl font-semibold text-gray-800 mb-1">
-        Acciones Disponibles
+      <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+        {t("index.actions")}
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-        {current.features.map(({ title, icon, color, desc, route }, idx) => (
-          <div
-            key={idx}
-            onClick={() => route && navigate(route)}
-            className={`${color} p-4 rounded-xl shadow-lg text-white flex flex-col hover:scale-105 transition-transform duration-300 cursor-pointer`}
-          >
-            <div className="mb-4">{icon}</div>
-            <h3 className="text-xl font-semibold mb-2">{title}</h3>
-            <p className="text-sm">{desc}</p>
-          </div>
-        ))}
+        {Object.entries(current.features).map(([key, { title, desc }], idx) => {
+          const featureColors = {
+            usuarios: "from-blue-600 to-blue-700",
+            reportes: "from-indigo-600 to-indigo-700",
+            crearForm: "from-cyan-600 to-cyan-700",
+            config: "from-sky-700 to-sky-800",
+            perfil: "from-cyan-600 to-cyan-700",
+            formularios: "from-blue-600 to-blue-700",
+            planes: "from-sky-600 to-sky-700",
+            comentarios: "from-cyan-900 to-cyan-800",
+            pendientes: "from-sky-700 to-sky-800",
+            evaluacion: "from-indigo-700 to-indigo-800",
+            estado: "from-blue-700 to-blue-800",
+            seguimiento: "from-cyan-800 to-cyan-900",
+          };
+
+          return (
+            <div
+              key={idx}
+              onClick={() => featureRoutes[key] && navigate(featureRoutes[key])}
+              className={`p-4 rounded-xl shadow-lg text-white flex flex-col hover:scale-105 transition-transform duration-300 cursor-pointer bg-gradient-to-br ${
+                featureColors[key] || "from-gray-500 to-gray-700"
+              }`}
+            >
+              <div className="mb-4">{featureIcons[key]}</div>
+              <h3 className="text-xl font-semibold mb-2">{title}</h3>
+              <p className="text-sm">{desc}</p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

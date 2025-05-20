@@ -1,0 +1,263 @@
+{
+  "home": "Home",
+  "about_us": "Chi siamo",
+  "n_services": "Servizi",
+  "contact": "Contatto",
+  "login": "Accedi",
+  "hero": {
+    "title": {
+      "part1": "Automatizzare e semplificare la regolamentazione",
+      "part2": "Conformità"
+    },
+    "description": "Risparmia tempo e riduci al minimo gli errori con una piattaforma progettata per le aziende che cercano una soluzione rapida, affidabile e automatizzata per la conformità normativa.",
+    "cta": "Inizia ora!"
+  },
+  "about": {
+    "title": "Incontra il nostro team",
+    "roles": {
+      "frontend": "Sviluppatore Frontend",
+      "backend": "Sviluppatore Backend"
+    }
+  },
+  "services": {
+    "title": "Rivoluzionare la valutazione della qualità",
+    "subtitle": "Eleviamo i vostri audit con l'automazione e l'attenzione strategica per soddisfare le normative e gli standard.",
+    "cards": [
+      {
+        "title": "Valutazioni intelligenti della conformità",
+        "subtitle": "Autovalutazioni e audit guidati",
+        "description": "Esegue una diagnostica dettagliata della conformità a standard quali ISO 9001, utilizzando questionari strutturati, liste di controllo e acquisizione di prove."
+      },
+      {
+        "title": "Gestione del piano d'azione (PDCA)",
+        "subtitle": "Definire obiettivi, azioni e monitoraggio",
+        "description": "Trasformare i risultati in miglioramenti: creare obiettivi, assegnare compiti e seguire il ciclo PDCA per garantire progressi misurabili verso la conformità."
+      },
+      {
+        "title": "Dashboard e report dinamici",
+        "subtitle": "Visualizzate i vostri progressi in tempo reale",
+        "description": "Esplorate i cruscotti con le metriche di conformità, le lacune critiche e i rapporti scaricabili."
+      },
+      {
+        "title": "Gestione dei ruoli e dei permessi",
+        "subtitle": "Accesso differenziato per profilo",
+        "description": "Gestite facilmente l'accesso del team: definite ruoli quali manager, revisori o valutatori e assicuratevi che ognuno abbia accesso solo a ciò di cui ha bisogno."
+      },
+      {
+        "title": "Standard flessibili e multilingue",
+        "subtitle": "Adattamento a standard e regioni diverse",
+        "description": "Ottenete la certificazione in varie normative e utilizzate la piattaforma nella lingua che preferite."
+      },
+      {
+        "title": "Identificazione delle lacune e delle azioni correttive",
+        "subtitle": "Rilevare, documentare e risolvere",
+        "description": "Registrate le lacune di conformità, definite le azioni correttive e seguite il vostro stato con lo storico e le prove."
+      }
+    ]
+  },
+  "footer": {
+    "text1": "Tutti i diritti riservati"
+  },
+  "log_in": {
+    "title": "Accesso",
+    "email": "Email",
+    "password": "Password",
+    "terms": "Termini e condizioni",
+    "button": "Accedi",
+    "p1": "Non hai un account?",
+    "register": "Registrati",
+    "error": "Errore di accesso: credenziali non valide",
+    "exist": "Non sono state trovate informazioni sull'utente nel database."
+  },
+  "sign_up": {
+    "title": "Registrazione",
+    "user": "Nome utente",
+    "rols": {
+      "select": "Seleziona un ruolo",
+      "r1": "Revisore interno",
+      "r2": "Revisore esterno",
+      "r3": "Amministratore"
+    },
+    "email": "Email",
+    "password": "Password",
+    "company": "Nome della compagnia",
+    "code": "Codice",
+    "button": "Crea account",
+    "p1": "Hai già un account?",
+    "login": "Accedi"
+  },
+  "sidebar": {
+    "language": "Lingua",
+    "logout": "Disconnettersi",
+    "home": "Home",
+    "forms": "Moduli",
+    "create_form": "Crea modulo",
+    "users": "Utenti",
+    "reports": "Report",
+    "action_plan": "Piano d'azione"
+  },
+  "index": {
+    "welcome": "Benvenuto, {{name}} 👋",
+    "role": "Ruolo",
+    "resume": "Riepilogo delle funzionalità",
+    "actions": "Azioni disponibili",
+    "admin": {
+      "title": "Amministratore",
+      "description": "Gestisce gli utenti, supervisiona gli auditor, crea e assegna modelli e audit, e controlla l'intero sistema.",
+      "list": [
+        "Gestire auditor interni ed esterni",
+        "Creare e gestire modelli di moduli",
+        "Visualizzare e generare report globali",
+        "Assegnare audit e monitorare i progressi"
+      ],
+      "features": {
+        "usuarios": {
+          "title": "Utenti",
+          "desc": "Creare, visualizzare ed eliminare gli utenti del sistema."
+        },
+        "reportes": {
+          "title": "Report globali",
+          "desc": "Visualizzare statistiche e report globali."
+        },
+        "crearForm": {
+          "title": "Crea moduli",
+          "desc": "Creare moduli basati su standard o linee guida"
+        },
+        "config": {
+          "title": "Impostazioni",
+          "desc": "Configurazioni generali e impostazioni di sistema."
+        }
+      }
+    },
+    "auditor_interno": {
+      "title": "Auditor Interno",
+      "description": "Supervisiona e documenta gli audit interni, compila i moduli e segue i piani d’azione generati.",
+      "list": [
+        "Visualizzare e aggiornare le informazioni personali",
+        "Selezionare standard e completare i moduli",
+        "Creare e monitorare piani d’azione",
+        "Esaminare commenti e osservazioni degli audit"
+      ],
+      "features": {
+        "perfil": {
+          "title": "Informazioni personali",
+          "desc": "Visualizzare e aggiornare dati personali e moduli compilati."
+        },
+        "formularios": {
+          "title": "Moduli",
+          "desc": "Selezionare uno standard e completare i moduli di audit."
+        },
+        "planes": {
+          "title": "Piani d’Azione",
+          "desc": "Creare, registrare e monitorare piani d’azione."
+        },
+        "comentarios": {
+          "title": "Commenti",
+          "desc": "Visualizzare i commenti degli auditor esterni."
+        }
+      }
+    },
+    "auditor_externo": {
+      "title": "Auditor Esterno",
+      "description": "Esamina i moduli in sospeso, valuta le evidenze, aggiunge commenti e aggiorna lo stato dell’audit per il follow-up interno.",
+      "list": [
+        "Consultare moduli in sospeso da controllare",
+        "Valutare le evidenze e documentare commenti",
+        "Inviare osservazioni per l’aggiornamento del database",
+        "Aggiornare lo stato dell’audit a 'Commenti effettuati'"
+      ],
+      "features": {
+        "pendientes": {
+          "title": "Moduli in sospeso",
+          "desc": "Visualizzare i moduli che richiedono un audit esterno."
+        },
+        "evaluacion": {
+          "title": "Valutazione",
+          "desc": "Esaminare le evidenze e scrivere commenti per ogni modulo."
+        },
+        "estado": {
+          "title": "Stato Audit",
+          "desc": "Aggiornare lo stato per consentire il follow-up interno."
+        },
+        "seguimiento": {
+          "title": "Follow-Up",
+          "desc": "Permettere all’auditor interno di rivedere commenti e osservazioni."
+        }
+      }
+    }
+  },
+  "forms": {
+    "title": "Moduli",
+    "load": "Carica Documento",
+    "pdf": "Seleziona un file PDF:",
+    "generate": "Genera modulo"
+  },
+  "users": {
+    "title": "Gestione Utenti",
+    "name": "Nome",
+    "email": "Email",
+    "rol": "Ruolo",
+    "company": "Azienda",
+    "actions": "Azioni",
+    "no": "Non applicabile",
+    "delete": "Elimina",
+    "cancel": "Annulla",
+    "new": "Nuovo utente"
+  },
+  "plan": {
+    "title": "Piano d'Azione",
+    "success": "Piano inviato con successo a un revisore esterno",
+    "evidence_s": "Prove salvate con successo",
+    "save": "Piano d'azione creato con successo",
+    "create": "Crea Nuovo Piano d'Azione",
+    "create1": "Nuovo Piano",
+    "objective": "Obiettivo del Piano",
+    "sub1": "Fasi e Obiettivi",
+    "meta": "Obiettivo",
+    "etapa": "Fase",
+    "e": "Fasi:",
+    "evidencia": "Prova",
+    "a_evidencia": "Aggiungi Prove",
+    "comment": "Commento:",
+    "add": "Aggiungi un'altra fase",
+    "sub2": "Descrivi l'obiettivo principale del piano d'azione",
+    "sub3": "Descrivi l'obiettivo da raggiungere",
+    "loading": "Salvataggio...",
+    "save2": "Salva Piano",
+    "loading2": "Caricamento piani...",
+    "l_send": "Invio...",
+    "send": "Invia Prove",
+    "send2": "Invia al Revisore Esterno",
+    "void": "Nessun piano d'azione registrato. Creane uno nuovo."
+  },
+  "report": {
+    "title": "Rapporti",
+    "t2": "Rapporti salvati",
+    "t3": "Genera nuovo rapporto",
+    "t4": "Clicca sul pulsante per generare un rapporto basato sulle risposte del modulo.",
+    "t5": "Generazione...",
+    "t6": "Genera rapporto",
+    "t7": "Riepilogo dei risultati",
+    "t8": "punti",
+    "t9": "Punteggio totale",
+    "t10": " possibili.",
+    "certificate": "Visualizza certificato",
+    "download": "Scarica certificato",
+    "generate": "Genera un altro rapporto",
+    "back": "Torna all'elenco"
+  },
+  "certificate": {
+    "t1": "CERTIFICATO",
+    "t2": "DI CONFORMITÀ",
+    "t3": "Si certifica che:",
+    "t4": " dell'azienda ",
+    "t5": "Ha soddisfatto con successo i requisiti specificati nella norma:",
+    "t6": "Con un punteggio di ",
+    "t7": "su 100 punti possibili.",
+    "t8": "Firma del valutatore",
+    "t9": "Data: ",
+    "t11": "Congratulazioni, siete certificati secondo lo standard ",
+    "t12": "Continuate a provare, ci siete vicini",
+    "t13": "Siamo spiacenti, i punti non sono sufficienti per ottenere la certificazione"
+  }
+}
