@@ -90,7 +90,7 @@ const Sidebar = () => {
 
           {/* Nav */}
           <div
-            className={`p-4 rounded-tr-[50px] h-[90vh] overflow-y-auto flex flex-col justify-between gap-8 ${colors.sid}`}
+            className={`p-4 rounded-tr-[50px] h-[70vh] overflow-y-auto flex flex-col justify-between gap-8 ${colors.sid}`}
           >
             <nav className="flex flex-col gap-6 ">
               {menuItems.map((item) => {

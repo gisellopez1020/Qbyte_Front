@@ -520,6 +520,8 @@ const Reports = () => {
 
   return (
     <div className="p-5 min-h-screen bg-gray-50">
+      <div className="bg-slate-300 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[600px] max-w-[1200px]  
+                   overflow-y-auto space-y-6">
       <h1 className="text-3xl text-gray-800 font-bold mb-6 text-center flex justify-center items-center">
         <FaChartPie className="text-4xl text-primary mr-2" />
         Reportes
@@ -571,7 +573,7 @@ const Reports = () => {
               className={`px-4 py-2 rounded font-medium ${
                 loading
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-primary hover:bg-blue-800 text-white"
+                  : "flex items-center gap-2 bg-gradient-to-r from-[#2067af] to-blue-950 hover:from-[#1b5186] hover:to-blue-900 text-white rounded-lg active:scale-95 active:shadow-md hover:scale-105"
               }`}
             >
               {loading ? "Generando..." : "Generar reporte"}
@@ -652,7 +654,11 @@ const Reports = () => {
                     <div className="mt-3 flex gap-2">
                       <button
                         onClick={() => setShowCertificate(!showCertificate)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                        className="flex items-center gap-2 
+                    bg-gradient-to-r from-[#2067af] to-blue-950
+                    hover:from-[#1b5186] hover:to-blue-900
+                    transition-all duration-200 ease-in-out text-white px-4 py-2
+                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
                       >
                         <FaCertificate /> Ver certificado
                       </button>
@@ -688,7 +694,11 @@ const Reports = () => {
                     setReporte(null);
                     setShowCertificate(false);
                   }}
-                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 font-medium"
+                  className="flex items-center gap-2 
+                    bg-gradient-to-r from-[#2067af] to-blue-950
+                    hover:from-[#1b5186] hover:to-blue-900
+                    transition-all duration-200 ease-in-out text-white px-4 py-2
+                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
                 >
                   Generar otro reporte
                 </button>
@@ -703,7 +713,11 @@ const Reports = () => {
                     setReporte(null);
                     setShowCertificate(false);
                   }}
-                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 font-medium"
+                  className="flex items-center gap-2 
+                    bg-gradient-to-r from-[#2067af] to-blue-950
+                    hover:from-[#1b5186] hover:to-blue-900
+                    transition-all duration-200 ease-in-out text-white px-4 py-2
+                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
                 >
                   Volver a la lista
                 </button>
@@ -723,6 +737,7 @@ const Reports = () => {
           />
         )}
       </div>
+    </div>
     </div>
   );
 };

@@ -237,6 +237,7 @@ const Formulario = () => {
 
   return (
     <div className="p-5 min-h-screen bg-gray-50">
+     <div className="bg-slate-300 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[600px] max-w-[1200px]  overflow-y-auto space-y-6">
       <h1 className="text-2xl font-bold mb-6 text-center">
         {formulario.nombre ||
           formulario.descripcion ||
@@ -328,12 +329,17 @@ const Formulario = () => {
 
         <button
           type="submit"
-          className="bg-primary text-white px-6 py-2 rounded hover:bg-blue-900"
+          className="flex items-center gap-2 
+                    bg-gradient-to-r from-[#2067af] to-blue-950
+                    hover:from-[#1b5186] hover:to-blue-900
+                    transition-all duration-200 ease-in-out text-white px-4 py-2
+                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
         >
           Enviar formulario
         </button>
       </form>
-    </div>
+    </div> 
+   </div>
   );
 };
 

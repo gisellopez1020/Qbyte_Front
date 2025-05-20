@@ -64,8 +64,8 @@ const CrearForm = () => {
     };
 
     return (
-        <div className="relative py-11 px-4">
-            <div className="max-h-[600px] overflow-y-auto h-screen mx-auto max-w-[1200px] px-4 py-4 bg-sky-900/30 rounded-3xl">
+        <div className="relative py-11 mx-auto">
+            <div className="max-h-[500px] overflow-y-auto h-screen mx-auto max-w-[1200px] px-4 py-4 bg-sky-900/30 rounded-3xl">
                 <h1 className="text-3xl font-bold mb-6 text-center text-black">Subir Documento</h1>
 
                 {mensaje && (

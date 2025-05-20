@@ -24,17 +24,21 @@ const AudiInterno = () => {
   }, []);
 
   return (
-    <div className="mx-auto mt-8 py-8 h-screen">
+    <div className="mx-auto py-8">
+   <div className="bg-slate-300 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[600px] max-w-[1200px]  
+                   overflow-y-auto space-y-6">
       <h1 className="text-3xl text-gray-800 font-bold flex items-center justify-center mb-12">
         <SiGoogleforms className="text-primary mr-2" />
         Formularios
       </h1>
-
       <div className="flex flex-wrap p-5 xl:p-2 relative items-center justify-center gap-5 xl:gap-10 h-auto">
         {formularios.map((form) => (
           <div
             key={form._id}
-            className="bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[200px] cursor-pointer hover:scale-105 transition-transform duration-300 backdrop-blur-md border border-primary flex flex-col justify-center items-center"
+            className="bg-white rounded-xl shadow-xl p-6
+             max-w-xs w-full min-h-[200px] cursor-pointer hover:scale-105 
+             transition-transform duration-300 backdrop-blur-md border
+              border-primary flex flex-col justify-center items-center"
             onClick={() =>
               navigate(`/forms/${encodeURIComponent(form.nombre)}`)
             }
@@ -48,6 +52,7 @@ const AudiInterno = () => {
             </p>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

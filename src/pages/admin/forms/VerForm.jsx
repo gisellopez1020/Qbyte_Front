@@ -52,7 +52,10 @@ const VerForm = () => {
     };
 
     return (
-        <div className="p-6 max-w-4xl mx-auto bg-white rounded shadow">
+    <div className="p-6 max-w-6xl mx-auto bg-white rounded shadow">
+         <div className="bg-gradient-to-r bg-slate-300 rounded-2xl
+          shadow-sm flex-1 p-4 max-h-[600px] overflow-y-auto space-y-6">
+
             <h1 className="text-2xl font-bold mb-2">
                 {formulario.nombre || formulario.titulo || "Formulario"}
             </h1>
@@ -70,11 +73,16 @@ const VerForm = () => {
 
             <button
                 onClick={() => navigate(-1)}
-                className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                className="flex items-center gap-2 
+                    bg-gradient-to-r from-[#2067af] to-blue-950
+                    hover:from-[#1b5186] hover:to-blue-900
+                    transition-all duration-200 ease-in-out text-white px-4 py-2
+                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
             >
                 Volver
             </button>
         </div>
+    </div>
     );
 };
 
