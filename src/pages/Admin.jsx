@@ -58,11 +58,15 @@ const Admin = () => {
   };
 
   return (
-    <div className="p-6 mt-8 max-w-6xl mx-auto bg-white rounded-xl shadow">
+    <div className="p-1 mt-8 max-w-6xl mx-auto bg-white rounded-xl shadow">
       <div className="flex justify-center mb-4">
         <button
           onClick={() => setModoEdicion(!modoEdicion)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+          className="flex items-center gap-2 
+                    bg-gradient-to-r from-[#2067af] to-blue-950
+                    hover:from-[#1b5186] hover:to-blue-900
+                    transition-all duration-200 ease-in-out text-white px-4 py-2
+                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
         >
           {modoEdicion ? "Cancelar edición" : "Editar"}
         </button>
