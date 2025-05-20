@@ -524,7 +524,7 @@ const Reports = () => {
   };
 
   return (
-    <div className="p-5 min-h-screen bg-gray-50">
+    <div className="mx-auto px-4 py-8 max-w-6xl">
       <div className="bg-slate-200 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[80vh] max-w-[70vw] overflow-y-auto space-y-6">
         <h1 className="text-3xl text-gray-800 font-bold mb-6 text-center flex justify-center items-center">
           <FaChartPie className="text-4xl text-primary mr-2" />

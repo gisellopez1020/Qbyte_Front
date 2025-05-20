@@ -236,8 +236,8 @@ const Formulario = () => {
   }
 
   return (
-    <div className="p-5 min-h-screen bg-gray-50">
-      <div className="bg-slate-200 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[80vh] max-w-[70vw]  overflow-y-auto space-y-6">
+    <div className="min-h-screen mx-auto py-8 bg-gray-50">
+      <div className="bg-slate-200 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[80vh] max-w-[70vw] overflow-y-auto space-y-6">
         <h1 className="text-2xl font-bold mb-6 text-center">
           {formulario.nombre ||
             formulario.descripcion ||
