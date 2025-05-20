@@ -24,26 +24,26 @@ const AudiInterno = () => {
   }, []);
 
   return (
-    <div className="mx-auto mt-8 py-8 h-screen">
+    <div className="mx-auto mt-8 py-8 h-auto">
       <h1 className="text-3xl text-gray-800 font-bold flex items-center justify-center mb-12">
         <SiGoogleforms className="text-primary mr-2" />
         Formularios
       </h1>
 
-      <div className="flex flex-wrap p-5 xl:p-2 relative items-center justify-center gap-5 xl:gap-10 h-auto">
+      <div className="flex flex-wrap p-2 xl:p-2 relative items-center justify-center gap-5 xl:gap-10 h-auto">
         {formularios.map((form) => (
           <div
             key={form._id}
-            className="bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-xs w-full min-h-[200px] cursor-pointer hover:scale-105 transition-transform duration-300 backdrop-blur-md border border-primary flex flex-col justify-center items-center"
+            className="bg-white bg-opacity-10 rounded-xl shadow-xl p-6 max-w-sm w-full min-h-[320px] cursor-pointer hover:scale-105 transition-transform duration-300 backdrop-blur-md border border-primary flex flex-col justify-between items-center"
             onClick={() =>
               navigate(`/forms/${encodeURIComponent(form.nombre)}`)
             }
           >
-            <FcRules className="text-7xl" />
-            <h2 className="text-black font-semibold text-xl text-center">
+            <FcRules className="text-7xl mb-4" />
+            <h2 className="text-black font-semibold text-xl text-center mb-2">
               {form.nombre}
             </h2>
-            <p className="text-sm text-gray-700 text-center">
+            <p className="text-sm text-gray-700 text-center line-clamp-3">
               {form.descripcion}
             </p>
           </div>

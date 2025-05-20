@@ -183,7 +183,7 @@ const Index = () => {
   }, [usuario.uid]);
 
   return (
-    <div className="p-2 max-w-5xl mx-auto">
+    <div className="mt-12 max-w-5xl mx-auto">
       <div
         className={`rounded-3xl shadow-lg text-white p-7 mb-8 flex items-center gap-6 bg-gradient-to-r ${roleColors[rol]}`}
       >
