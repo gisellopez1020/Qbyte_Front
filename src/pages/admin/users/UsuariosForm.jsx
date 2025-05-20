@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../../../firebaseConfig";
 import { setDoc, doc, getDoc } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
+import Swal from "sweetalert2";
 
 const DEFAULT_PASSWORD = "123456";
 
@@ -13,14 +14,10 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
   const [adminCode, setAdminCode] = useState("");
   const [email, setEmail] = useState("");
   const [compania, setCompania] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
 
     try {
       // Validar código si es admin
@@ -31,7 +28,11 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
           !codeSnap.exists() ||
           String(codeSnap.data().codigo) !== adminCode.trim()
         ) {
-          setError("Código de administrador incorrecto.");
+          Swal.fire({
+            icon: "error",
+            title: "Código incorrecto",
+            text: "Código de administrador incorrecto.",
+          });
           return;
         }
       }
@@ -43,7 +44,7 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
         DEFAULT_PASSWORD
       );
 
-      //Guardar en Firestore
+      // Guardar en Firestore
       const userData = {
         name,
         email,
@@ -92,9 +93,12 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
         }
       }
 
-      setSuccess(
-        `Usuario creado exitosamente. Password por defecto: "${DEFAULT_PASSWORD}"`
-      );
+      Swal.fire({
+        icon: "success",
+        title: "Usuario creado",
+        text: `Usuario creado exitosamente. Contraseña por defecto: "${DEFAULT_PASSWORD}"`,
+      });
+
       // Reset campos
       setName("");
       setRol("auditor_interno");
@@ -106,7 +110,11 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
       if (onUsuarioCreado) onUsuarioCreado();
     } catch (err) {
       console.error(err);
-      setError("Error al crear usuario: " + err.message);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Error al crear usuario: " + err.message,
+      });
     }
   };
 
@@ -115,9 +123,6 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
       onSubmit={handleSubmit}
       className="bg-gray-100 p-4 rounded mb-6 space-y-4"
     >
-      {error && <p className="text-red-500">{error}</p>}
-      {success && <p className="text-green-500">{success}</p>}
-
       <input
         className="w-full p-2 border rounded"
         type="text"
@@ -132,9 +137,9 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
         value={rol}
         onChange={(e) => setRol(e.target.value)}
       >
-        <option value="auditor_interno">{t("sign_up.rols.r1")}</option>
-        <option value="auditor_externo">{t("sign_up.rols.r2")}</option>
-        <option value="admin">{t("sign_up.rols.r3")}</option>
+        <option value="auditor_interno">Auditor Interno</option>
+        <option value="auditor_externo">Auditor Externo</option>
+        <option value="admin">Administrador</option>
       </select>
 
       {rol === "admin" && (
@@ -176,11 +181,11 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
 
       <button
         type="submit"
-        className=" w-full items-center gap-2 
-                bg-gradient-to-r from-[#2067af] to-blue-950
-                hover:from-[#1b5186] hover:to-blue-900
-                transition-all duration-200 ease-in-out text-white px-4 py-2
-                rounded-lg active:scale-65 active:shadow-md hover:scale-105"
+        className="w-full items-center gap-2 
+          bg-gradient-to-r from-[#2067af] to-blue-950
+          hover:from-[#1b5186] hover:to-blue-900
+          transition-all duration-200 ease-in-out text-white px-4 py-2
+          rounded-lg active:scale-65 active:shadow-md hover:scale-105"
       >
         Crear Usuario
       </button>

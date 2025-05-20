@@ -1,8 +1,27 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Swal from "sweetalert2";
 
 const UserTable = ({ usuarios, eliminarUsuario }) => {
   const { t } = useTranslation();
+  const handleEliminar = (id) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción no se puede deshacer.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        eliminarUsuario(id);
+        Swal.fire("¡Eliminado!", "El usuario ha sido eliminado.", "success");
+      }
+    });
+  };
+
   return (
     <div className="overflow-x-auto rounded-lg shadow border border-gray-300">
       <table className="w-full text-sm text-left">
@@ -47,12 +66,12 @@ const UserTable = ({ usuarios, eliminarUsuario }) => {
 
               <td className="px-4 py-3 border border-gray-200 text-center">
                 <button
-                  onClick={() => eliminarUsuario(usuario.id)}
+                  onClick={() => handleEliminar(usuario.id)}
                   className="flex items-center gap-2 
-                                    bg-gradient-to-r from-red-700 to-red-800
-                                    hover:from-red-600 hover:to-red-700
-                                    transition-all duration-200 ease-in-out text-white px-4 py-2
-                                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
+                      bg-gradient-to-r from-red-700 to-red-800
+                      hover:from-red-600 hover:to-red-700
+                      transition-all duration-200 ease-in-out text-white px-4 py-2
+                      rounded-lg active:scale-95 active:shadow-md hover:scale-105"
                 >
                   {t("users.delete")}
                 </button>

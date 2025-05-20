@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Swal from "sweetalert2";
 
 const CrearForm = () => {
   const [archivo, setArchivo] = useState(null);
@@ -60,13 +61,20 @@ const CrearForm = () => {
       }
 
       console.log("Formulario generado:", data);
-      setMensaje({
-        tipo: "exito",
-        texto: "Formulario generado correctamente.",
+
+      Swal.fire({
+        icon: "success",
+        title: "Formulario generado",
+        text: "Se ha generado correctamente el formulario.",
       });
+
       navigate("/forms");
     } catch (err) {
-      setMensaje({ tipo: "error", texto: err.message });
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.message,
+      });
     }
   };
 
