@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  ClipboardList,
-  Save,
-  MessageSquare,
-  AlertCircle,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { Save, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { BsFillClipboard2DataFill } from "react-icons/bs";
 import { useAuth } from "../context/AuthContext";
 
 const PlanesAuditorExterno = () => {
@@ -210,8 +204,9 @@ const PlanesAuditorExterno = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 flex items-center text-gray-800">
-        <ClipboardList className="mr-2" /> Planes de Acción Asignados
+      <h1 className="text-3xl font-bold my-10 flex items-center text-gray-800">
+        <BsFillClipboard2DataFill className="mr-2 text-primary" /> Planes de
+        Acción Asignados
       </h1>
 
       {mensaje.texto && (

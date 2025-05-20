@@ -25,35 +25,34 @@ const AudiInterno = () => {
 
   return (
     <div className="mx-auto py-8">
-   <div className="bg-slate-300 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[600px] max-w-[1200px]  
-                   overflow-y-auto space-y-6">
-      <h1 className="text-3xl text-gray-800 font-bold flex items-center justify-center mb-12">
-        <SiGoogleforms className="text-primary mr-2" />
-        Formularios
-      </h1>
+      <div className="bg-slate-200 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[80vh] max-w-[70vw] overflow-y-auto space-y-6">
+        <h1 className="text-3xl text-gray-800 font-bold flex items-center justify-center mb-12">
+          <SiGoogleforms className="text-primary mr-2" />
+          Formularios
+        </h1>
 
-      <div className="flex flex-wrap justify-center gap-6 w-full">
-        {formularios.map((form) => (
-          <div
-            key={form._id}
-            className="bg-white rounded-xl shadow-xl p-6
+        <div className="flex flex-wrap justify-center gap-6 w-full">
+          {formularios.map((form) => (
+            <div
+              key={form._id}
+              className="bg-white rounded-xl shadow-xl p-6
              max-w-xs w-full min-h-[200px] cursor-pointer hover:scale-105 
              transition-transform duration-300 backdrop-blur-md border
               border-primary flex flex-col justify-center items-center"
-            onClick={() =>
-              navigate(`/forms/${encodeURIComponent(form.nombre)}`)
-            }
-          >
-            <FcRules className="text-7xl mb-4" />
-            <h2 className="text-black font-semibold text-xl text-center mb-2">
-              {form.nombre}
-            </h2>
-            <p className="text-sm text-gray-700 text-center line-clamp-3">
-              {form.descripcion}
-            </p>
-          </div>
-        ))}
-      </div>
+              onClick={() =>
+                navigate(`/forms/${encodeURIComponent(form.nombre)}`)
+              }
+            >
+              <FcRules className="text-7xl mb-4" />
+              <h2 className="text-black font-semibold text-xl text-center mb-2">
+                {form.nombre}
+              </h2>
+              <p className="text-sm text-gray-700 text-center line-clamp-3">
+                {form.descripcion}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

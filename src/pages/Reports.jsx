@@ -133,13 +133,13 @@ const Certificate = React.forwardRef(({ reportData, totalPoints }, ref) => {
               <span className="text-primary text-4xl">.</span>
               <GiStarsStack className="text-primary absolute bottom-1 left-11" />
             </p>
-            <div className="border-t-2 border-gray-500 pt-2 px-10">
+            <div className="border-t-2 border-gray-500 pt-1 px-10">
               Firma del evaluador
             </div>
           </div>
 
           <div className="text-center">
-            <div className="border-t-2 border-gray-500 pt-2 px-10">
+            <div className="border-t-2 border-gray-500 pt-1 px-10">
               Fecha: {currentDate}
             </div>
           </div>
@@ -264,11 +264,17 @@ const Reports = () => {
         format: "a4",
       });
 
-      const imgWidth = 297;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const pageWidth = 297;
+      const pageHeight = 210;
+      let imgWidth = pageWidth;
+      let imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      if (imgHeight > pageHeight) {
+        imgHeight = pageHeight;
+      }
 
       pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-      pdf.save(`certificado_${reportData?.norma || "normativo"}.pdf`);
+      pdf.save(`certificado_${reportData?.nombre || "normativo"}.pdf`);
     } catch (err) {
       console.error("Error generando PDF:", err);
       alert(
@@ -520,224 +526,223 @@ const Reports = () => {
 
   return (
     <div className="p-5 min-h-screen bg-gray-50">
-      <div className="bg-slate-300 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[600px] max-w-[1200px]  
-                   overflow-y-auto space-y-6">
-      <h1 className="text-3xl text-gray-800 font-bold mb-6 text-center flex justify-center items-center">
-        <FaChartPie className="text-4xl text-primary mr-2" />
-        Reportes
-      </h1>
+      <div className="bg-slate-200 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[80vh] max-w-[70vw] overflow-y-auto space-y-6">
+        <h1 className="text-3xl text-gray-800 font-bold mb-6 text-center flex justify-center items-center">
+          <FaChartPie className="text-4xl text-primary mr-2" />
+          Reportes
+        </h1>
 
-      <div className="max-w-4xl mx-auto">
-        {/* Sección de reportes guardados */}
-        {savedReports.length > 0 && (
-          <div className="mb-8 bg-white p-5 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Reportes guardados</h2>
-            <div className="space-y-2">
-              {savedReports.map((report) => (
-                <div
-                  key={report.id}
-                  className={`p-3 border rounded cursor-pointer hover:bg-blue-50 transition 
+        <div className="max-w-4xl mx-auto">
+          {/* Sección de reportes guardados */}
+          {savedReports.length > 0 && (
+            <div className="mb-8 bg-white p-5 rounded-lg shadow">
+              <h2 className="text-xl font-semibold mb-4">Reportes guardados</h2>
+              <div className="space-y-2">
+                {savedReports.map((report) => (
+                  <div
+                    key={report.id}
+                    className={`p-3 border rounded cursor-pointer hover:bg-blue-50 transition 
                     ${
                       selectedReport?.id === report.id
                         ? "bg-blue-100 border-blue-400"
                         : "border-gray-200"
                     }`}
-                  onClick={() => viewSavedReport(report)}
-                >
-                  <div className="font-medium">{report.title}</div>
-                  <div className="text-sm text-gray-500">
-                    {new Date(report.createdAt).toLocaleDateString()}{" "}
-                    {new Date(report.createdAt).toLocaleTimeString()}
+                    onClick={() => viewSavedReport(report)}
+                  >
+                    <div className="font-medium">{report.title}</div>
+                    <div className="text-sm text-gray-500">
+                      {new Date(report.createdAt).toLocaleDateString()}{" "}
+                      {new Date(report.createdAt).toLocaleTimeString()}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Sección de nuevo reporte */}
-        {reportData && !reporte && (
-          <div className="bg-white p-5 rounded-lg shadow mb-6">
-            <h2 className="text-xl font-semibold mb-4">
-              Generar nuevo reporte
-            </h2>
+          {/* Sección de nuevo reporte */}
+          {reportData && !reporte && (
+            <div className="bg-white p-5 rounded-lg shadow mb-6">
+              <h2 className="text-xl font-semibold mb-4">
+                Generar nuevo reporte
+              </h2>
 
-            <p className="mb-4">
-              Haga clic en el botón para generar un reporte basado en las
-              respuestas del formulario.
-            </p>
+              <p className="mb-4">
+                Haga clic en el botón para generar un reporte basado en las
+                respuestas del formulario.
+              </p>
 
-            <button
-              onClick={generateReport}
-              disabled={loading}
-              className={`px-4 py-2 rounded font-medium ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "flex items-center gap-2 bg-gradient-to-r from-[#2067af] to-blue-950 hover:from-[#1b5186] hover:to-blue-900 text-white rounded-lg active:scale-95 active:shadow-md hover:scale-105"
-              }`}
-            >
-              {loading ? "Generando..." : "Generar reporte"}
-            </button>
+              <button
+                onClick={generateReport}
+                disabled={loading}
+                className={`px-4 py-2 rounded font-medium ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "flex items-center gap-2 bg-gradient-to-r from-[#2067af] to-blue-950 hover:from-[#1b5186] hover:to-blue-900 text-white rounded-lg active:scale-95 active:shadow-md hover:scale-105"
+                }`}
+              >
+                {loading ? "Generando..." : "Generar reporte"}
+              </button>
 
-            {error && (
-              <div className="mt-4 p-3 bg-red-100 text-red-800 rounded">
-                {error}
-              </div>
-            )}
-          </div>
-        )}
+              {error && (
+                <div className="mt-4 p-3 bg-red-100 text-red-800 rounded">
+                  {error}
+                </div>
+              )}
+            </div>
+          )}
 
-        {/* Visualización del reporte */}
-        {reporte && (
-          <div className="bg-white p-5 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">
-              {selectedReport ? selectedReport.title : "Reporte generado"}
-            </h2>
+          {/* Visualización del reporte */}
+          {reporte && (
+            <div className="bg-white p-5 rounded-lg shadow">
+              <h2 className="text-xl font-semibold mb-4">
+                {selectedReport ? selectedReport.title : "Reporte generado"}
+              </h2>
 
-            {/* Gráfico circular para mostrar totales */}
-            {totalesData && totalesData.length > 0 && (
-              <div className="mb-6">
-                <h3 className="text-lg font-medium mb-3">
-                  Resumen de resultados
-                </h3>
-                <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-                  <ResponsiveContainer width="100%" height={250}>
-                    <PieChart>
-                      <Pie
-                        data={totalesData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={true}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                        label={({ name, percent }) =>
-                          `${name}: ${(percent * 100).toFixed(0)}%`
-                        }
-                      >
-                        {totalesData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        formatter={(value) => [`${value} puntos`, "Cantidad"]}
-                      />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div className="flex flex-col justify-center mt-2">
-                    <div className="text-sm font-medium">
-                      Puntuación total: {getTotalPoints()} de 100 puntos
-                      posibles.
+              {/* Gráfico circular para mostrar totales */}
+              {totalesData && totalesData.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-medium mb-3">
+                    Resumen de resultados
+                  </h3>
+                  <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <ResponsiveContainer width="100%" height={250}>
+                      <PieChart>
+                        <Pie
+                          data={totalesData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={true}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="value"
+                          label={({ name, percent }) =>
+                            `${name}: ${(percent * 100).toFixed(0)}%`
+                          }
+                        >
+                          {totalesData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          formatter={(value) => [`${value} puntos`, "Cantidad"]}
+                        />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="flex flex-col justify-center mt-2">
+                      <div className="text-sm font-medium">
+                        Puntuación total: {getTotalPoints()} de 100 puntos
+                        posibles.
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            )}
-
-            <div className="prose max-w-none">
-              {totalesData && totalesData.length > 0 && (
-                <div
-                  className={`p-4 mb-6 rounded-lg border ${
-                    getCertificationStatus(getTotalPoints()).className
-                  }`}
-                >
-                  <p className="text-lg font-bold flex items-center">
-                    <span className="text-2xl mr-2">
-                      {getCertificationStatus(getTotalPoints()).icon}
-                    </span>
-                    {getCertificationStatus(getTotalPoints()).message}
-                  </p>
-
-                  {/* Botón de certificado para descargar solo si está certificado */}
-                  {getCertificationStatus(getTotalPoints()).certified && (
-                    <div className="mt-3 flex gap-2">
-                      <button
-                        onClick={() => setShowCertificate(!showCertificate)}
-                        className="flex items-center gap-2 
-                    bg-gradient-to-r from-[#2067af] to-blue-950
-                    hover:from-[#1b5186] hover:to-blue-900
-                    transition-all duration-200 ease-in-out text-white px-4 py-2
-                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
-                      >
-                        <FaCertificate /> Ver certificado
-                      </button>
-
-                      <button
-                        onClick={generatePDF}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-                      >
-                        <FaDownload /> Descargar certificado
-                      </button>
-                    </div>
-                  )}
                 </div>
               )}
 
-              {/* Mostrar el certificado si está habilitado */}
-              {showCertificate &&
-                getCertificationStatus(getTotalPoints()).certified && (
-                  <div className="mb-6 p-4 border rounded-lg overflow-auto flex justify-center">
-                    <Certificate
-                      ref={certificateRef}
-                      reportData={reportData || selectedReport?.formData}
-                      totalPoints={getTotalPoints()}
-                    />
+              <div className="prose max-w-none">
+                {totalesData && totalesData.length > 0 && (
+                  <div
+                    className={`p-4 mb-6 rounded-lg border ${
+                      getCertificationStatus(getTotalPoints()).className
+                    }`}
+                  >
+                    <p className="text-lg font-bold flex items-center">
+                      <span className="text-2xl mr-2">
+                        {getCertificationStatus(getTotalPoints()).icon}
+                      </span>
+                      {getCertificationStatus(getTotalPoints()).message}
+                    </p>
+
+                    {/* Botón de certificado para descargar solo si está certificado */}
+                    {getCertificationStatus(getTotalPoints()).certified && (
+                      <div className="mt-3 flex gap-2">
+                        <button
+                          onClick={() => setShowCertificate(!showCertificate)}
+                          className="flex items-center gap-2 
+                    bg-gradient-to-r from-[#2067af] to-blue-950
+                    hover:from-[#1b5186] hover:to-blue-900
+                    transition-all duration-200 ease-in-out text-white px-4 py-2
+                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
+                        >
+                          <FaCertificate /> Ver certificado
+                        </button>
+
+                        <button
+                          onClick={generatePDF}
+                          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                        >
+                          <FaDownload /> Descargar certificado
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
+
+                {/* Mostrar el certificado si está habilitado */}
+                {showCertificate &&
+                  getCertificationStatus(getTotalPoints()).certified && (
+                    <div className="mb-6 p-4 border rounded-lg overflow-auto flex justify-center">
+                      <Certificate
+                        ref={certificateRef}
+                        reportData={reportData || selectedReport?.formData}
+                        totalPoints={getTotalPoints()}
+                      />
+                    </div>
+                  )}
+              </div>
+
+              {!selectedReport && (
+                <div className="mt-6">
+                  <button
+                    onClick={() => {
+                      setReporte(null);
+                      setShowCertificate(false);
+                    }}
+                    className="flex items-center gap-2 
+                    bg-gradient-to-r from-[#2067af] to-blue-950
+                    hover:from-[#1b5186] hover:to-blue-900
+                    transition-all duration-200 ease-in-out text-white px-4 py-2
+                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
+                  >
+                    Generar otro reporte
+                  </button>
+                </div>
+              )}
+
+              {selectedReport && (
+                <div className="mt-6">
+                  <button
+                    onClick={() => {
+                      setSelectedReport(null);
+                      setReporte(null);
+                      setShowCertificate(false);
+                    }}
+                    className="flex items-center gap-2 
+                    bg-gradient-to-r from-[#2067af] to-blue-950
+                    hover:from-[#1b5186] hover:to-blue-900
+                    transition-all duration-200 ease-in-out text-white px-4 py-2
+                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
+                  >
+                    Volver a la lista
+                  </button>
+                </div>
+              )}
             </div>
+          )}
+        </div>
 
-            {!selectedReport && (
-              <div className="mt-6">
-                <button
-                  onClick={() => {
-                    setReporte(null);
-                    setShowCertificate(false);
-                  }}
-                  className="flex items-center gap-2 
-                    bg-gradient-to-r from-[#2067af] to-blue-950
-                    hover:from-[#1b5186] hover:to-blue-900
-                    transition-all duration-200 ease-in-out text-white px-4 py-2
-                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
-                >
-                  Generar otro reporte
-                </button>
-              </div>
-            )}
-
-            {selectedReport && (
-              <div className="mt-6">
-                <button
-                  onClick={() => {
-                    setSelectedReport(null);
-                    setReporte(null);
-                    setShowCertificate(false);
-                  }}
-                  className="flex items-center gap-2 
-                    bg-gradient-to-r from-[#2067af] to-blue-950
-                    hover:from-[#1b5186] hover:to-blue-900
-                    transition-all duration-200 ease-in-out text-white px-4 py-2
-                    rounded-lg active:scale-95 active:shadow-md hover:scale-105"
-                >
-                  Volver a la lista
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+        {/* Elemento oculto para generar el PDF */}
+        <div className="hidden">
+          {getTotalPoints() >= 70 && (
+            <Certificate
+              ref={certificateRef}
+              reportData={reportData || selectedReport?.formData}
+              totalPoints={getTotalPoints()}
+            />
+          )}
+        </div>
       </div>
-
-      {/* Elemento oculto para generar el PDF */}
-      <div className="hidden">
-        {getTotalPoints() >= 70 && (
-          <Certificate
-            ref={certificateRef}
-            reportData={reportData || selectedReport?.formData}
-            totalPoints={getTotalPoints()}
-          />
-        )}
-      </div>
-    </div>
     </div>
   );
 };
