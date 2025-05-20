@@ -97,7 +97,7 @@
     "action_plan": "Action Plan"
   },
   "index": {
-    "welcome": "Welcome, {{name}} 👋",
+    "welcome": "Welcome",
     "role": "Role",
     "resume": "Functionality Summary",
     "actions": "Available Actions",

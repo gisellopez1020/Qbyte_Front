@@ -97,7 +97,7 @@
     "action_plan": "Piano d'azione"
   },
   "index": {
-    "welcome": "Benvenuto, {{name}} 👋",
+    "welcome": "Benvenuto",
     "role": "Ruolo",
     "resume": "Riepilogo delle funzionalità",
     "actions": "Azioni disponibili",
