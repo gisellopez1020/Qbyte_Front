@@ -31,7 +31,8 @@ const AudiInterno = () => {
         <SiGoogleforms className="text-primary mr-2" />
         Formularios
       </h1>
-      <div className="flex flex-wrap p-5 xl:p-2 relative items-center justify-center gap-5 xl:gap-10 h-auto">
+
+      <div className="flex flex-wrap justify-center gap-6 w-full">
         {formularios.map((form) => (
           <div
             key={form._id}
@@ -43,11 +44,11 @@ const AudiInterno = () => {
               navigate(`/forms/${encodeURIComponent(form.nombre)}`)
             }
           >
-            <FcRules className="text-7xl" />
-            <h2 className="text-black font-semibold text-xl text-center">
+            <FcRules className="text-7xl mb-4" />
+            <h2 className="text-black font-semibold text-xl text-center mb-2">
               {form.nombre}
             </h2>
-            <p className="text-sm text-gray-700 text-center">
+            <p className="text-sm text-gray-700 text-center line-clamp-3">
               {form.descripcion}
             </p>
           </div>

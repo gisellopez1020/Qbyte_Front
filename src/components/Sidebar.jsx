@@ -7,13 +7,12 @@ import { IoIosMenu } from "react-icons/io";
 
 const Sidebar = () => {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const { usuario, logout } = useAuth();
 
   const rol = usuario?.rol;
 
   const menuItems = sidebarMenu[rol] || [];
-
 
   const getSidebarStyles = (rol) => {
     switch (rol) {
@@ -27,7 +26,6 @@ const Sidebar = () => {
           button: "bg-sky-700",
           icon: "text-[#5AD0FF]",
           active: "bg-gradient-to-r from-sky-800 to-sky-950",
-          
         };
       case "auditor_interno":
         return {
@@ -75,8 +73,9 @@ const Sidebar = () => {
             </button>
             <img
               src="profile.png"
-              className={`${collapsed ? "w-12 h-12" : "w-16 h-16"
-                } object-cover bg-white rounded-full ring-2 ring-gray-400`}
+              className={`${
+                collapsed ? "w-12 h-12" : "w-16 h-16"
+              } object-cover bg-white rounded-full ring-2 ring-gray-400`}
               alt="Perfil"
             />
             {!collapsed && (
@@ -90,7 +89,7 @@ const Sidebar = () => {
 
           {/* Nav */}
           <div
-            className={`p-4 rounded-tr-[50px] h-[70vh] overflow-y-auto flex flex-col justify-between gap-8 ${colors.sid}`}
+            className={`p-4 rounded-tr-[50px] h-[70vh] flex flex-col justify-between gap-8 ${colors.sid}`}
           >
             <nav className="flex flex-col gap-6 ">
               {menuItems.map((item) => {
@@ -105,15 +104,17 @@ const Sidebar = () => {
                 py-2 px-3 rounded-xl 
                 transition-all duration-500 ease-in-out transform
                 ${colors.text} 
-                ${isActive
-                        ? `${colors.active} scale-[0.99] shadow-inner`
-                        : `${colors.hover} hover:scale-[0.98] hover:shadow-md`
-                      }
+                ${
+                  isActive
+                    ? `${colors.active} scale-[0.99] shadow-inner`
+                    : `${colors.hover} hover:scale-[0.98] hover:shadow-md`
+                }
               `}
                   >
                     <item.icon
-                      className={`text-xl ${isActive ? "text-inherit" : colors.icon
-                        }`}
+                      className={`text-xl ${
+                        isActive ? "text-inherit" : colors.icon
+                      }`}
                     />
                     {!collapsed && item.label}
                   </Link>

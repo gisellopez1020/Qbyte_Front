@@ -351,26 +351,40 @@ const Plan = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-800 flex items-center">
-          <ClipboardList className="mr-2" />
-          Plan de Acción
-        </h1>
-        <button
-          onClick={() => setMostrarFormulario(!mostrarFormulario)}
-          className="px-4 py-2 font-semibold
-    bg-gradient-to-r from-sky-800 to-sky-950
-    hover:from-sky-700 hover:to-sky-900
-    active:from-sky-900 active:to-sky-950
-    text-white rounded-md flex items-center justify-center
-    transition-all duration-200 ease-in-out
-    shadow-md hover:shadow-lg active:shadow-inner
-    hover:scale-100 active:scale-95"
-        >
-          {mostrarFormulario ? "Cancelar" : "Nuevo Plan"}
-          {!mostrarFormulario && <Plus className="ml-1" size={18} />}
-        </button>
-      </div>
+    <div className="bg-slate-300 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[570px] max-w-[1200px]  overflow-y-auto space-y-6">
+
+    <div className="mb-8">
+  <div className="flex items-center justify-between mb-4">
+    <h1 className="text-3xl font-bold text-gray-800 flex items-center">
+      <ClipboardList className="mr-2" />
+      Plan de Acción
+    </h1>
+    
+    <button
+      onClick={() => setMostrarFormulario(!mostrarFormulario)}
+      className="px-4 py-2 font-semibold
+        bg-gradient-to-r from-sky-800 to-sky-950
+        hover:from-sky-700 hover:to-sky-900
+        active:from-sky-900 active:to-sky-950
+        text-white rounded-md flex items-center justify-center
+        transition-all duration-200 ease-in-out
+        shadow-md hover:shadow-lg active:shadow-inner
+        hover:scale-100 active:scale-95"
+    >
+      {mostrarFormulario ? "Cancelar" : "Nuevo Plan"}
+      {!mostrarFormulario && <Plus className="ml-1" size={18} />}
+    </button>
+  </div>
+  
+  {usuario && (
+    <div className="bg-blue-50 p-2 rounded-lg border border-blue-200 mb-2 max-w-md">
+      <p className="text-blue-800">
+        <span className="font-medium">Auditor Interno:</span>{" "}
+        {auditorNombre || "Cargando..."}
+      </p>
+    </div>
+  )}
+</div>
 
       {/* Mensajes de notificación */}
       {mensaje.texto && (
@@ -384,20 +398,11 @@ const Plan = () => {
           {mensaje.texto}
         </div>
       )}
-
-      {/* Información del auditor logueado */}
-      {usuario && (
-        <div className="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-200">
-          <p className="text-blue-800">
-            <span className="font-medium">Auditor Interno:</span>{" "}
-            {auditorNombre || "Cargando..."}
-          </p>
-        </div>
-      )}
+  
 
       {/* Formulario para Crear Plan */}
       {mostrarFormulario && (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-200">          
           <h2 className="text-xl font-semibold mb-4">
             Crear Nuevo Plan de Acción
           </h2>
@@ -622,7 +627,8 @@ const Plan = () => {
           )}
         </div>
       </div>
-    </div>
+      </div>
+      </div>
   );
 };
 
