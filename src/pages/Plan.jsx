@@ -10,6 +10,7 @@ import { BsFillClipboard2DataFill } from "react-icons/bs";
 import { useAuth } from "../context/AuthContext";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 const Plan = () => {
   const [planes, setPlanes] = useState([]);
@@ -27,6 +28,7 @@ const Plan = () => {
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" });
   const [auditoresExternos, setAuditoresExternos] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const obtenerAuditoresExternos = async () => {
@@ -78,7 +80,7 @@ const Plan = () => {
 
       if (respuesta.ok) {
         setMensaje({
-          texto: "Plan enviado exitosamente a un auditor externo",
+          texto: `${t("plan.success")}`,
           tipo: "exito",
         });
         cargarPlanes(auditorId);
@@ -211,7 +213,7 @@ const Plan = () => {
 
       if (respuesta.ok) {
         setMensaje({
-          texto: "Evidencias guardadas exitosamente",
+          texto: `${t("plan.evidence_s")}`,
           tipo: "exito",
         });
         cargarPlanes(auditorId);
@@ -294,7 +296,7 @@ const Plan = () => {
 
       if (respuesta.ok) {
         setMensaje({
-          texto: "Plan de acción creado exitosamente",
+          texto: `${t("plan.save")}`,
           tipo: "exito",
         });
         // Resetear formulario
@@ -355,7 +357,7 @@ const Plan = () => {
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-3xl font-bold text-gray-800 flex items-center">
               <BsFillClipboard2DataFill className="mr-2 text-primary" />
-              Plan de Acción
+              {t("plan.title")}
             </h1>
 
             <button
@@ -369,7 +371,9 @@ const Plan = () => {
         shadow-md hover:shadow-lg active:shadow-inner
         hover:scale-100 active:scale-95"
             >
-              {mostrarFormulario ? "Cancelar" : "Nuevo Plan"}
+              {mostrarFormulario
+                ? `${t("users.cancel")}`
+                : `${t("plan.create1")}`}
               {!mostrarFormulario && <Plus className="ml-1" size={18} />}
             </button>
           </div>
@@ -377,7 +381,7 @@ const Plan = () => {
           {usuario && (
             <div className="bg-blue-50 p-2 rounded-lg border border-blue-200 mb-2 max-w-md">
               <p className="text-blue-800">
-                <span className="font-medium">Auditor Interno:</span>{" "}
+                <span className="font-medium">{t("sign_up.rols.r1")}:</span>{" "}
                 {auditorNombre || "Cargando..."}
               </p>
             </div>
@@ -400,13 +404,11 @@ const Plan = () => {
         {/* Formulario para Crear Plan */}
         {mostrarFormulario && (
           <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-200">
-            <h2 className="text-xl font-semibold mb-4">
-              Crear Nuevo Plan de Acción
-            </h2>
+            <h2 className="text-xl font-semibold mb-4">{t("plan.create")}</h2>
             <div>
               <div className="mb-4">
                 <label className="block text-gray-700 font-medium mb-2">
-                  Objetivo del Plan
+                  {t("plan.objective")}
                 </label>
                 <textarea
                   value={objetivo}
@@ -414,13 +416,13 @@ const Plan = () => {
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   rows="3"
                   required
-                  placeholder="Describa el objetivo principal del plan de acción"
+                  placeholder={t("plan.sub2")}
                 ></textarea>
               </div>
 
               <div className="mb-4">
                 <label className="block text-gray-700 font-medium mb-2">
-                  Etapas y Metas
+                  {t("plan.sub1")}
                 </label>
                 {etapas.map((etapa, index) => (
                   <div
@@ -428,7 +430,9 @@ const Plan = () => {
                     className="mb-3 p-4 border border-gray-200 rounded-md bg-gray-50"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-medium">Etapa {index + 1}</h3>
+                      <h3 className="font-medium">
+                        {t("plan.etapa")} {index + 1}
+                      </h3>
                       <button
                         type="button"
                         onClick={() => eliminarEtapa(index)}
@@ -440,7 +444,7 @@ const Plan = () => {
                     </div>
                     <div className="mb-2">
                       <label className="block text-gray-600 text-sm mb-1">
-                        Meta
+                        {t("plan.meta")}
                       </label>
                       <textarea
                         value={etapa.meta}
@@ -450,7 +454,7 @@ const Plan = () => {
                         className="w-full p-2 border border-gray-300 rounded-md"
                         rows="2"
                         required
-                        placeholder="Describa la meta a alcanzar"
+                        placeholder={t("plan.sub3")}
                       ></textarea>
                     </div>
                   </div>
@@ -460,7 +464,7 @@ const Plan = () => {
                   onClick={agregarEtapa}
                   className="mt-2 flex items-center text-blue-600 hover:text-blue-800"
                 >
-                  <Plus size={16} className="mr-1" /> Agregar otra etapa
+                  <Plus size={16} className="mr-1" /> {t("plan.add")}
                 </button>
               </div>
 
@@ -471,7 +475,7 @@ const Plan = () => {
                   disabled={cargando}
                   className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-md flex items-center"
                 >
-                  {cargando ? "Guardando..." : "Guardar Plan"}
+                  {cargando ? t("plan.loading") : t("plan.save2")}
                   {!cargando && <CheckCircle size={18} className="ml-1" />}
                 </button>
               </div>
@@ -483,7 +487,7 @@ const Plan = () => {
         <div className="h-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
           <div>
             {cargando ? (
-              <div className="text-center py-8">Cargando planes...</div>
+              <div className="text-center py-8">{t("plan.loading2")}</div>
             ) : planes.length > 0 ? (
               <div className="space-y-4">
                 {planes.map((plan) => (
@@ -518,7 +522,7 @@ const Plan = () => {
                     {expandidos[plan._id] && (
                       <div className="p-4 border-t border-gray-200">
                         <h4 className="font-medium text-gray-700 mb-2">
-                          Etapas:
+                          {t("plan.e")}
                         </h4>
                         {plan.etapas.map((etapa, idx) => (
                           <div
@@ -529,7 +533,7 @@ const Plan = () => {
                             <p className="text-gray-700">{etapa.meta}</p>
                             <div className="mt-2">
                               <p className="text-sm font-medium text-gray-600">
-                                Evidencia:
+                                {t("plan.evidencia")}
                               </p>
                               {modoEvidencias[plan._id] ? (
                                 <textarea
@@ -565,7 +569,7 @@ const Plan = () => {
                         ))}
                         <div className="mt-3">
                           <p className="font-medium text-gray-700">
-                            Comentario:
+                            {t("plan.comment")}
                           </p>
                           <p className="text-gray-600">{plan.comentario}</p>
                         </div>
@@ -577,7 +581,7 @@ const Plan = () => {
                               className="bg-primary hover:bg-blue-800 text-white py-2 px-6 rounded-md"
                               disabled={cargando}
                             >
-                              {cargando ? "Enviando..." : "Enviar Evidencias"}
+                              {cargando ? t("plan.l_send") : t("plan.send")}
                             </button>
                           </div>
                         )}
@@ -592,9 +596,7 @@ const Plan = () => {
              transition-all duration-200 ease-in-out shadow-md hover:shadow-lg active:shadow-inner"
                             disabled={cargando}
                           >
-                            {cargando
-                              ? "Enviando..."
-                              : "Enviar a Auditor Externo"}
+                            {cargando ? t("plan.l_send") : t("plan.send2")}
                           </button>
                           <button
                             onClick={() =>
@@ -608,8 +610,8 @@ const Plan = () => {
                             disabled={cargando}
                           >
                             {modoEvidencias[plan._id]
-                              ? "Cancelar"
-                              : "Añadir Evidencias"}
+                              ? t("users.cancel")
+                              : t("plan.a_evidencia")}
                           </button>
                         </div>
                       </div>
@@ -619,7 +621,7 @@ const Plan = () => {
               </div>
             ) : usuario ? (
               <div className="text-center py-8 text-gray-600">
-                No hay planes de acción registrados. Cree uno nuevo.
+                {t("plan.void")}
               </div>
             ) : (
               <div className="text-center py-8 text-gray-600">

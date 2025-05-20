@@ -7,6 +7,8 @@ import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
+import { MdLanguage } from "react-icons/md";
 
 function Sign() {
   const [name, setName] = useState("");
@@ -20,6 +22,21 @@ function Sign() {
   const [showPassword, setShowPassword] = useState(false);
   const [compania, setCompania] = useState("");
   const { login } = useAuth();
+  const { t, i18n } = useTranslation();
+  const [showLangMenu, setShowLangMenu] = useState(false);
+
+  const languages = [
+    { code: "es", label: "Español" },
+    { code: "gb", label: "English", langCode: "en" },
+    { code: "fr", label: "Français" },
+    { code: "de", label: "Deutsch" },
+    { code: "it", label: "Italiano" },
+  ];
+
+  const handleChangeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setShowLangMenu(false);
+  };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -137,17 +154,47 @@ function Sign() {
       <Link to="/" className="absolute m-10 z-50 top-[1%] left-[2%]">
         <FaArrowLeft className="text-3xl xl:text-4xl text-white rounded-full" />
       </Link>
+      <div className="absolute m-10 z-50 top-[1%] right-[2%]">
+        <button
+          onClick={() => setShowLangMenu(!showLangMenu)}
+          className={`p-2 rounded-full`}
+        >
+          <MdLanguage
+            className={`text-white hover:text-sky-950 text-4xl transition-colors duration-300`}
+          />
+        </button>
+
+        {showLangMenu && (
+          <div className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg z-50">
+            <ul className="py-1 text-sm text-gray-700">
+              {languages.map((lang) => (
+                <li key={lang.code}>
+                  <button
+                    onClick={() =>
+                      handleChangeLanguage(lang.langCode || lang.code)
+                    }
+                    className="flex items-center w-full px-4 py-2 hover:bg-gray-50"
+                  >
+                    <span className={`fi fi-${lang.code} mr-2`}></span>{" "}
+                    {lang.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
 
       <div className="relative z-10 bg-white bg-opacity-5 shadow-white rounded-xl p-6 max-w-xs w-full min-h-[420px] backdrop-blur-md border border-sky-800">
         <h2 className="text-center text-3xl italic tracking-wide font-bold text-white mb-5">
-          Sign Up
+          {t("sign_up.title")}
         </h2>
 
         <form onSubmit={handleSignUp}>
           <div className="mb-4 relative">
             <input
               type="text"
-              placeholder="Nombre de usuario"
+              placeholder={t("sign_up.user")}
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -162,15 +209,15 @@ function Sign() {
               required
               className="w-full p-2 rounded-lg bg-white bg-opacity-20 text-white placeholder-white focus:outline-none focus:ring-2 appearance-none"
             >
-              <option value="">Seleccione un rol</option>
+              <option value="">{t("sign_up.rols.select")}</option>
               <option value="auditor_interno" className="text-black">
-                Auditor Interno
+                {t("sign_up.rols.r1")}
               </option>
               <option value="auditor_externo" className="text-black">
-                Auditor Externo
+                {t("sign_up.rols.r2")}
               </option>
               <option value="admin" className="text-black">
-                Administrador
+                {t("sign_up.rols.r3")}
               </option>
             </select>
             <i className="absolute right-3 top-2 text-white pointer-events-none">
@@ -182,7 +229,7 @@ function Sign() {
             <div className="mb-4 relative">
               <input
                 type="text"
-                placeholder="Nombre de la compañía"
+                placeholder={t("sign_up.company")}
                 value={compania}
                 onChange={(e) => setCompania(e.target.value)}
                 required
@@ -196,7 +243,7 @@ function Sign() {
             <div className="mb-4 relative">
               <input
                 type="text"
-                placeholder="Código"
+                placeholder={t("sign_up.code")}
                 value={adminCode}
                 onChange={(e) => setAdminCode(e.target.value)}
                 required
@@ -209,7 +256,7 @@ function Sign() {
           <div className="mb-4 relative">
             <input
               type="email"
-              placeholder="Correo electrónico"
+              placeholder={t("sign_up.email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -221,7 +268,7 @@ function Sign() {
           <div className="mb-4 relative">
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Contraseña"
+              placeholder={t("sign_up.password")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -249,7 +296,7 @@ function Sign() {
              active:scale-95 active:from-sky-900 active:to-sky-950
              transition-all duration-200 ease-in-out shadow-md hover:shadow-lg active:shadow-inner"
           >
-            Crear cuenta
+            {t("sign_up.button")}
           </button>
         </form>
 
@@ -261,12 +308,12 @@ function Sign() {
         )}
 
         <p className="text-center text-white text-sm mt-4">
-          ¿Ya tienes una cuenta?{" "}
+          {t("sign_up.p1")}{" "}
           <Link
             to="/login"
             className="underline text-white hover:text-blue-300"
           >
-            Inicia sesión
+            {t("sign_up.login")}
           </Link>
         </p>
       </div>

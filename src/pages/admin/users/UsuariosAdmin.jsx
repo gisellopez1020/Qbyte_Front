@@ -8,10 +8,12 @@ import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 import UsersTable from "./UsersTable";
 import UsuariosForm from "./UsuariosForm";
+import { useTranslation } from "react-i18next";
 
 const UsuariosAdmin = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const { t } = useTranslation();
 
   const fetchUsuarios = async () => {
     const snapshot = await getDocs(collection(db, "usuarios"));
@@ -39,7 +41,7 @@ const UsuariosAdmin = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2">
           <RiUser3Line className="text-sky-800 w-7 h-7" />
-          Gestión de Usuarios
+          {t("users.title")}
         </h2>
 
         <button
@@ -55,12 +57,12 @@ const UsuariosAdmin = () => {
           {mostrarFormulario ? (
             <>
               <RiCloseCircleLine className="w-5 h-5" />
-              <span>Cancelar</span>
+              <span>{t("users.cancel")}</span>
             </>
           ) : (
             <>
               <RiAddCircleLine className="w-5 h-5" />
-              <span>Nuevo Usuario</span>
+              <span>{t("users.new")}</span>
             </>
           )}
         </button>

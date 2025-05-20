@@ -3,24 +3,24 @@ import {
   RiFileCopyLine,
   RiWalletLine,
   RiPieChartLine,
-  RiUser3Line
+  RiUser3Line,
 } from "react-icons/ri";
 
 export const sidebarMenu = {
   admin: [
-    { label: "Inicio", path: "/index", icon: RiHome3Line },
-    { label: "Formularios", path: "/forms", icon: RiFileCopyLine },
-    { label: "Crear Formulario", path: "/crear-form", icon: RiPieChartLine },
-    { label: "Usuarios", path: "/usuarios", icon: RiUser3Line },
+    { label: "home", path: "/index", icon: RiHome3Line },
+    { label: "forms", path: "/forms", icon: RiFileCopyLine },
+    { label: "create_form", path: "/crear-form", icon: RiPieChartLine },
+    { label: "users", path: "/usuarios", icon: RiUser3Line },
   ],
   auditor_interno: [
-    { label: "Inicio", path: "/index", icon: RiHome3Line },
-    { label: "Formularios", path: "/forms", icon: RiFileCopyLine },
-    { label: "Reportes", path: "/reports", icon: RiPieChartLine },
-    { label: "Plan de acción", path: "/plan-action", icon: RiWalletLine },
+    { label: "home", path: "/index", icon: RiHome3Line },
+    { label: "forms", path: "/forms", icon: RiFileCopyLine },
+    { label: "reports", path: "/reports", icon: RiPieChartLine },
+    { label: "action_plan", path: "/plan-action", icon: RiWalletLine },
   ],
   auditor_externo: [
-    { label: "Inicio", path: "/index", icon: RiHome3Line },
-    { label: "Plan de acción", path: "/PlanesExterno", icon: RiWalletLine },
+    { label: "home", path: "/index", icon: RiHome3Line },
+    { label: "action_plan", path: "/PlanesExterno", icon: RiWalletLine },
   ],
 };

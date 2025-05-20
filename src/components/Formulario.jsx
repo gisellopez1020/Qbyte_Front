@@ -237,109 +237,115 @@ const Formulario = () => {
 
   return (
     <div className="p-5 min-h-screen bg-gray-50">
-     <div className="bg-slate-300 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[600px] max-w-[1200px]  overflow-y-auto space-y-6">
-      <h1 className="text-2xl font-bold mb-6 text-center">
-        {formulario.nombre ||
-          formulario.descripcion ||
-          "Formulario de evaluación"}
-      </h1>
+      <div className="bg-slate-200 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[80vh] max-w-[70vw]  overflow-y-auto space-y-6">
+        <h1 className="text-2xl font-bold mb-6 text-center">
+          {formulario.nombre ||
+            formulario.descripcion ||
+            "Formulario de evaluación"}
+        </h1>
 
-      {/* Mensaje de éxito o error */}
-      {mensaje && (
-        <div
-          className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${
-            mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"
-          }`}
+        {/* Mensaje de éxito o error */}
+        {mensaje && (
+          <div
+            className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${
+              mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            <div className="text-center font-semibold">{mensaje.texto}</div>
+            {mensaje.tipo === "exito" && (
+              <div className="text-center mt-3">
+                <button
+                  className="bg-white text-green-600 px-4 py-1 rounded hover:bg-gray-100 font-medium"
+                  onClick={() => {
+                    const reportData = {
+                      formularioId: formulario._id,
+                      formularioTitulo:
+                        formulario?.titulo ||
+                        formulario?.nombre ||
+                        "Formulario de evaluación",
+                      nombre: id,
+                      fechaEnvio: new Date().toISOString(),
+                      respuestas: respuestas,
+                    };
+                    localStorage.setItem(
+                      "lastSubmittedFormData",
+                      JSON.stringify(reportData)
+                    );
+                    navigate("/reports");
+                  }}
+                >
+                  Ver reporte
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        <form
+          onSubmit={enviarRespuestas}
+          className="space-y-6 max-w-3xl mx-auto"
         >
-          <div className="text-center font-semibold">{mensaje.texto}</div>
-          {mensaje.tipo === "exito" && (
-            <div className="text-center mt-3">
-              <button
-                className="bg-white text-green-600 px-4 py-1 rounded hover:bg-gray-100 font-medium"
-                onClick={() => {
-                  // Se guardan las respuestas en firebase para que estén disponibles en la página de reportes
-                  const reportData = {
-                    formularioId: formulario._id,
-                    formularioTitulo:
-                      formulario?.titulo ||
-                      formulario?.nombre ||
-                      "Formulario de evaluación",
-                    nombre: id,
-                    fechaEnvio: new Date().toISOString(),
-                    respuestas: respuestas,
-                  };
-                  localStorage.setItem(
-                    "lastSubmittedFormData",
-                    JSON.stringify(reportData)
-                  );
-                  navigate("/reports");
-                }}
-              >
-                Ver reporte
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+          {formulario.preguntas.map((pregunta, i) => {
+            let preguntaTexto = "";
 
-      <form onSubmit={enviarRespuestas} className="space-y-6 max-w-3xl mx-auto">
-        {formulario.preguntas.map((pregunta, i) => {
-          let preguntaTexto = "";
+            if (typeof pregunta === "string") {
+              preguntaTexto = pregunta;
+            } else if (pregunta && typeof pregunta === "object") {
+              preguntaTexto = pregunta.input || "Pregunta sin texto";
+            } else {
+              preguntaTexto = String(pregunta);
+            }
 
-          if (typeof pregunta === "string") {
-            preguntaTexto = pregunta;
-          } else if (pregunta && typeof pregunta === "object") {
-            preguntaTexto = pregunta.input || "Pregunta sin texto";
-          } else {
-            preguntaTexto = String(pregunta);
-          }
-
-          return (
-            <div key={i} className="bg-white p-4 rounded shadow-md">
-              <div className="font-medium text-lg text-gray-700 mb-2">
-                {i + 1}. {preguntaTexto}
-              </div>
-              <select
-                className="w-full border rounded p-2"
-                value={respuestas[i]?.respuesta || ""}
-                onChange={(e) => handleChange(i, "respuesta", e.target.value)}
-                required
-              >
-                <option value="">Seleccione una opción</option>
-                <option value="Cumple">Cumple</option>
-                <option value="No cumple">No cumple</option>
-                <option value="Medianamente cumple">Medianamente cumple</option>
-              </select>
-              <div className="mt-2">
-                <label className="text-sm text-gray-600">
-                  Subir evidencia:
-                </label>
-                <input
-                  type="url"
+            return (
+              <div key={i} className="bg-white p-4 rounded shadow-md">
+                <div className="font-medium text-lg text-gray-700 mb-2">
+                  {i + 1}. {preguntaTexto}
+                </div>
+                <select
                   className="w-full border rounded p-2"
-                  placeholder="Link del repositorio"
-                  value={respuestas[i]?.evidencia || ""}
-                  onChange={(e) => handleChange(i, "evidencia", e.target.value)}
+                  value={respuestas[i]?.respuesta || ""}
+                  onChange={(e) => handleChange(i, "respuesta", e.target.value)}
                   required
-                />
+                >
+                  <option value="">Seleccione una opción</option>
+                  <option value="Cumple">Cumple</option>
+                  <option value="No cumple">No cumple</option>
+                  <option value="Medianamente cumple">
+                    Medianamente cumple
+                  </option>
+                </select>
+                <div className="mt-2">
+                  <label className="text-sm text-gray-600">
+                    Subir evidencia:
+                  </label>
+                  <input
+                    type="url"
+                    className="w-full border rounded p-2"
+                    placeholder="Link del repositorio"
+                    value={respuestas[i]?.evidencia || ""}
+                    onChange={(e) =>
+                      handleChange(i, "evidencia", e.target.value)
+                    }
+                    required
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
 
-        <button
-          type="submit"
-          className="flex items-center gap-2 
+          <button
+            type="submit"
+            className="flex items-center gap-2 
                     bg-gradient-to-r from-[#2067af] to-blue-950
                     hover:from-[#1b5186] hover:to-blue-900
                     transition-all duration-200 ease-in-out text-white px-4 py-2
                     rounded-lg active:scale-95 active:shadow-md hover:scale-105"
-        >
-          Enviar formulario
-        </button>
-      </form>
-    </div> 
-   </div>
+          >
+            Enviar formulario
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 

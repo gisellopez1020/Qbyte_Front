@@ -2,10 +2,27 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { GiStarsStack } from "react-icons/gi";
 import { RiMenu3Fill, RiCloseLine } from "react-icons/ri";
+import { useTranslation } from "react-i18next";
+import { MdLanguage } from "react-icons/md";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const { t, i18n } = useTranslation();
+  const [showLangMenu, setShowLangMenu] = useState(false);
+
+  const languages = [
+    { code: "es", label: "Español" },
+    { code: "gb", label: "English", langCode: "en" },
+    { code: "fr", label: "Français" },
+    { code: "de", label: "Deutsch" },
+    { code: "it", label: "Italiano" },
+  ];
+
+  const handleChangeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setShowLangMenu(false);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,7 +79,7 @@ const Header = () => {
               scrolled ? "group-hover:text-fourth" : "group-hover:text-primary"
             }`}
           >
-            Home
+            {t("home")}
           </span>
           <span
             className={`absolute left-0 bottom-0 h-0.5 w-0 ${
@@ -77,7 +94,7 @@ const Header = () => {
               scrolled ? "group-hover:text-fourth" : "group-hover:text-primary"
             }`}
           >
-            Sobre Nosotros
+            {t("about_us")}
           </span>
           <span
             className={`absolute left-0 bottom-0 h-0.5 w-0 ${
@@ -92,7 +109,7 @@ const Header = () => {
               scrolled ? "group-hover:text-fourth" : "group-hover:text-primary"
             }`}
           >
-            Servicios
+            {t("n_services")}
           </span>
           <span
             className={`absolute left-0 bottom-0 h-0.5 w-0 ${
@@ -107,7 +124,7 @@ const Header = () => {
               scrolled ? "group-hover:text-fourth" : "group-hover:text-primary"
             }`}
           >
-            Contacto
+            {t("contact")}
           </span>
           <span
             className={`absolute left-0 bottom-0 h-0.5 w-0 ${
@@ -136,11 +153,45 @@ const Header = () => {
                 scrolled ? "group-hover:text-primary" : "group-hover:text-white"
               } relative z-10`}
             >
-              Log in
+              {t("login")}
             </span>
           </button>
         </Link>
       </nav>
+      <div className="relative inline-block text-left">
+        <button
+          onClick={() => setShowLangMenu(!showLangMenu)}
+          className={`p-2 rounded-full`}
+        >
+          <MdLanguage
+            className={`${
+              scrolled
+                ? "text-white hover:text-primary"
+                : "text-primary hover:text-secondary "
+            } text-4xl transition-colors duration-300`}
+          />
+        </button>
+
+        {showLangMenu && (
+          <div className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg z-50">
+            <ul className="py-1 text-sm text-gray-700">
+              {languages.map((lang) => (
+                <li key={lang.code}>
+                  <button
+                    onClick={() =>
+                      handleChangeLanguage(lang.langCode || lang.code)
+                    }
+                    className="flex items-center w-full px-4 py-2 hover:bg-gray-50"
+                  >
+                    <span className={`fi fi-${lang.code} mr-2`}></span>{" "}
+                    {lang.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
 
       <button
         onClick={() => setShowMenu(!showMenu)}

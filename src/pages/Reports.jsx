@@ -20,6 +20,7 @@ import {
 import { FaChartPie, FaDownload, FaCertificate } from "react-icons/fa";
 import { doc, getDoc } from "firebase/firestore";
 import { GiStarsStack } from "react-icons/gi";
+import { useTranslation } from "react-i18next";
 
 const Certificate = React.forwardRef(({ reportData, totalPoints }, ref) => {
   const { usuario } = useAuth();
@@ -30,6 +31,7 @@ const Certificate = React.forwardRef(({ reportData, totalPoints }, ref) => {
     month: "long",
     day: "numeric",
   });
+  const { t } = useTranslation();
 
   useEffect(() => {
     const obtenerAuditorNombre = async () => {
@@ -94,26 +96,23 @@ const Certificate = React.forwardRef(({ reportData, totalPoints }, ref) => {
           className="text-4xl font-bold text-primary mb-4"
           style={{ fontFamily: "serif" }}
         >
-          CERTIFICADO
+          {t("certificate.t1")}
         </h1>
         <h2 className="text-2xl font-semibold text-gray-700 mb-10">
-          DE CUMPLIMIENTO
+          {t("certificate.t2")}
         </h2>
 
-        <p className="text-lg mb-8">Se certifica que:</p>
+        <p className="text-lg mb-8">{t("certificate.t3")}</p>
 
         <p className="text-3xl font-bold mb-10 border-b-2 pb-2 border-gray-300 inline-block">
           {auditorNombre || usuario?.email}
         </p>
 
         <p className="text-xl mb-5 font-bold">
-          {usuario?.rol} de la empresa {auditorEmpresa}
+          {t("sign_up.rols.r1")} {t("certificate.t4")} {auditorEmpresa}
         </p>
 
-        <p className="text-lg mb-8 px-16">
-          Ha cumplido satisfactoriamente con los requisitos especificados en la
-          norma:
-        </p>
+        <p className="text-lg mb-8 px-16">{t("certificate.t5")}</p>
 
         <p className="text-2xl font-bold mb-10 text-primary">
           {reportData?.norma ||
@@ -122,8 +121,8 @@ const Certificate = React.forwardRef(({ reportData, totalPoints }, ref) => {
         </p>
 
         <p className="text-lg">
-          Con una puntuación de <strong>{totalPoints}</strong> de 100 puntos
-          posibles
+          {t("certificate.t6")} <strong>{totalPoints}</strong>{" "}
+          {t("certificate.t7")}
         </p>
 
         <div className="mt-10 flex justify-between items-end">
@@ -134,13 +133,13 @@ const Certificate = React.forwardRef(({ reportData, totalPoints }, ref) => {
               <GiStarsStack className="text-primary absolute bottom-1 left-11" />
             </p>
             <div className="border-t-2 border-gray-500 pt-1 px-10">
-              Firma del evaluador
+              {t("certificate.t8")}
             </div>
           </div>
 
           <div className="text-center">
             <div className="border-t-2 border-gray-500 pt-1 px-10">
-              Fecha: {currentDate}
+              {t("certificate.t9")} {currentDate}
             </div>
           </div>
         </div>
@@ -160,6 +159,7 @@ const Reports = () => {
   const [totalesData, setTotalesData] = useState(null);
   const [showCertificate, setShowCertificate] = useState(false);
   const certificateRef = useRef(null);
+  const { t } = useTranslation();
 
   const COLORS = ["#4CAF50", "#FFC107", "#F44336"];
 
@@ -218,7 +218,7 @@ const Reports = () => {
   const getCertificationStatus = (totalPoints) => {
     if (totalPoints >= 70) {
       return {
-        message: `Felicitaciones, te certificaste en la norma ${
+        message: `${t("certificate.t11")} ${
           reportData?.norma || reportData?.formularioTitulo || ""
         }`,
         className: "bg-green-100 text-green-800 border-green-300",
@@ -227,15 +227,14 @@ const Reports = () => {
       };
     } else if (totalPoints >= 50) {
       return {
-        message: "Sigue intentando, estás cerca de lograrlo",
+        message: `${t("certificate.t12")}`,
         className: "bg-yellow-100 text-yellow-800 border-yellow-300",
         icon: "💪",
         certified: false,
       };
     } else {
       return {
-        message:
-          "Lo siento, no cumples con los puntos suficientes para certificarte",
+        message: `${t("certificate.t13")}`,
         className: "bg-red-100 text-red-800 border-red-300",
         icon: "❌",
         certified: false,
@@ -529,14 +528,14 @@ const Reports = () => {
       <div className="bg-slate-200 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[80vh] max-w-[70vw] overflow-y-auto space-y-6">
         <h1 className="text-3xl text-gray-800 font-bold mb-6 text-center flex justify-center items-center">
           <FaChartPie className="text-4xl text-primary mr-2" />
-          Reportes
+          {t("report.title")}
         </h1>
 
         <div className="max-w-4xl mx-auto">
           {/* Sección de reportes guardados */}
           {savedReports.length > 0 && (
             <div className="mb-8 bg-white p-5 rounded-lg shadow">
-              <h2 className="text-xl font-semibold mb-4">Reportes guardados</h2>
+              <h2 className="text-xl font-semibold mb-4">{t("report.t2")}</h2>
               <div className="space-y-2">
                 {savedReports.map((report) => (
                   <div
@@ -563,14 +562,9 @@ const Reports = () => {
           {/* Sección de nuevo reporte */}
           {reportData && !reporte && (
             <div className="bg-white p-5 rounded-lg shadow mb-6">
-              <h2 className="text-xl font-semibold mb-4">
-                Generar nuevo reporte
-              </h2>
+              <h2 className="text-xl font-semibold mb-4">{t("report.t3")}</h2>
 
-              <p className="mb-4">
-                Haga clic en el botón para generar un reporte basado en las
-                respuestas del formulario.
-              </p>
+              <p className="mb-4">{t("report.t4")}</p>
 
               <button
                 onClick={generateReport}
@@ -581,7 +575,7 @@ const Reports = () => {
                     : "flex items-center gap-2 bg-gradient-to-r from-[#2067af] to-blue-950 hover:from-[#1b5186] hover:to-blue-900 text-white rounded-lg active:scale-95 active:shadow-md hover:scale-105"
                 }`}
               >
-                {loading ? "Generando..." : "Generar reporte"}
+                {loading ? `${t("report.t5")}` : `${t("report.t6")}`}
               </button>
 
               {error && (
@@ -602,9 +596,7 @@ const Reports = () => {
               {/* Gráfico circular para mostrar totales */}
               {totalesData && totalesData.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-medium mb-3">
-                    Resumen de resultados
-                  </h3>
+                  <h3 className="text-lg font-medium mb-3">{t("report.t7")}</h3>
                   <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
                     <ResponsiveContainer width="100%" height={250}>
                       <PieChart>
@@ -625,15 +617,18 @@ const Reports = () => {
                           ))}
                         </Pie>
                         <Tooltip
-                          formatter={(value) => [`${value} puntos`, "Cantidad"]}
+                          formatter={(value) => [
+                            `${value} ${t("report.t8")}`,
+                            "Cantidad",
+                          ]}
                         />
                         <Legend />
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="flex flex-col justify-center mt-2">
                       <div className="text-sm font-medium">
-                        Puntuación total: {getTotalPoints()} de 100 puntos
-                        posibles.
+                        {t("report.t9")}: {getTotalPoints()} / 100{" "}
+                        {t("report.t8")} {t("report.t10")}
                       </div>
                     </div>
                   </div>
@@ -665,14 +660,14 @@ const Reports = () => {
                     transition-all duration-200 ease-in-out text-white px-4 py-2
                     rounded-lg active:scale-95 active:shadow-md hover:scale-105"
                         >
-                          <FaCertificate /> Ver certificado
+                          <FaCertificate /> {t("report.certificate")}
                         </button>
 
                         <button
                           onClick={generatePDF}
                           className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
                         >
-                          <FaDownload /> Descargar certificado
+                          <FaDownload /> {t("report.download")}
                         </button>
                       </div>
                     )}
@@ -705,7 +700,7 @@ const Reports = () => {
                     transition-all duration-200 ease-in-out text-white px-4 py-2
                     rounded-lg active:scale-95 active:shadow-md hover:scale-105"
                   >
-                    Generar otro reporte
+                    {t("report.generate")}
                   </button>
                 </div>
               )}
@@ -724,7 +719,7 @@ const Reports = () => {
                     transition-all duration-200 ease-in-out text-white px-4 py-2
                     rounded-lg active:scale-95 active:shadow-md hover:scale-105"
                   >
-                    Volver a la lista
+                    {t("report.back")}
                   </button>
                 </div>
               )}

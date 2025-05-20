@@ -4,15 +4,32 @@ import { useAuth } from "../context/AuthContext";
 import { sidebarMenu } from "../config/sidebarConfig";
 import { RiLogoutBoxLine, RiCloseFill } from "react-icons/ri";
 import { IoIosMenu } from "react-icons/io";
+import { useTranslation } from "react-i18next";
+import { MdLanguage } from "react-icons/md";
 
 const Sidebar = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const { usuario, logout } = useAuth();
+  const { t, i18n } = useTranslation();
+  const [showLangMenu, setShowLangMenu] = useState(false);
 
   const rol = usuario?.rol;
 
   const menuItems = sidebarMenu[rol] || [];
+
+  const languages = [
+    { code: "es", label: "Español" },
+    { code: "gb", label: "English", langCode: "en" },
+    { code: "fr", label: "Français" },
+    { code: "de", label: "Deutsch" },
+    { code: "it", label: "Italiano" },
+  ];
+
+  const handleChangeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setShowLangMenu(false);
+  };
 
   const getSidebarStyles = (rol) => {
     switch (rol) {
@@ -116,7 +133,7 @@ const Sidebar = () => {
                         isActive ? "text-inherit" : colors.icon
                       }`}
                     />
-                    {!collapsed && item.label}
+                    {!collapsed && t(`sidebar.${item.label}`)}
                   </Link>
                 );
               })}
@@ -124,11 +141,38 @@ const Sidebar = () => {
 
             <nav className="flex flex-col gap-6">
               <button
+                onClick={() => setShowLangMenu(!showLangMenu)}
+                className={`flex items-center gap-4 ${colors.text} py-2 px-3 rounded-xl transition-all duration-300 ${colors.hover} hover:shadow-xl`}
+              >
+                <MdLanguage className={`text-2xl ${colors.icon}`} />
+                {!collapsed && t("sidebar.language")}
+              </button>
+
+              {showLangMenu && (
+                <div className="absolute bottom-32 mt-2 w-36 bg-white rounded-md shadow-lg z-50">
+                  <ul className="py-1 text-sm text-gray-700">
+                    {languages.map((lang) => (
+                      <li key={lang.code}>
+                        <button
+                          onClick={() =>
+                            handleChangeLanguage(lang.langCode || lang.code)
+                          }
+                          className="flex items-center w-full px-4 py-2 hover:bg-gray-50"
+                        >
+                          <span className={`fi fi-${lang.code} mr-2`}></span>{" "}
+                          {lang.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <button
                 onClick={logout}
-                className={`flex items-center gap-4 ${colors.text}  py-2 px-3 rounded-xl transition-all duration-300 ${colors.hover} hover:shadow-xl`}
+                className={`flex items-center gap-4 ${colors.text} py-2 px-3 rounded-xl transition-all duration-300 ${colors.hover} hover:shadow-xl`}
               >
                 <RiLogoutBoxLine className={`text-xl ${colors.icon}`} />
-                {!collapsed && "Cerrar Sesión"}
+                {!collapsed && t("sidebar.logout")}
               </button>
             </nav>
           </div>

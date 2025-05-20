@@ -1,7 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 
 const UserTable = ({ usuarios, eliminarUsuario }) => {
+  const { t } = useTranslation();
   const handleEliminar = (id) => {
     Swal.fire({
       title: "¿Estás seguro?",
@@ -25,11 +27,13 @@ const UserTable = ({ usuarios, eliminarUsuario }) => {
       <table className="w-full text-sm text-left">
         <thead className="bg-gradient-to-r from-[#1f5d9b] to-blue-950 text-white text-center">
           <tr>
-            <th className="px-4 py-3 font-semibold">Nombre</th>
-            <th className="px-4 py-3 font-semibold">Email</th>
-            <th className="px-4 py-3 font-semibold">Rol</th>
-            <th className="px-4 py-3 font-semibold">Compañía</th>
-            <th className="px-4 py-3 font-semibold text-center">Acciones</th>
+            <th className="px-4 py-3 font-semibold">{t("users.name")}</th>
+            <th className="px-4 py-3 font-semibold">{t("users.email")}</th>
+            <th className="px-4 py-3 font-semibold">{t("users.rol")}</th>
+            <th className="px-4 py-3 font-semibold">{t("users.company")}</th>
+            <th className="px-4 py-3 font-semibold text-center">
+              {t("users.actions")}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -56,7 +60,7 @@ const UserTable = ({ usuarios, eliminarUsuario }) => {
                 {usuario.rol === "auditor_interno" ? (
                   <span>{usuario.compania || "No definida"}</span>
                 ) : (
-                  <span className="text-gray-400 italic">No aplica</span>
+                  <span className="text-gray-400 italic">{t("users.no")}</span>
                 )}
               </td>
 
@@ -69,7 +73,7 @@ const UserTable = ({ usuarios, eliminarUsuario }) => {
                       transition-all duration-200 ease-in-out text-white px-4 py-2
                       rounded-lg active:scale-95 active:shadow-md hover:scale-105"
                 >
-                  Eliminar
+                  {t("users.delete")}
                 </button>
               </td>
             </tr>
