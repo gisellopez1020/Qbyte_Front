@@ -110,7 +110,7 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-gray-100 p-4 rounded mb-6 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-gray-00 p-4 rounded mb-6 space-y-4">
             <input
                 className="w-full p-2 border rounded"
                 type="text"

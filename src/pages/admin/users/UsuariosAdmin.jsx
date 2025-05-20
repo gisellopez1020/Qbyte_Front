@@ -33,7 +33,9 @@ const UsuariosAdmin = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-3 max-w-6xl mx-auto">
+            <div className="bg-slate-200 mx-auto rounded-2xl shadow-sm flex-1 p-4 max-h-[95vh] max-w-[70vw] overflow-y-auto space-y-6">
+
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2">
           <RiUser3Line className="text-sky-800 w-7 h-7" />
@@ -80,6 +82,7 @@ const UsuariosAdmin = () => {
           <UsersTable usuarios={usuarios} eliminarUsuario={eliminarUsuario} />
         </div>
       </div>
+    </div>
     </div>
   );
 };
