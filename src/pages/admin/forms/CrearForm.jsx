@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const CrearForm = () => {
   const [archivo, setArchivo] = useState(null);
@@ -57,15 +58,21 @@ const CrearForm = () => {
         throw new Error(data.detail || "Error al generar el formulario");
       }
 
-      // Aquí puedes guardar el formulario en estado, redirigir, o mostrarlo:
       console.log("Formulario generado:", data);
-      setMensaje({
-        tipo: "exito",
-        texto: "Formulario generado correctamente.",
+
+      Swal.fire({
+        icon: "success",
+        title: "Formulario generado",
+        text: "Se ha generado correctamente el formulario.",
       });
+
       navigate("/forms");
     } catch (err) {
-      setMensaje({ tipo: "error", texto: err.message });
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.message,
+      });
     }
   };
 
@@ -78,9 +85,8 @@ const CrearForm = () => {
 
         {mensaje && (
           <div
-            className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${
-              mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"
-            }`}
+            className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"
+              }`}
           >
             <div className="text-center font-semibold">{mensaje.texto}</div>
           </div>
