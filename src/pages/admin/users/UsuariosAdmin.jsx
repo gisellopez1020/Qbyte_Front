@@ -38,9 +38,6 @@ const UsuariosAdmin = () => {
         await deleteDoc(doc(db, "usuarios", usuarioDoc.id));
       }
 
-      console.log(rol);
-      console.log(email);
-
       // 🔹 Paso 2: Eliminar de MongoDB por rol
       let endpoint = "";
       if (rol === "auditor_interno") {
