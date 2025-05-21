@@ -334,7 +334,6 @@ const Formulario = () => {
 
           <button
             type="submit"
-            onClick={() => navigate("/forms")}
             className="flex items-center gap-2 
                     bg-gradient-to-r from-[#2067af] to-blue-950
                     hover:from-[#1b5186] hover:to-blue-900
