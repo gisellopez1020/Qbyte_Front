@@ -88,7 +88,7 @@ const Index = () => {
   }, [usuario.uid]);
 
   return (
-    <div className="mt-12 max-w-5xl mx-auto">
+    <div className="mt-2 max-w-5xl mx-auto">
       <div
         className={`rounded-3xl shadow-lg text-white p-7 mb-8 flex items-center gap-6 bg-gradient-to-r ${roleColors[rol]}`}
       >
@@ -98,14 +98,14 @@ const Index = () => {
             {t("index.welcome")}, {usuarioNombre}{" "}
             <span className="ml-2">👋</span>
           </h1>
-          <p className="text-lg mt-1">
+          <p className="text-lg mt-2">
             {t("index.role")}:{" "}
             <span className="font-semibold capitalize">{current.title}</span>
           </p>
         </div>
       </div>
 
-      <div className="mb-8 bg-white rounded-xl shadow p-4 space-y-4">
+      <div className="mb-6 bg-white rounded-xl shadow p- space-y-3">
         <h2 className="text-2xl font-semibold text-gray-800">
           {t("index.resume")}
         </h2>

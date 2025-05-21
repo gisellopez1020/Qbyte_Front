@@ -40,9 +40,22 @@ function Sign() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
-    setIsLoading(true);
+  setError("");
+  setSuccess("");
+  setIsLoading(true);
+
+  if (password.length < 7) {
+    setError("La contraseña debe tener al menos 7 caracteres.");
+    setIsLoading(false);
+    return;
+  }
+
+  const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+  if (!specialCharRegex.test(password)) {
+    setError("La contraseña debe contener al menos un carácter especial.");
+    setIsLoading(false);
+    return;
+  }
 
     try {
       if (rol === "admin") {
@@ -301,7 +314,7 @@ function Sign() {
         </form>
 
         {error && (
-          <p className="text-red-400 text-sm mt-3 text-center">{error}</p>
+          <p className="text-red-400 text-sm mt-3 font-semibold text-center">{error}</p>
         )}
         {success && (
           <p className="text-green-400 text-sm mt-3 text-center">{success}</p>

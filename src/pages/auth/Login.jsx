@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,10 +14,17 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [isLocked, setIsLocked] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(0);
+  
   const navigate = useNavigate();
   const { login } = useAuth();
   const { t, i18n } = useTranslation();
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [intervalId, setIntervalId] = useState(null);
+
+  const lockDuration = 20 * 1000;
 
   const languages = [
     { code: "es", label: "Español" },
@@ -26,6 +33,49 @@ function Login() {
     { code: "de", label: "Deutsch" },
     { code: "it", label: "Italiano" },
   ];
+
+  useEffect(() => {
+    const storedAttempts = localStorage.getItem("failedAttempts") || 0;
+    const lockTime = localStorage.getItem("lockTime");
+
+    setFailedAttempts(parseInt(storedAttempts));
+
+    if (lockTime && Date.now() < parseInt(lockTime)) {
+      const timeLeft = parseInt(lockTime) - Date.now();
+      setIsLocked(true);
+      startLockCountdown(timeLeft); 
+    } else {
+      clearLockState(); 
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, []);
+
+  const startLockCountdown = (duration) => {
+    setRemainingTime(Math.ceil(duration / 1000));
+
+    const id = setInterval(() => {
+      setRemainingTime((prev) => {
+        if (prev <= 1) {
+          clearInterval(id);
+          clearLockState();  
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    setIntervalId(id);
+  };
+
+  const clearLockState = () => {
+    setIsLocked(false);
+    localStorage.removeItem("failedAttempts");
+    localStorage.removeItem("lockTime");
+    setFailedAttempts(0);
+  };
 
   const handleChangeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -36,13 +86,16 @@ function Login() {
     e.preventDefault();
     setError("");
 
+    if (isLocked) {
+      setError("Demasiados intentos fallidos. Inténtalo más tarde.");
+      return;
+    }
+
     try {
-      const credencial = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const credencial = await signInWithEmailAndPassword(auth, email, password);
       const user = credencial.user;
+
+      clearLockState();
 
       const docRef = doc(db, "usuarios", user.uid);
       const docSnap = await getDoc(docRef);
@@ -55,38 +108,20 @@ function Login() {
       const userData = docSnap.data();
       const { rol } = userData;
 
-      if (rol === "auditor_interno" || rol === "auditor_externo") {
-        try {
-          const endpoint =
-            rol === "auditor_interno"
-              ? "/auditor_interno/logear_auditor_interno"
-              : "/auditor_externo/logear_auditor_externo";
-
-          const response = await fetch(`http://localhost:8000${endpoint}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ usuario: email, contraseña: password }),
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            setError("Error de backend: " + errorData.detail);
-            return;
-          }
-
-          login({ uid: user.uid, email: user.email, rol });
-
-          navigate("/index", { replace: true });
-        } catch (err) {
-          setError("Error al conectar con el backend.");
-        }
-      } else {
-        login({ uid: user.uid, email: user.email, rol });
-        navigate("/index", { replace: true });
-      }
+      login({ uid: user.uid, email: user.email, rol });
+      navigate("/index", { replace: true });
     } catch (err) {
+      const newAttempts = failedAttempts + 1;
+      setFailedAttempts(newAttempts);
+      localStorage.setItem("failedAttempts", newAttempts);
+
+      if (newAttempts >= 4) {
+        const lockTime = Date.now() + lockDuration;
+        localStorage.setItem("lockTime", lockTime.toString());
+        setIsLocked(true);
+        startLockCountdown(lockDuration);
+      }
+
       setError(`${t("log_in.error")}`);
     }
   };
@@ -106,11 +141,8 @@ function Login() {
           onClick={() => setShowLangMenu(!showLangMenu)}
           className={`p-2 rounded-full`}
         >
-          <MdLanguage
-            className={`text-white hover:text-sky-950 text-4xl transition-colors duration-300`}
-          />
+          <MdLanguage className="text-white hover:text-sky-950 text-4xl transition-colors duration-300" />
         </button>
-
         {showLangMenu && (
           <div className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg z-50">
             <ul className="py-1 text-sm text-gray-700">
@@ -181,13 +213,15 @@ function Login() {
 
           <button
             type="submit"
+            disabled={isLocked} 
             className="w-full text-white p-2 rounded-lg font-semibold
              bg-gradient-to-r from-sky-800 to-sky-950
              hover:from-sky-700 hover:to-sky-900
              active:scale-95 active:from-sky-900 active:to-sky-950
-             transition-all duration-200 ease-in-out shadow-md hover:shadow-lg active:shadow-inner"
+             transition-all duration-200 ease-in-out shadow-md hover:shadow-lg active:shadow-inner
+             disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {t("log_in.button")}
+            {isLocked ? "Bloqueado..." : t("log_in.button")}
           </button>
         </form>
 
@@ -202,6 +236,17 @@ function Login() {
           </Link>
         </p>
       </div>
+
+      {isLocked && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm">
+            <h2 className="text-xl font-semibold mb-2 text-red-600">Acceso Bloqueado</h2>
+            <p className="text-gray-700 mb-4">
+              Demasiados intentos fallidos. Por favor espera <strong>{remainingTime}</strong> segundos para intentar nuevamente.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
