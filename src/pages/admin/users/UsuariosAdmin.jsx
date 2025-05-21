@@ -41,9 +41,9 @@ const UsuariosAdmin = () => {
       // 🔹 Paso 2: Eliminar de MongoDB por rol
       let endpoint = "";
       if (rol === "auditor_interno") {
-        endpoint = `http://localhost:8000/auditor_interno/eliminar_auditor_interno?usuario=${email}`;
+        endpoint = `https://acmeapplication.onrender.com/auditor_interno/eliminar_auditor_interno?usuario=${email}`;
       } else if (rol === "auditor_externo") {
-        endpoint = `http://localhost:8000/auditor_externo/eliminar_auditor_externo?usuario=${email}`;
+        endpoint = `https://acmeapplication.onrender.com/auditor_externo/eliminar_auditor_externo?usuario=${email}`;
       }
 
       if (endpoint) {

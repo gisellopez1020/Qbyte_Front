@@ -11,7 +11,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchFormularios = async () => {
       try {
-        const res = await fetch("http://localhost:8000/formulario/listar_formularios");
+        const res = await fetch("https://acmeapplication.onrender.com/formulario/listar_formularios");
         const data = await res.json();
         setFormularios(data);
       } catch (error) {
@@ -38,7 +38,7 @@ const Admin = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/formulario/eliminar_formulario?id=${encodeURIComponent(id)}`,
+        `https://acmeapplication.onrender.com/formulario/eliminar_formulario?id=${encodeURIComponent(id)}`,
         {
           method: "DELETE",
         }

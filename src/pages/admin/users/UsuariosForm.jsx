@@ -61,7 +61,7 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
                     contraseña: DEFAULT_PASSWORD,
                 };
                 const res = await fetch(
-                    "http://localhost:8000/auditor_externo/crear_auditor_externo",
+                    "https://acmeapplication.onrender.com/auditor_externo/crear_auditor_externo",
                     {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -81,7 +81,7 @@ const UsuariosForm = ({ onUsuarioCreado }) => {
                     contraseña: DEFAULT_PASSWORD,
                 };
                 const res = await fetch(
-                    "http://localhost:8000/auditor_interno/crear_auditor_interno",
+                    "https://acmeapplication.onrender.com/auditor_interno/crear_auditor_interno",
                     {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },

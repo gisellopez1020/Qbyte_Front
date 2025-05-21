@@ -13,7 +13,7 @@ const AudiInterno = () => {
     const fetchFormularios = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8000/formulario/listar_formularios"
+          "https://acmeapplication.onrender.com/formulario/listar_formularios"
         );
         const data = await res.json();
         setFormularios(data);

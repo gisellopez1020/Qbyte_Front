@@ -17,7 +17,7 @@ export const eliminarUsuario = async (usuario) => {
 
     if (endpoint) {
       const res = await fetch(
-        `http://localhost:8000${endpoint}?id=${usuario.id}`,
+        `https://acmeapplication.onrender.com${endpoint}?id=${usuario.id}`,
         {
           method: "DELETE",
         },

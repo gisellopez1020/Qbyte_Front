@@ -218,9 +218,8 @@ const Reports = () => {
   const getCertificationStatus = (totalPoints) => {
     if (totalPoints >= 70) {
       return {
-        message: `${t("certificate.t11")} ${
-          reportData?.norma || reportData?.formularioTitulo || ""
-        }`,
+        message: `${t("certificate.t11")} ${reportData?.norma || reportData?.formularioTitulo || ""
+          }`,
         className: "bg-green-100 text-green-800 border-green-300",
         icon: "🏆",
         certified: true,
@@ -360,7 +359,7 @@ const Reports = () => {
 
       try {
         const response = await fetch(
-          "http://localhost:8000/gemini/generar_reporte",
+          "https://acmeapplication.onrender.com/gemini/generar_reporte",
           {
             method: "POST",
             headers: {
@@ -384,9 +383,9 @@ const Reports = () => {
         const reporteContent =
           typeof result === "object" && result !== null
             ? result.html ||
-              result.content ||
-              result.report ||
-              JSON.stringify(result, null, 2)
+            result.content ||
+            result.report ||
+            JSON.stringify(result, null, 2)
             : result;
 
         // Extraer datos para el gráfico circular
@@ -398,9 +397,8 @@ const Reports = () => {
         // Guardar reporte en Firebase
         if (usuario?.email) {
           const reportDoc = {
-            title: `Reporte: ${
-              data.formularioTitulo || data.norma || data.titulo || "Sin título"
-            }`,
+            title: `Reporte: ${data.formularioTitulo || data.norma || data.titulo || "Sin título"
+              }`,
             content: reporteContent,
             formData: data,
             userEmail: usuario.email,
@@ -447,9 +445,9 @@ const Reports = () => {
           const reporteContent =
             typeof result === "object" && result !== null
               ? result.html ||
-                result.content ||
-                result.report ||
-                JSON.stringify(result, null, 2)
+              result.content ||
+              result.report ||
+              JSON.stringify(result, null, 2)
               : result;
 
           const totales = extractTotalesData(result);
@@ -459,12 +457,11 @@ const Reports = () => {
 
           if (usuario?.email) {
             const reportDoc = {
-              title: `Reporte: ${
-                data.formularioTitulo ||
+              title: `Reporte: ${data.formularioTitulo ||
                 data.norma ||
                 data.titulo ||
                 "Sin título"
-              }`,
+                }`,
               content: result,
               formData: data,
               userEmail: usuario.email,
@@ -501,9 +498,9 @@ const Reports = () => {
     if (typeof reportContent === "object" && reportContent !== null) {
       setReporte(
         reportContent.html ||
-          reportContent.content ||
-          reportContent.report ||
-          JSON.stringify(reportContent, null, 2)
+        reportContent.content ||
+        reportContent.report ||
+        JSON.stringify(reportContent, null, 2)
       );
 
       const totales = extractTotalesData(reportContent);
@@ -541,11 +538,10 @@ const Reports = () => {
                   <div
                     key={report.id}
                     className={`p-3 border rounded cursor-pointer hover:bg-blue-50 transition 
-                    ${
-                      selectedReport?.id === report.id
+                    ${selectedReport?.id === report.id
                         ? "bg-blue-100 border-blue-400"
                         : "border-gray-200"
-                    }`}
+                      }`}
                     onClick={() => viewSavedReport(report)}
                   >
                     <div className="font-medium">{report.title}</div>
@@ -569,11 +565,10 @@ const Reports = () => {
               <button
                 onClick={generateReport}
                 disabled={loading}
-                className={`px-4 py-2 rounded font-medium ${
-                  loading
+                className={`px-4 py-2 rounded font-medium ${loading
                     ? "bg-gray-400 cursor-not-allowed"
                     : "flex items-center gap-2 bg-gradient-to-r from-[#2067af] to-blue-950 hover:from-[#1b5186] hover:to-blue-900 text-white rounded-lg active:scale-95 active:shadow-md hover:scale-105"
-                }`}
+                  }`}
               >
                 {loading ? `${t("report.t5")}` : `${t("report.t6")}`}
               </button>
@@ -638,9 +633,8 @@ const Reports = () => {
               <div className="prose max-w-none">
                 {totalesData && totalesData.length > 0 && (
                   <div
-                    className={`p-4 mb-6 rounded-lg border ${
-                      getCertificationStatus(getTotalPoints()).className
-                    }`}
+                    className={`p-4 mb-6 rounded-lg border ${getCertificationStatus(getTotalPoints()).className
+                      }`}
                   >
                     <p className="text-lg font-bold flex items-center">
                       <span className="text-2xl mr-2">

@@ -11,7 +11,7 @@ const VerForm = () => {
     const fetchFormulario = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8000/formulario/listar_por_nombre?nombre=${encodeURIComponent(
+          `https://acmeapplication.onrender.com/formulario/listar_por_nombre?nombre=${encodeURIComponent(
             id
           )}`
         );

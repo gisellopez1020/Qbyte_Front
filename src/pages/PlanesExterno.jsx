@@ -35,7 +35,7 @@ const PlanesAuditorExterno = () => {
     setProcesando(true);
     try {
       const res = await fetch(
-        "http://localhost:8000/plan_de_accion/actualizar_comentario_estado",
+        "https://acmeapplication.onrender.com/plan_de_accion/actualizar_comentario_estado",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -69,7 +69,7 @@ const PlanesAuditorExterno = () => {
 
       try {
         const res = await fetch(
-          "http://localhost:8000/auditor_externo/listar_auditores_externos"
+          "https://acmeapplication.onrender.com/auditor_externo/listar_auditores_externos"
         );
         const auditores = await res.json();
 
@@ -81,7 +81,7 @@ const PlanesAuditorExterno = () => {
         setAuditorExternoId(auditor._id);
 
         const res2 = await fetch(
-          "http://localhost:8000/auditor_interno/listar_auditores_internos"
+          "https://acmeapplication.onrender.com/auditor_interno/listar_auditores_internos"
         );
         const data = await res2.json();
         const diccionario = {};
@@ -93,7 +93,7 @@ const PlanesAuditorExterno = () => {
         const planesData = await Promise.all(
           auditor.planesAsignados.map((id) =>
             fetch(
-              `http://localhost:8000/plan_de_accion/listar_plan_por_id?plan_id=${id}`
+              `https://acmeapplication.onrender.com/plan_de_accion/listar_plan_por_id?plan_id=${id}`
             )
               .then((res) => res.json())
               .catch(() => [])
@@ -211,11 +211,10 @@ const PlanesAuditorExterno = () => {
 
       {mensaje.texto && (
         <div
-          className={`mb-4 p-4 rounded ${
-            mensaje.tipo === "exito"
+          className={`mb-4 p-4 rounded ${mensaje.tipo === "exito"
               ? "bg-green-100 text-green-800"
               : "bg-red-100 text-red-800"
-          }`}
+            }`}
         >
           {mensaje.tipo === "error" ? (
             <AlertCircle className="mr-2 inline" />
