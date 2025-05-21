@@ -34,7 +34,7 @@ const Plan = () => {
     const obtenerAuditoresExternos = async () => {
       try {
         const respuesta = await fetch(
-          `http://localhost:8000/auditor_externo/listar_auditores_externos`,
+          `https://acmeapplication.onrender.com/auditor_externo/listar_auditores_externos`,
           {
             method: "GET",
             headers: {
@@ -65,7 +65,7 @@ const Plan = () => {
   const enviarAAuditorExterno = async (planId) => {
     setCargando(true);
     try {
-      const url = `http://localhost:8000/plan_de_accion/enviar_a_auditorExterno?plan_id=${planId}`;
+      const url = `https://acmeapplication.onrender.com/plan_de_accion/enviar_a_auditorExterno?plan_id=${planId}`;
       const respuesta = await fetch(url, {
         method: "POST",
         headers: {
@@ -137,7 +137,7 @@ const Plan = () => {
         try {
           console.log("Buscando auditor con email:", usuario.email);
           const res = await fetch(
-            `http://localhost:8000/auditor_interno/listar_auditores_internos`
+            `https://acmeapplication.onrender.com/auditor_interno/listar_auditores_internos`
           );
           const auditores = await res.json();
 
@@ -198,7 +198,7 @@ const Plan = () => {
     setCargando(true);
     try {
       const respuesta = await fetch(
-        `http://localhost:8000/plan_de_accion/añadir_evidencias`,
+        `https://acmeapplication.onrender.com/plan_de_accion/añadir_evidencias`,
         {
           method: "POST",
           headers: {
@@ -239,7 +239,7 @@ const Plan = () => {
     setCargando(true);
     try {
       const respuesta = await fetch(
-        `http://localhost:8000/plan_de_accion/listar_plan_por_auditor_interno?auditorI_id=${auditorId}`
+        `https://acmeapplication.onrender.com/plan_de_accion/listar_plan_por_auditor_interno?auditorI_id=${auditorId}`
       );
 
       if (!respuesta.ok) {
@@ -284,7 +284,7 @@ const Plan = () => {
     setCargando(true);
     try {
       const respuesta = await fetch(
-        `http://localhost:8000/plan_de_accion/guardar_plan`,
+        `https://acmeapplication.onrender.com/plan_de_accion/guardar_plan`,
         {
           method: "POST",
           headers: {
@@ -391,11 +391,10 @@ const Plan = () => {
         {/* Mensajes de notificación */}
         {mensaje.texto && (
           <div
-            className={`p-4 mb-4 rounded-md ${
-              mensaje.tipo === "exito"
+            className={`p-4 mb-4 rounded-md ${mensaje.tipo === "exito"
                 ? "bg-green-100 text-green-800"
                 : "bg-red-100 text-red-800"
-            }`}
+              }`}
           >
             {mensaje.texto}
           </div>
@@ -503,13 +502,12 @@ const Plan = () => {
                         <h3 className="font-medium text-lg">{plan.objetivo}</h3>
                         <div className="flex items-center mt-1">
                           <span
-                            className={`text-sm px-2 py-1 rounded-full ${
-                              plan.estado === "pendiente"
+                            className={`text-sm px-2 py-1 rounded-full ${plan.estado === "pendiente"
                                 ? "bg-yellow-100 text-yellow-800"
                                 : plan.estado === "Evaluado"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
-                            }`}
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-red-100 text-red-800"
+                              }`}
                           >
                             {plan.estado.charAt(0).toUpperCase() +
                               plan.estado.slice(1)}
@@ -555,7 +553,7 @@ const Plan = () => {
                               ) : (
                                 <p className="text-sm text-gray-600">
                                   {etapa.evidencia ===
-                                  "Aun no ha cargado evidencia para esta meta" ? (
+                                    "Aun no ha cargado evidencia para esta meta" ? (
                                     <span className="italic text-gray-500">
                                       {etapa.evidencia}
                                     </span>
@@ -602,11 +600,10 @@ const Plan = () => {
                             onClick={() =>
                               toggleModoEvidencias(plan._id, plan.etapas)
                             }
-                            className={`text-sm font-medium ${
-                              modoEvidencias[plan._id]
+                            className={`text-sm font-medium ${modoEvidencias[plan._id]
                                 ? "text-red-600 hover:text-red-800"
                                 : "text-blue-600 hover:text-blue-800"
-                            }`}
+                              }`}
                             disabled={cargando}
                           >
                             {modoEvidencias[plan._id]

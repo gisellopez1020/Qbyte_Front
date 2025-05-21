@@ -40,22 +40,22 @@ function Sign() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-  setError("");
-  setSuccess("");
-  setIsLoading(true);
+    setError("");
+    setSuccess("");
+    setIsLoading(true);
 
-  if (password.length < 7) {
-    setError("La contraseña debe tener al menos 7 caracteres.");
-    setIsLoading(false);
-    return;
-  }
+    if (password.length < 7) {
+      setError("La contraseña debe tener al menos 7 caracteres.");
+      setIsLoading(false);
+      return;
+    }
 
-  const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
-  if (!specialCharRegex.test(password)) {
-    setError("La contraseña debe contener al menos un carácter especial.");
-    setIsLoading(false);
-    return;
-  }
+    const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+    if (!specialCharRegex.test(password)) {
+      setError("La contraseña debe contener al menos un carácter especial.");
+      setIsLoading(false);
+      return;
+    }
 
     try {
       if (rol === "admin") {
@@ -79,7 +79,7 @@ function Sign() {
         };
 
         const res = await fetch(
-          "http://localhost:8000/auditor_externo/crear_auditor_externo",
+          "https://acmeapplication.onrender.com/auditor_externo/crear_auditor_externo",
           {
             method: "POST",
             headers: {
@@ -107,7 +107,7 @@ function Sign() {
         };
 
         const res = await fetch(
-          "http://localhost:8000/auditor_interno/crear_auditor_interno",
+          "https://acmeapplication.onrender.com/auditor_interno/crear_auditor_interno",
           {
             method: "POST",
             headers: {

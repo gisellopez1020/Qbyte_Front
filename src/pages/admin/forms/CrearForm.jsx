@@ -24,7 +24,7 @@ const CrearForm = () => {
     formData.append("file", archivo);
 
     try {
-      const res = await fetch("http://localhost:8000/rag/upload", {
+      const res = await fetch("https://acmeapplication.onrender.com/rag/upload", {
         method: "POST",
         body: formData,
       });
@@ -46,7 +46,7 @@ const CrearForm = () => {
 
   const generarFormulario = async () => {
     try {
-      const res = await fetch("http://localhost:8000/rag/generar_formulario", {
+      const res = await fetch("https://acmeapplication.onrender.com/rag/generar_formulario", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,9 +87,8 @@ const CrearForm = () => {
 
         {mensaje && (
           <div
-            className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${
-              mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"
-            }`}
+            className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"
+              }`}
           >
             <div className="text-center font-semibold">{mensaje.texto}</div>
           </div>

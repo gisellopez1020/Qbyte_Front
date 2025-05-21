@@ -17,7 +17,7 @@ const Formulario = () => {
         try {
           console.log("Buscando auditor con email:", usuario.email);
           const res = await fetch(
-            `http://localhost:8000/auditor_interno/listar_auditores_internos`
+            `https://acmeapplication.onrender.com/auditor_interno/listar_auditores_internos`
           );
           const auditores = await res.json();
 
@@ -45,7 +45,7 @@ const Formulario = () => {
       try {
         console.log("Obteniendo formulario para norma:", id);
         let res = await fetch(
-          `http://localhost:8000/formulario/listar_por_nombre?nombre=${encodeURIComponent(
+          `https://acmeapplication.onrender.com/formulario/listar_por_nombre?nombre=${encodeURIComponent(
             id
           )}`
         );
@@ -55,7 +55,7 @@ const Formulario = () => {
             "No se encontró por norma, buscando en todos los formularios"
           );
           const resAll = await fetch(
-            "http://localhost:8000/formulario/listar_formularios/"
+            "https://acmeapplication.onrender.com/formulario/listar_formularios/"
           );
 
           const allForms = await resAll.json();
@@ -183,7 +183,7 @@ const Formulario = () => {
 
     try {
       const res = await fetch(
-        "http://localhost:8000/respuesta/crear_respuesta",
+        "https://acmeapplication.onrender.com/respuesta/crear_respuesta",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
