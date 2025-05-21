@@ -106,26 +106,20 @@
       "description": "Manages users, supervises auditors, creates and assigns templates and audits, and oversees the entire system.",
       "list": [
         "Manage internal and external auditors",
-        "Create and manage form templates",
-        "View and generate global reports",
-        "Assign audits and monitor their progress"
+        "Create and manage form templates"
       ],
       "features": {
         "usuarios": {
-          "title": "Users",
-          "desc": "Create, view, and delete system users."
-        },
-        "reportes": {
-          "title": "Global Reports",
-          "desc": "View statistics and global reports."
+          "title": "User management",
+          "desc": "Create, view and delete system users."
         },
         "crearForm": {
-          "title": "Create Forms",
-          "desc": "Create forms based on standards or guidelines"
+          "title": "Form creation",
+          "desc": "Design forms based on established standards or guidelines."
         },
-        "config": {
-          "title": "Settings",
-          "desc": "General system settings and configuration."
+        "eliminarForm": {
+          "title": "Deleting forms",
+          "desc": "Delete forms previously created according to rules or guidelines."
         }
       }
     },
@@ -133,27 +127,28 @@
       "title": "Internal Auditor",
       "description": "Oversees and documents internal audits, fills out forms, and follows up on generated action plans.",
       "list": [
-        "View and update personal information",
-        "Select standards and complete forms",
-        "Create and track action plans",
+        "Select standards or guidelines and complete forms",
+        "Generate reports and verify compliance",
+        "Create and follow up action plans",
+        "Submit action plans for external review",
         "Review audit comments and observations"
       ],
       "features": {
-        "perfil": {
-          "title": "Personal Information",
-          "desc": "View and update personal information and completed forms."
-        },
         "formularios": {
           "title": "Forms",
-          "desc": "Select standard and complete audit forms."
+          "desc": "Select a standard or guideline and complete the relevant audit forms."
+        },
+        "reportes": {
+          "title": "Compliance Reports",
+          "desc": "Generate reports indicating compliance or non-compliance detected in the audit."
         },
         "planes": {
           "title": "Action Plans",
-          "desc": "Create, record, and track action plans."
+          "desc": "Create, record and follow up action plans and submit them for review by an external auditor."
         },
         "comentarios": {
-          "title": "Comments",
-          "desc": "View comments made by external auditors."
+          "title": "Coments",
+          "desc": "Consult observations and comments issued by the external auditors on the action plans."
         }
       }
     },

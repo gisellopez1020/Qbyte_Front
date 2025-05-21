@@ -106,26 +106,20 @@
       "description": "Verwaltet Benutzer, überwacht Auditoren, erstellt und weist Vorlagen und Audits zu und kontrolliert das gesamte System.",
       "list": [
         "Interne und externe Auditoren verwalten",
-        "Formularvorlagen erstellen und verwalten",
-        "Globale Berichte anzeigen und erstellen",
-        "Audits zuweisen und deren Fortschritt überwachen"
+        "Formularvorlagen erstellen und verwalten"
       ],
       "features": {
         "usuarios": {
-          "title": "Benutzer",
-          "desc": "Benutzer im System erstellen, anzeigen und löschen."
-        },
-        "reportes": {
-          "title": "Globale Berichte",
-          "desc": "Statistiken und globale Berichte anzeigen."
+          "title": "Benutzerverwaltung",
+          "desc": "Erstellen, Anzeigen und Löschen von Benutzern im System."
         },
         "crearForm": {
-          "title": "Formulare erstellen",
-          "desc": "Formulare basierend auf Normen oder Richtlinien erstellen"
+          "title": "Erstellung von Formularen",
+          "desc": "Entwerfen Sie Formulare auf der Grundlage festgelegter Normen oder Richtlinien."
         },
-        "config": {
-          "title": "Einstellungen",
-          "desc": "Allgemeine Einstellungen und Systemkonfiguration."
+        "eliminarForm": {
+          "title": "Beseitigung von Formularen",
+          "desc": "Löschen von Formularen, die zuvor gemäß den Regeln oder Richtlinien erstellt wurden."
         }
       }
     },
@@ -133,27 +127,28 @@
       "title": "Interner Auditor",
       "description": "Überwacht und dokumentiert interne Audits, füllt Formulare aus und verfolgt Aktionspläne.",
       "list": [
-        "Persönliche Daten einsehen und aktualisieren",
-        "Normen auswählen und Formulare ausfüllen",
-        "Aktionspläne erstellen und verfolgen",
-        "Kommentare und Beobachtungen aus Audits prüfen"
+        "Normen oder Leitlinien auswählen und Formulare ausfüllen",
+        "Erstellung von Berichten und Überprüfung der Einhaltung der Vorschriften",
+        "Erstellung und Weiterverfolgung von Aktionsplänen",
+        "Aktionspläne zur externen Überprüfung einreichen",
+        "Überprüfung der Prüfungskommentare und Beobachtungen"
       ],
       "features": {
-        "perfil": {
-          "title": "Persönliche Daten",
-          "desc": "Persönliche Informationen und ausgefüllte Formulare anzeigen und bearbeiten."
-        },
         "formularios": {
           "title": "Formulare",
-          "desc": "Norm auswählen und Audit-Formulare ausfüllen."
+          "desc": "Wählen Sie eine Norm oder einen Leitfaden aus und füllen Sie die entsprechenden Prüfungsformulare aus."
+        },
+        "reportes": {
+          "title": "Compliance-Berichte",
+          "desc": "Erstellung von Berichten über die Einhaltung oder Nichteinhaltung von Vorschriften, die bei der Prüfung festgestellt wurden."
         },
         "planes": {
           "title": "Aktionspläne",
-          "desc": "Aktionspläne erstellen, erfassen und verfolgen."
+          "desc": "Erstellung, Aufzeichnung und Weiterverfolgung von Aktionsplänen und Vorlage dieser Pläne zur Überprüfung durch einen externen Prüfer."
         },
         "comentarios": {
           "title": "Kommentare",
-          "desc": "Von externen Auditoren abgegebene Kommentare anzeigen."
+          "desc": "Konsultieren Sie die Bemerkungen und Kommentare der externen Prüfer zu den Aktionsplänen."
         }
       }
     },

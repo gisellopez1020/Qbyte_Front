@@ -40,7 +40,7 @@ const Index = () => {
     usuarios: <UserCog size={32} className="text-white" />,
     reportes: <BarChart2 size={32} className="text-white" />,
     crearForm: <ClipboardList size={32} className="text-white" />,
-    config: <ShieldCheck size={32} className="text-white" />,
+    eliminarForm: <ShieldCheck size={32} className="text-white" />,
     perfil: <UserCog size={32} className="text-white" />,
     formularios: <PlusCircle size={32} className="text-white" />,
     planes: <ClipboardList size={32} className="text-white" />,
@@ -53,17 +53,16 @@ const Index = () => {
 
   const featureRoutes = {
     usuarios: "/usuarios",
-    reportes: "/usuarios",
+    reportes: "/reports",
     crearForm: "/crear-form",
-    config: "/admin/configuracion",
-    perfil: "/auditor-interno/perfil",
+    eliminarForm: "/forms",
     formularios: "/forms",
     planes: "/plan-action",
     comentarios: "/plan-action",
-    pendientes: "/planesExternos",
-    evaluacion: "/auditor-externo/evaluacion",
-    estado: "/auditor-externo/estado-auditoria",
-    seguimiento: "/auditor-externo/seguimiento",
+    pendientes: "/PlanesExterno",
+    evaluacion: "/PlanesExterno",
+    estado: "/PlanesExterno",
+    seguimiento: "/PlanesExterno",
   };
 
   const current = t(`index.${rol}`, { returnObjects: true });
@@ -106,7 +105,7 @@ const Index = () => {
         </div>
       </div>
 
-      <div className="mb-8 bg-white rounded-xl shadow p-1 space-y-4">
+      <div className="mb-8 bg-white rounded-xl shadow p-4 space-y-4">
         <h2 className="text-2xl font-semibold text-gray-800">
           {t("index.resume")}
         </h2>
@@ -130,7 +129,7 @@ const Index = () => {
             usuarios: "from-blue-600 to-blue-700",
             reportes: "from-indigo-600 to-indigo-700",
             crearForm: "from-cyan-600 to-cyan-700",
-            config: "from-sky-700 to-sky-800",
+            eliminarForm: "from-sky-700 to-sky-800",
             perfil: "from-cyan-600 to-cyan-700",
             formularios: "from-blue-600 to-blue-700",
             planes: "from-sky-600 to-sky-700",

@@ -46,7 +46,7 @@ const AudiInterno = () => {
               }
             >
               <FcRules className="text-7xl mb-4" />
-              <h2 className="text-black font-semibold text-xl text-center mb-2">
+              <h2 className="text-black font-semibold text-xl text-center mb-2 line-clamp-3">
                 {form.nombre}
               </h2>
               <p className="text-sm text-gray-700 text-center line-clamp-3">

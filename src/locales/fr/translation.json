@@ -106,26 +106,20 @@
       "description": "Gère les utilisateurs, supervise les auditeurs, crée et attribue des modèles et des audits, et contrôle l'ensemble du système.",
       "list": [
         "Gérer les auditeurs internes et externes",
-        "Créer et gérer des modèles de formulaires",
-        "Afficher et générer des rapports globaux",
-        "Attribuer des audits et suivre leur progression"
+        "Créer et gérer des modèles de formulaires"
       ],
       "features": {
         "usuarios": {
-          "title": "Utilisateurs",
+          "title": "Gestion des utilisateurs",
           "desc": "Créer, visualiser et supprimer des utilisateurs du système."
         },
-        "reportes": {
-          "title": "Rapports globaux",
-          "desc": "Voir les statistiques et les rapports globaux."
-        },
         "crearForm": {
-          "title": "Créer des formulaires",
-          "desc": "Créer des formulaires selon les normes ou les lignes directrices"
+          "title": "Création de formulaires",
+          "desc": "Concevoir des formes sur la base de normes ou de lignes directrices établies."
         },
-        "config": {
-          "title": "Paramètres",
-          "desc": "Réglages généraux et configuration du système."
+        "eliminarForm": {
+          "title": "Élimination des formulaires",
+          "desc": "Supprimer des formulaires précédemment créés selon des règles ou des lignes directrices."
         }
       }
     },
@@ -133,27 +127,28 @@
       "title": "Auditeur interne",
       "description": "Supervise et documente les audits internes, remplit les formulaires, et suit les plans d'action générés.",
       "list": [
-        "Voir et mettre à jour ses informations personnelles",
-        "Sélectionner des normes et remplir des formulaires",
-        "Créer et suivre des plans d'action",
-        "Consulter les commentaires et observations des audits"
+        "Sélectionner des normes ou des lignes directrices et remplir des formulaires",
+        "Générer des rapports et vérifier la conformité",
+        "Élaborer des plans d'action et en assurer le suivi",
+        "Soumettre les plans d'action à un examen externe",
+        "Examiner les commentaires et les observations de l'audit"
       ],
       "features": {
-        "perfil": {
-          "title": "Informations personnelles",
-          "desc": "Afficher et mettre à jour les informations personnelles et les formulaires remplis."
-        },
         "formularios": {
           "title": "Formulaires",
-          "desc": "Sélectionner une norme et remplir les formulaires d’audit."
+          "desc": "Sélectionnez une norme ou une ligne directrice et remplissez les formulaires d'audit correspondants."
+        },
+        "reportes": {
+          "title": "Rapports de conformité",
+          "desc": "Générer des rapports indiquant la conformité ou la non-conformité détectée lors de l'audit."
         },
         "planes": {
           "title": "Plans d'action",
-          "desc": "Créer, enregistrer et suivre les plans d'action."
+          "desc": "Créer, enregistrer et suivre des plans d'action et les soumettre à l'examen d'un auditeur externe."
         },
         "comentarios": {
           "title": "Commentaires",
-          "desc": "Afficher les commentaires des auditeurs externes."
+          "desc": "Consulter les observations et commentaires émis par les auditeurs externes sur les plans d'action."
         }
       }
     },

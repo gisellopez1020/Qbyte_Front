@@ -106,26 +106,20 @@
       "description": "Gestisce gli utenti, supervisiona gli auditor, crea e assegna modelli e audit, e controlla l'intero sistema.",
       "list": [
         "Gestire auditor interni ed esterni",
-        "Creare e gestire modelli di moduli",
-        "Visualizzare e generare report globali",
-        "Assegnare audit e monitorare i progressi"
+        "Creare e gestire modelli di moduli"
       ],
       "features": {
         "usuarios": {
-          "title": "Utenti",
-          "desc": "Creare, visualizzare ed eliminare gli utenti del sistema."
-        },
-        "reportes": {
-          "title": "Report globali",
-          "desc": "Visualizzare statistiche e report globali."
+          "title": "Gestione degli utenti",
+          "desc": "Creare, visualizzare ed eliminare gli utenti dal sistema."
         },
         "crearForm": {
-          "title": "Crea moduli",
-          "desc": "Creare moduli basati su standard o linee guida"
+          "title": "Creazione di moduli",
+          "desc": "Progettare forme basate su standard o linee guida stabilite."
         },
-        "config": {
-          "title": "Impostazioni",
-          "desc": "Configurazioni generali e impostazioni di sistema."
+        "eliminarForm": {
+          "title": "Eliminazione dei moduli",
+          "desc": "Eliminare i moduli creati in precedenza in base a regole o linee guida."
         }
       }
     },
@@ -133,27 +127,28 @@
       "title": "Auditor Interno",
       "description": "Supervisiona e documenta gli audit interni, compila i moduli e segue i piani d’azione generati.",
       "list": [
-        "Visualizzare e aggiornare le informazioni personali",
-        "Selezionare standard e completare i moduli",
-        "Creare e monitorare piani d’azione",
-        "Esaminare commenti e osservazioni degli audit"
+        "Selezionare gli standard o le linee guida e compilare i moduli",
+        "Generare rapporti e verificare la conformità",
+        "Creare e seguire i piani d'azione",
+        "Presentare i piani d'azione per la revisione esterna",
+        "Esaminare i commenti e le osservazioni dell'audit"
       ],
       "features": {
-        "perfil": {
-          "title": "Informazioni personali",
-          "desc": "Visualizzare e aggiornare dati personali e moduli compilati."
-        },
         "formularios": {
           "title": "Moduli",
-          "desc": "Selezionare uno standard e completare i moduli di audit."
+          "desc": "Selezionare uno standard o una linea guida e completare i relativi moduli di audit."
+        },
+        "reportes": {
+          "title": "Rapporti di conformità",
+          "desc": "Generare rapporti che indichino la conformità o la non conformità rilevata durante l'audit."
         },
         "planes": {
-          "title": "Piani d’Azione",
-          "desc": "Creare, registrare e monitorare piani d’azione."
+          "title": "Piani d'azione",
+          "desc": "Creare, registrare e seguire i piani d'azione e sottoporli alla revisione di un revisore esterno."
         },
         "comentarios": {
           "title": "Commenti",
-          "desc": "Visualizzare i commenti degli auditor esterni."
+          "desc": "Consultare le osservazioni e i commenti dei revisori esterni sui piani d'azione."
         }
       }
     },

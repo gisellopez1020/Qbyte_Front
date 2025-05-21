@@ -106,54 +106,49 @@
       "description": "Administra usuarios, supervisa auditores, crea y asigna plantillas y auditorías, y controla el sistema completo.",
       "list": [
         "Gestionar auditores internos y externos",
-        "Crear y administrar plantillas de formularios",
-        "Visualizar y generar reportes globales",
-        "Asignar auditorías y supervisar su progreso"
+        "Crear y administrar plantillas de formularios"
       ],
       "features": {
         "usuarios": {
-          "title": "Usuarios",
+          "title": "Gestión de usuarios",
           "desc": "Crear, visualizar y eliminar usuarios del sistema."
         },
-        "reportes": {
-          "title": "Reportes Globales",
-          "desc": "Visualizar estadísticas y reportes globales."
-        },
         "crearForm": {
-          "title": "Crear formularios",
-          "desc": "Crear formularios de las normas o lineamientos"
+          "title": "Creación de formularios",
+          "desc": "Diseñar formularios basados en normas o lineamientos establecidos."
         },
-        "config": {
-          "title": "Configuración",
-          "desc": "Ajustes generales y configuración del sistema."
+        "eliminarForm": {
+          "title": "Eliminación de formularios",
+          "desc": "Eliminar formularios previamente creados según las normas o lineamientos."
         }
       }
     },
     "auditor_interno": {
       "title": "Auditor Interno",
-      "description": "Supervisa y documenta auditorías internas, llena formularios, y da seguimiento a los planes de acción generados.",
+      "description": "Realiza auditorías internas mediante normas o lineamientos, completa formularios, genera reportes de cumplimiento y elabora planes de acción que pueden ser revisados por un auditor externo.",
       "list": [
-        "Visualizar y actualizar su información personal",
-        "Seleccionar normas y completar formularios",
+        "Seleccionar normas o lineamientos y completar formularios",
+        "Generar reportes y verificar cumplimiento",
         "Crear y dar seguimiento a planes de acción",
+        "Enviar planes de acción para revisión externa",
         "Revisar comentarios y observaciones de auditorías"
       ],
       "features": {
-        "perfil": {
-          "title": "Información Personal",
-          "desc": "Ver y actualizar información personal y formularios completados."
-        },
         "formularios": {
           "title": "Formularios",
-          "desc": "Seleccionar norma y completar formularios de auditoría."
+          "desc": "Seleccionar una norma o lineamiento y completar los formularios de auditoría correspondientes."
+        },
+        "reportes": {
+          "title": "Reportes de Cumplimiento",
+          "desc": "Generar reportes que indiquen el cumplimiento o incumplimiento detectado en la auditoría."
         },
         "planes": {
           "title": "Planes de Acción",
-          "desc": "Crear, registrar y hacer seguimiento a planes de acción."
+          "desc": "Crear, registrar y dar seguimiento a planes de acción, así como enviarlos para revisión de un auditor externo."
         },
         "comentarios": {
           "title": "Comentarios",
-          "desc": "Visualizar comentarios realizados por auditores externos."
+          "desc": "Consultar observaciones y comentarios emitidos por los auditores externos sobre los planes de acción."
         }
       }
     },
