@@ -4,8 +4,9 @@ import Swal from "sweetalert2";
 
 const UserTable = ({ usuarios, eliminarUsuario }) => {
   const { t } = useTranslation();
-  const handleEliminar = (id) => {
-    Swal.fire({
+
+  const handleEliminar = async (email, rol) => {
+    const result = await Swal.fire({
       title: "¿Estás seguro?",
       text: "Esta acción no se puede deshacer.",
       icon: "warning",
@@ -14,13 +15,19 @@ const UserTable = ({ usuarios, eliminarUsuario }) => {
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        eliminarUsuario(id);
-        Swal.fire("¡Eliminado!", "El usuario ha sido eliminado.", "success");
-      }
     });
+
+    if (result.isConfirmed) {
+      try {
+        await eliminarUsuario(email, rol);
+        Swal.fire("¡Eliminado!", "El usuario ha sido eliminado.", "success");
+      } catch (error) {
+        Swal.fire("Error", "No se pudo eliminar el usuario.", error);
+      }
+    }
   };
+
+
 
   return (
     <div className="overflow-x-auto rounded-lg shadow border border-gray-300">
@@ -66,7 +73,7 @@ const UserTable = ({ usuarios, eliminarUsuario }) => {
 
               <td className="px-4 py-3 border border-gray-200 text-center">
                 <button
-                  onClick={() => handleEliminar(usuario.id)}
+                  onClick={() => handleEliminar(usuario.email, usuario.rol)}
                   className="flex items-center gap-2 
                       bg-gradient-to-r from-red-700 to-red-800
                       hover:from-red-600 hover:to-red-700
