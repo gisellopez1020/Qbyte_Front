@@ -104,8 +104,8 @@ const Formulario = () => {
           typeof pregunta === "string"
             ? pregunta
             : pregunta && typeof pregunta === "object" && pregunta.input
-            ? pregunta.input
-            : String(pregunta);
+              ? pregunta.input
+              : String(pregunta);
 
         return {
           pregunta: textoPregunta,
@@ -247,9 +247,8 @@ const Formulario = () => {
         {/* Mensaje de éxito o error */}
         {mensaje && (
           <div
-            className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${
-              mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"
-            }`}
+            className={`max-w-xl mx-auto mb-6 p-4 rounded shadow-md text-white ${mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"
+              }`}
           >
             <div className="text-center font-semibold">{mensaje.texto}</div>
             {mensaje.tipo === "exito" && (
